@@ -144,8 +144,34 @@ v0.3	検索 / RSS / OGP 生成 / Lighthouse CI
 v1.0	20 言語フル自動翻訳 + マップ埋込
 
 10. 最後に
-原則 “小さな PR”（1 機能 / 1 ファイルセット）で送ってください。
+原則 "小さな PR"（1 機能 / 1 ファイルセット）で送ってください。
 
 不明点・追加情報は必ずオーナー（ひで）へ質問。
 
 この CLAUDE.md を変更する場合は PR タイトル docs: update CLAUDE.md を付けること。
+
+---
+
+## 📝 開発履歴 (History)
+
+### v0.2-dev Article Schema Migration (2025-01-27)
+**実装**: Post → Article スキーマ移行完了
+
+#### ✅ 完了項目
+- `/schemas/article.js` 新規作成（単一ドキュメント型）
+- `/schemas/affiliate.js` アフィリエイトブロック作成
+- `sanity.config.js` 20言語対応 + Article スキーマ追加
+- `site/src/lib/sanity.ts` Article インターフェース + GROQ クエリ
+- 新ルーティング: `[type]/[slug]` & `en/[type]/[slug]`
+- コンポーネント: `ArticleCard`, `Gallery`（LazyLoad）, `AffiliateBlock`
+- 既存 Post 機能は後方互換性維持
+
+#### 🔧 既知の問題
+- Sanity Studio ビルドエラー: `.sanity/runtime/app.js` 解決できず
+- 対応策: 開発サーバー（`npm run dev`）で Studio 利用可能
+- Astro フロントエンド: ビルド・動作正常
+
+#### 📊 移行結果
+- JA/EN 一覧ページ: Article 対応完了
+- 詳細ページ: Gallery + アフィリエイト表示
+- 20言語設定: 準備完了（n8n 翻訳待ち）

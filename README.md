@@ -1,9 +1,9 @@
 # 🗾 旅ログ - Japan Travel Blog
 
-[![Version](https://img.shields.io/github/v/release/HIDE-Kanazawa/my-sanity-site?style=flat-square&color=blue)](https://github.com/HIDE-Kanazawa/my-sanity-site/releases)
+[![Version](https://img.shields.io/badge/version-v0.2--dev-blue?style=flat-square)](https://github.com/HIDE-Kanazawa/my-sanity-site/tree/v0.2-dev)
+[![Schema](https://img.shields.io/badge/schema-Article%20v0.2-green?style=flat-square)](https://github.com/HIDE-Kanazawa/my-sanity-site/blob/v0.2-dev/schema/article.js)
 [![Deploy](https://img.shields.io/badge/deploy-vercel-black?style=flat-square&logo=vercel)](https://my-sanity-site.vercel.app)
-[![Studio](https://img.shields.io/badge/studio-sanity.studio-red?style=flat-square&logo=sanity)](https://travel-blog-jp.sanity.studio)
-[![CI Status](https://img.shields.io/github/actions/workflow/status/HIDE-Kanazawa/my-sanity-site/ci.yml?style=flat-square&label=CI)](https://github.com/HIDE-Kanazawa/my-sanity-site/actions)
+[![Studio](https://img.shields.io/badge/studio-dev%20mode-yellow?style=flat-square&logo=sanity)](http://localhost:3333)
 [![License](https://img.shields.io/badge/license-UNLICENSED-red?style=flat-square)](LICENSE)
 [![Astro](https://img.shields.io/badge/astro-5.x-orange?style=flat-square&logo=astro)](https://astro.build)
 [![Sanity](https://img.shields.io/badge/sanity-v4-red?style=flat-square&logo=sanity)](https://sanity.io)
@@ -30,12 +30,12 @@
 - [x] 収益導線（アフィリエイト・広告）
 - [x] ISR（Incremental Static Regeneration）対応
 
-### 📝 記事フィールド
-- タイトル・スラッグ・本文
-- 公開日・旅行日
-- メイン画像・タグ
-- 交通費・宿泊費（経費管理）
-- 言語設定（ja/en）
+### 📝 記事フィールド（Article Schema v0.2）
+- タイトル・スラッグ・記事タイプ（spot/food/transport/hotel/note）
+- カバー画像・ギャラリー（最大12枚）
+- 位置情報・場所名
+- 本文（Portable Text + アフィリエイトブロック）
+- 多言語対応（20言語）・公開日
 
 ## 🛠 技術スタック
 
@@ -153,13 +153,17 @@ npm run dev
 - [x] 収益化導線
 - [x] Vercel 自動デプロイ
 
-### 🚀 v0.2.0 - UI/UX 改善
+### 🚀 v0.2.0 - Article Schema Migration - 🔄 進行中
+- [x] Article スキーマ（単一ドキュメント型）
+- [x] 記事タイプ別分類（spot/food/transport/hotel/note）
+- [x] ギャラリー機能（最大12枚、LazyLoad）
+- [x] 位置情報・場所名フィールド
+- [x] アフィリエイトブロック（Booking/Rakuten/Klook）
+- [x] 新ルーティング（[type]/[slug]）
+- [x] 20言語対応準備
+- [ ] Studio デプロイ（ビルドエラー調査中）
 - [ ] 記事検索機能
-- [ ] カテゴリ・タグ別ページ
-- [ ] 記事いいね機能
-- [ ] コメント機能
 - [ ] RSS フィード生成
-- [ ] OGP 画像自動生成
 
 ### 🤖 v0.3.0 - 自動化強化
 - [ ] n8n による投稿自動化
@@ -187,6 +191,15 @@ A: `PUBLIC_ADSENSE_CLIENT_ID` が正しく設定されているか確認
 
 **Q: ISR が動作しない**
 A: Webhook URL とシークレットが正しく設定されているか確認
+
+### 🔧 既知の問題 (v0.2-dev)
+
+**Q: Sanity Studio のビルド・デプロイが失敗する**
+```
+Could not resolve entry module ".sanity/runtime/app.js"
+```
+A: 開発サーバー（`npm run dev`）は正常動作。ビルドエラーは調査中  
+現在の対応策: `http://localhost:3333` で Studio 利用可能
 
 ### デバッグ用エンドポイント
 - `/api/revalidate?secret=your-secret` - ISR エンドポイント確認
