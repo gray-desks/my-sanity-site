@@ -1,0 +1,53 @@
+---
+export interface Props {
+  lang?: 'ja' | 'en'
+}
+const { lang = 'ja' } = Astro.props
+---
+<aside class="sticky top-24 space-y-10 hidden lg:block">
+  <!-- Search -->
+  <div>
+    <label for="search" class="sr-only">{lang === 'ja' ? '検索' : 'Search'}</label>
+    <div class="relative text-gray-600 dark:text-gray-400">
+      <input
+        id="search"
+        type="search"
+        placeholder={lang === 'ja' ? 'キーワード検索' : 'Search...'}
+        class="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 focus:ring-2 focus:ring-brand-500 outline-none"
+      />
+      <svg class="w-5 h-5 absolute right-3 top-1/2 transform -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1116.65 16.65z" />
+      </svg>
+    </div>
+  </div>
+
+  <!-- Categories -->
+  <div>
+    <h3 class="text-lg font-semibold mb-4 text-gray-900 dark:text-gray-100 flex items-center gap-2">
+      <span>📂</span>{lang === 'ja' ? 'カテゴリ' : 'Categories'}
+    </h3>
+    <ul class="space-y-3">
+      <li><a href="/spot" class="sidebar-link">{lang==='ja'? 'スポット':'Spot'}</a></li>
+      <li><a href="/food" class="sidebar-link">{lang==='ja'? 'グルメ':'Food'}</a></li>
+      <li><a href="/hotel" class="sidebar-link">{lang==='ja'? '宿泊':'Hotel'}</a></li>
+      <li><a href="/note" class="sidebar-link">{lang==='ja'? 'ノート':'Note'}</a></li>
+    </ul>
+  </div>
+
+  <!-- Social links -->
+  <div>
+    <h3 class="text-lg font-semibold mb-4 text-gray-900 dark:text-gray-100 flex items-center gap-2">
+      <span>🌐</span>Social
+    </h3>
+    <div class="flex gap-4 text-gray-500 dark:text-gray-400">
+      <a href="https://twitter.com" aria-label="X / Twitter" class="hover:text-brand-500 transition-colors"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M22 5.92c-.77.35-1.6.57-2.47.67a4.26 4.26 0 001.88-2.36 8.59 8.59 0 01-2.7 1.04 4.24 4.24 0 00-7.22 3.87A12.03 12.03 0 013 4.79a4.24 4.24 0 001.31 5.65 4.22 4.22 0 01-1.92-.53v.05a4.24 4.24 0 003.4 4.16 4.25 4.25 0 01-1.91.07 4.24 4.24 0 003.96 2.95A8.5 8.5 0 012 19.54a12.04 12.04 0 006.52 1.91c7.83 0 12.11-6.49 12.11-12.11 0-.18-.01-.36-.02-.54A8.6 8.6 0 0022 5.92z"/></svg></a>
+      <a href="https://facebook.com" aria-label="Facebook" class="hover:text-secondary-500 transition-colors"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12a10 10 0 008 9.8v-6.93H7.9V12H10V9.8c0-2.05 1.22-3.19 3.09-3.19.9 0 1.84.16 1.84.16v2.02h-1.04c-1.03 0-1.35.64-1.35 1.3V12h2.3l-.37 2.87h-1.93v6.93a10 10 0 008-9.8z"/></svg></a>
+    </div>
+  </div>
+
+  <style>
+    .sidebar-link {
+      @apply text-gray-600 dark:text-gray-400 hover:text-brand-500 dark:hover:text-brand-400 transition-colors font-medium;
+    }
+  </style>
+</aside>
