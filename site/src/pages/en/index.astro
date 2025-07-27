@@ -1,13 +1,14 @@
 ---
 import Layout from '../../layouts/Layout.astro'
 import AdSense from '../../components/AdSense.astro'
-import { getEnglishPosts, type Post } from '../../lib/sanity'
+import ArticleCard from '../../components/ArticleCard.astro'
+import { getArticles, type Article } from '../../lib/sanity'
 
-let posts: Post[] = []
+let articles: Article[] = []
 try {
-  posts = await getEnglishPosts()
+  articles = await getArticles('en')
 } catch (error) {
-  console.error('Failed to fetch English posts:', error)
+  console.error('Failed to fetch English articles:', error)
 }
 
 const formatDate = (dateString: string) => {
@@ -42,67 +43,19 @@ const formatDate = (dateString: string) => {
       </a>
     </div>
 
-    <!-- Posts List -->
+    <!-- Articles List -->
     <section>
       <h2 class="text-3xl font-bold mb-8 text-center">Latest Travel Stories</h2>
       
-      {posts.length === 0 ? (
+      {articles.length === 0 ? (
         <div class="text-center py-12 bg-white rounded-lg shadow">
-          <p class="text-gray-500 text-lg">No English posts yet.</p>
-          <p class="text-gray-400 mt-2">Create your first English post in Sanity Studio.</p>
+          <p class="text-gray-500 text-lg">No English articles yet.</p>
+          <p class="text-gray-400 mt-2">Create your first English article in Sanity Studio.</p>
         </div>
       ) : (
         <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-          {posts.map((post) => (
-            <article class="bg-white rounded-lg shadow hover:shadow-lg transition-shadow">
-              {post.mainImage?.asset?.url && (
-                <img 
-                  src={post.mainImage.asset.url}
-                  alt={post.title}
-                  class="w-full h-48 object-cover rounded-t-lg"
-                />
-              )}
-              <div class="p-6">
-                <h3 class="text-xl font-semibold mb-2 hover:text-blue-600">
-                  <a href={`/posts/${post.slug?.current || post._id}?lang=en`}>
-                    {post.title}
-                  </a>
-                </h3>
-                
-                {post.excerpt && (
-                  <p class="text-gray-600 mb-4 line-clamp-3">{post.excerpt}</p>
-                )}
-                
-                <div class="flex justify-between items-center text-sm text-gray-500">
-                  <time datetime={post.publishedAt}>
-                    {formatDate(post.publishedAt)}
-                  </time>
-                  {post.tripDate && (
-                    <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded">
-                      Trip: {new Date(post.tripDate).toLocaleDateString('en-US')}
-                    </span>
-                  )}
-                </div>
-                
-                {post.tags && post.tags.length > 0 && (
-                  <div class="mt-3 flex flex-wrap gap-1">
-                    {post.tags.map(tag => (
-                      <span class="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs">
-                        #{tag}
-                      </span>
-                    ))}
-                  </div>
-                )}
-                
-                {(post.travelCost || post.lodgingCost) && (
-                  <div class="mt-3 text-xs text-gray-500 border-t pt-2">
-                    {post.travelCost && <span>Transport: ¥{post.travelCost.toLocaleString()}</span>}
-                    {post.travelCost && post.lodgingCost && <span class="mx-2">|</span>}
-                    {post.lodgingCost && <span>Hotel: ¥{post.lodgingCost.toLocaleString()}</span>}
-                  </div>
-                )}
-              </div>
-            </article>
+          {articles.map((article) => (
+            <ArticleCard article={article} lang="en" />
           ))}
         </div>
       )}

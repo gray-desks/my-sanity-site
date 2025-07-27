@@ -1,0 +1,147 @@
+---
+import { getStaticPaths } from 'astro:content'
+import Layout from '../../../layouts/Layout.astro'
+import Gallery from '../../../components/Gallery.astro'
+import AffiliateBlock from '../../../components/AffiliateBlock.astro'
+import AdSense from '../../../components/AdSense.astro'
+import { getArticleBySlug, getAllArticleSlugs, type Article } from '../../../lib/sanity'
+
+export async function getStaticPaths() {
+  const slugs = await getAllArticleSlugs()
+  
+  return slugs
+    .filter(item => item.lang === 'en')
+    .map((item) => ({
+      params: { 
+        type: item.type,
+        slug: item.slug 
+      },
+    }))
+}
+
+const { type, slug } = Astro.params
+const article = await getArticleBySlug(slug!, 'en')
+
+if (!article) {
+  return Astro.redirect('/404')
+}
+
+const formatDate = (dateString: string) => {
+  return new Date(dateString).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  })
+}
+
+const typeLabels = {
+  spot: 'Spot',
+  food: 'Food',
+  transport: 'Transport',
+  hotel: 'Hotel',
+  note: 'Note'
+}
+---
+
+<Layout 
+  title={`${article.title} | Travel Blog`}
+  description={`${typeLabels[article.type]} - ${article.placeName || article.title}`}
+  lang="en"
+>
+  <article class="max-w-4xl mx-auto">
+    <!-- Header -->
+    <header class="mb-8">
+      <div class="flex items-center gap-2 mb-4">
+        <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">
+          {typeLabels[article.type]}
+        </span>
+        {article.placeName && (
+          <span class="text-gray-600">📍 {article.placeName}</span>
+        )}
+      </div>
+      
+      <h1 class="text-4xl font-bold mb-4">{article.title}</h1>
+      
+      <div class="flex items-center gap-4 text-gray-600 mb-6">
+        <time datetime={article.publishedAt}>
+          {formatDate(article.publishedAt)}
+        </time>
+        <a 
+          href={`/${type}/${slug}`}
+          class="flex items-center gap-1 text-blue-600 hover:text-blue-800"
+        >
+          🇯🇵 日本語
+        </a>
+      </div>
+    </header>
+
+    <!-- Cover Image -->
+    {article.coverImage?.asset?.url && (
+      <div class="mb-8">
+        <img 
+          src={article.coverImage.asset.url}
+          alt={article.title}
+          class="w-full h-96 object-cover rounded-lg shadow-lg"
+        />
+      </div>
+    )}
+
+    <!-- Gallery -->
+    {article.gallery && article.gallery.length > 0 && (
+      <div class="mb-8">
+        <Gallery images={article.gallery} />
+      </div>
+    )}
+
+    <!-- Content -->
+    <div class="prose prose-lg max-w-none mb-8">
+      {article.body && article.body.map((block) => {
+        if (block._type === 'block') {
+          return (
+            <div set:html={block.children?.map(span => span.text).join('') || ''} />
+          )
+        } else if (block._type === 'image') {
+          return (
+            <div class="my-8">
+              <img 
+                src={block.asset?.url}
+                alt=""
+                class="w-full rounded-lg shadow-md"
+              />
+            </div>
+          )
+        } else if (block._type === 'affiliate') {
+          return <AffiliateBlock {...block} />
+        }
+      })}
+    </div>
+
+    <!-- Location -->
+    {article.location && (
+      <div class="mb-8 p-4 bg-gray-50 rounded-lg">
+        <h3 class="text-lg font-semibold mb-2">📍 Location</h3>
+        <p class="text-gray-600">
+          Lat: {article.location.lat}, Lng: {article.location.lng}
+        </p>
+      </div>
+    )}
+
+    <!-- AdSense 広告 -->
+    <AdSense 
+      slot="article-bottom"
+      format="banner"
+      lang="en"
+      className="mt-12"
+    />
+
+    <!-- Navigation -->
+    <nav class="mt-12 pt-8 border-t">
+      <a 
+        href="/en" 
+        class="inline-flex items-center text-blue-600 hover:text-blue-800"
+      >
+        ← Back to Articles
+      </a>
+    </nav>
+  </article>
+</Layout>

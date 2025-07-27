@@ -26,7 +26,9 @@
       "Bash(git rm:*)",
       "Bash(find:*)",
       "Bash(git tag:*)",
-      "Bash(npx sanity:*)"
+      "Bash(npx sanity:*)",
+      "Bash(npm ci:*)",
+      "Bash(npm run build:*)"
     ],
     "deny": []
   }
