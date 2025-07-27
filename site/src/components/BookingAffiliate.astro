@@ -1,0 +1,101 @@
+---
+export interface Props {
+  lang: 'ja' | 'en'
+  destination?: string
+  checkIn?: string
+  checkOut?: string
+}
+
+const { 
+  lang = 'ja', 
+  destination = '',
+  checkIn = '',
+  checkOut = ''
+} = Astro.props
+
+const affiliateId = import.meta.env.PUBLIC_BOOKING_AFFILIATE_ID || 'your-booking-affiliate-id'
+
+// Booking.com URL構築
+const bookingUrl = new URL('https://www.booking.com/searchresults.html')
+bookingUrl.searchParams.set('aid', affiliateId)
+bookingUrl.searchParams.set('lang', lang)
+if (destination) bookingUrl.searchParams.set('ss', destination)
+if (checkIn) bookingUrl.searchParams.set('checkin', checkIn)
+if (checkOut) bookingUrl.searchParams.set('checkout', checkOut)
+
+const texts = {
+  ja: {
+    title: '🏨 この旅行におすすめの宿泊施設',
+    subtitle: 'Booking.com で最適な宿泊先を見つけよう',
+    cta: '宿泊施設を検索',
+    features: [
+      '✓ 無料キャンセル可能な宿泊施設多数',
+      '✓ ベストプライス保証',
+      '✓ 宿泊者の実際の口コミ'
+    ]
+  },
+  en: {
+    title: '🏨 Recommended Accommodations',
+    subtitle: 'Find the perfect place to stay with Booking.com',
+    cta: 'Search Hotels',
+    features: [
+      '✓ Free cancellation on most properties',
+      '✓ Best Price Guarantee',
+      '✓ Real guest reviews'
+    ]
+  }
+}
+
+const t = texts[lang]
+---
+
+<section class="bg-gradient-to-br from-blue-50 to-indigo-100 border border-blue-200 rounded-xl p-6 mb-8">
+  <div class="text-center mb-6">
+    <h3 class="text-xl font-bold text-blue-900 mb-2">{t.title}</h3>
+    <p class="text-blue-700">{t.subtitle}</p>
+  </div>
+
+  <div class="bg-white rounded-lg p-6 shadow-sm">
+    <div class="grid gap-4 md:grid-cols-2 items-center">
+      <!-- Features -->
+      <div class="space-y-2">
+        {t.features.map(feature => (
+          <div class="flex items-center text-sm text-gray-700">
+            <span class="text-green-600 mr-2">{feature.split(' ')[0]}</span>
+            <span>{feature.substring(2)}</span>
+          </div>
+        ))}
+      </div>
+
+      <!-- CTA Button -->
+      <div class="text-center">
+        <a 
+          href={bookingUrl.toString()}
+          target="_blank"
+          rel="noopener noreferrer sponsored"
+          class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-lg transition-colors shadow hover:shadow-lg"
+        >
+          {t.cta}
+        </a>
+        <p class="text-xs text-gray-500 mt-2">
+          {lang === 'ja' ? '※ パートナーリンクです' : '※ Partner link'}
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Booking.com ロゴ・クレジット -->
+  <div class="text-center mt-4">
+    <p class="text-xs text-gray-500">
+      Powered by 
+      <a 
+        href="https://www.booking.com" 
+        target="_blank" 
+        rel="noopener noreferrer"
+        class="text-blue-600 hover:text-blue-700 font-medium"
+      >
+        Booking.com
+      </a>
+    </p>
+  </div>
+</section>

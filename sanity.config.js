@@ -1,7 +1,8 @@
 import {defineConfig} from 'sanity'
 import {structureTool} from 'sanity/structure'
 import {visionTool} from '@sanity/vision'
-import schemaTypes from './schema/indes'
+import {documentInternationalization} from '@sanity/document-internationalization'
+import schemaTypes from './schema/index'
 
 export default defineConfig({
   name: 'default',
@@ -10,7 +11,17 @@ export default defineConfig({
   projectId: 'fcz6on8p',
   dataset: 'production',
 
-  plugins: [structureTool(), visionTool()],
+  plugins: [
+    structureTool(),
+    visionTool(),
+    documentInternationalization({
+      supportedLanguages: [
+        {id: 'ja', title: '日本語'},
+        {id: 'en', title: 'English'},
+      ],
+      schemaTypes: ['post'],
+    }),
+  ],
 
   schema: {
     types: schemaTypes,
