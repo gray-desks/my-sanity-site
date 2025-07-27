@@ -16,66 +16,87 @@ const formatDate = (dateString: string) => {
   })
 }
 
-const typeLabels = {
-  ja: {
-    spot: 'スポット',
-    food: '食事',
-    transport: '交通',
-    hotel: 'ホテル',
-    note: 'メモ'
+const typeConfig = {
+  spot: {
+    emoji: '🗾',
+    label: { ja: 'スポット', en: 'Spot' },
+    colors: 'bg-primary-100 text-primary-700 dark:bg-primary-900/30 dark:text-primary-300'
   },
-  en: {
-    spot: 'Spot',
-    food: 'Food',
-    transport: 'Transport',
-    hotel: 'Hotel',
-    note: 'Note'
+  food: {
+    emoji: '🍣',
+    label: { ja: 'グルメ', en: 'Food' },
+    colors: 'bg-sunset-100 text-sunset-700 dark:bg-sunset-900/30 dark:text-sunset-300'
+  },
+  transport: {
+    emoji: '🚄',
+    label: { ja: '交通', en: 'Transport' },
+    colors: 'bg-accent-100 text-accent-700 dark:bg-accent-900/30 dark:text-accent-300'
+  },
+  hotel: {
+    emoji: '🛏️',
+    label: { ja: '宿泊', en: 'Hotel' },
+    colors: 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300'
+  },
+  note: {
+    emoji: '📝',
+    label: { ja: 'メモ', en: 'Note' },
+    colors: 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300'
   }
 }
 
-const typeIcons = {
-  spot: '📍',
-  food: '🍽️',
-  transport: '🚅',
-  hotel: '🏨',
-  note: '📝'
-}
+const config = typeConfig[article.type as keyof typeof typeConfig] || typeConfig.note
+const typeLabel = config.label[lang as keyof typeof config.label] || config.label.ja
 
-const labels = typeLabels[lang as keyof typeof typeLabels] || typeLabels.ja
 const articleUrl = lang === 'en' 
   ? `/en/${article.type}/${article.slug?.current}` 
   : `/${article.type}/${article.slug?.current}`
 ---
 
-<article class="bg-white rounded-lg shadow hover:shadow-lg transition-shadow">
-  {article.coverImage?.asset?.url && (
-    <img 
-      src={article.coverImage.asset.url}
-      alt={article.title}
-      class="w-full h-48 object-cover rounded-t-lg"
-    />
-  )}
+<article class="break-inside-avoid mb-6 bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group border border-gray-100 dark:border-gray-700">
+  <a href={articleUrl} class="block">
+    {article.coverImage?.asset?.url && (
+      <div class="relative overflow-hidden">
+        <img 
+          src={article.coverImage.asset.url}
+          alt={article.title}
+          class="w-full aspect-[4/3] object-cover group-hover:scale-105 transition-transform duration-300"
+          loading="lazy"
+        />
+        <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+      </div>
+    )}
+  </a>
   
-  <div class="p-6">
-    <!-- Type Badge -->
-    <div class="flex items-center gap-2 mb-3">
-      <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">
-        {typeIcons[article.type as keyof typeof typeIcons]} {labels[article.type as keyof typeof labels]}
+  <div class="p-5">
+    <!-- Type Badge and Location -->
+    <div class="flex items-center justify-between gap-2 mb-3">
+      <span class={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium transition-colors ${config.colors}`}>
+        <span class="mr-1">{config.emoji}</span>
+        {typeLabel}
       </span>
-      {article.placeName && (
-        <span class="text-gray-600 text-sm">📍 {article.placeName}</span>
+      {article.location && (
+        <div class="flex items-center text-gray-500 dark:text-gray-400 text-sm">
+          <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+          </svg>
+          <span>{article.placeName || (lang === 'ja' ? '位置情報あり' : 'Location')}</span>
+        </div>
       )}
     </div>
 
     <!-- Title -->
-    <h3 class="text-xl font-semibold mb-2 hover:text-blue-600">
+    <h3 class="text-lg font-bold mb-2 text-gray-900 dark:text-gray-100 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors leading-snug">
       <a href={articleUrl}>
         {article.title}
       </a>
     </h3>
     
     <!-- Date -->
-    <div class="flex justify-between items-center text-sm text-gray-500 mb-4">
+    <div class="text-sm text-gray-500 dark:text-gray-400 mb-4 flex items-center">
+      <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+      </svg>
       <time datetime={article.publishedAt}>
         {formatDate(article.publishedAt)}
       </time>
@@ -84,32 +105,31 @@ const articleUrl = lang === 'en'
     <!-- Gallery preview -->
     {article.gallery && article.gallery.length > 0 && (
       <div class="mb-3">
-        <div class="flex gap-1 overflow-x-auto">
-          {article.gallery.slice(0, 3).map((image) => (
+        <div class="flex gap-2 overflow-x-auto pb-1">
+          {article.gallery.slice(0, 4).map((image) => (
             image.asset?.url && (
               <img 
                 src={image.asset.url}
                 alt=""
-                class="w-16 h-16 object-cover rounded flex-shrink-0"
+                class="w-12 h-12 object-cover rounded-lg flex-shrink-0 ring-2 ring-gray-100 dark:ring-gray-700"
+                loading="lazy"
               />
             )
           ))}
-          {article.gallery.length > 3 && (
-            <div class="w-16 h-16 bg-gray-100 rounded flex items-center justify-center text-gray-500 text-xs flex-shrink-0">
-              +{article.gallery.length - 3}
+          {article.gallery.length > 4 && (
+            <div class="w-12 h-12 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center text-gray-500 dark:text-gray-400 text-xs flex-shrink-0 ring-2 ring-gray-100 dark:ring-gray-700">
+              +{article.gallery.length - 4}
             </div>
           )}
         </div>
       </div>
     )}
 
-    <!-- Location info -->
-    {article.location && (
-      <div class="mt-3 text-xs text-gray-500 flex items-center gap-1">
-        <span>🗺️</span>
-        <span>
-          {lang === 'ja' ? '位置情報あり' : 'Location available'}
-        </span>
+    <!-- Place Name (if no location but has place name) -->
+    {!article.location && article.placeName && (
+      <div class="mt-3 text-xs text-gray-500 dark:text-gray-400 flex items-center gap-1">
+        <span>📍</span>
+        <span>{article.placeName}</span>
       </div>
     )}
   </div>

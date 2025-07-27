@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro'
+import Hero from '../components/Hero.astro'
 import AdSense from '../components/AdSense.astro'
 import ArticleCard from '../components/ArticleCard.astro'
 import { getArticles, type Article } from '../lib/sanity'
@@ -10,39 +11,36 @@ try {
 } catch (error) {
   console.error('Failed to fetch articles:', error)
 }
-
-const formatDate = (dateString: string) => {
-  return new Date(dateString).toLocaleDateString('ja-JP', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  })
-}
 ---
 
 <Layout 
   title="旅ログ - 日本全国の旅記録" 
   description="日本全国の旅ログを多言語で発信するブログ。各地の魅力を写真と文章でお届けします。"
 >
-  <div class="space-y-8">
-    <!-- ヒーローセクション -->
-    <section class="text-center py-12 bg-gradient-to-r from-blue-500 to-green-500 text-white rounded-lg">
-      <h1 class="text-4xl md:text-6xl font-bold mb-4">🗾 旅ログ</h1>
-      <p class="text-xl md:text-2xl opacity-90">日本全国の旅記録を多言語で発信</p>
-      <p class="mt-4 text-lg opacity-80">各地の魅力を写真と文章でお届けします</p>
-    </section>
+  <!-- Hero Section -->
+  <Hero lang="ja" />
 
-    <!-- 記事一覧 -->
-    <section>
-      <h2 class="text-3xl font-bold mb-8 text-center">最新の旅記録</h2>
+  <div class="max-w-6xl mx-auto px-4 py-12 space-y-12">
+    <!-- Articles Section -->
+    <section id="articles">
+      <div class="text-center mb-12">
+        <h2 class="text-4xl font-extrabold text-gray-900 dark:text-gray-100 mb-4">
+          最新の旅記録
+        </h2>
+        <div class="w-24 h-1 bg-gradient-to-r from-primary-400 to-accent-400 mx-auto rounded-full"></div>
+        <p class="mt-4 text-xl text-gray-600 dark:text-gray-400">
+          日本各地の美しい景色と体験をお届け
+        </p>
+      </div>
       
       {articles.length === 0 ? (
-        <div class="text-center py-12 bg-white rounded-lg shadow">
-          <p class="text-gray-500 text-lg">まだ記事がありません。</p>
-          <p class="text-gray-400 mt-2">Sanity Studio で最初の記事を作成してください。</p>
+        <div class="text-center py-16 bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700">
+          <div class="text-6xl mb-4">📝</div>
+          <p class="text-gray-500 dark:text-gray-400 text-xl mb-2">まだ記事がありません</p>
+          <p class="text-gray-400 dark:text-gray-500">Sanity Studio で最初の記事を作成してください</p>
         </div>
       ) : (
-        <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+        <div class="columns-1 sm:columns-2 lg:columns-3 gap-6">
           {articles.map((article) => (
             <ArticleCard article={article} lang="ja" />
           ))}
@@ -55,7 +53,7 @@ const formatDate = (dateString: string) => {
       slot="homepage-bottom"
       format="banner"
       lang="ja"
-      className="mt-12"
+      className="mt-16"
     />
   </div>
 </Layout>

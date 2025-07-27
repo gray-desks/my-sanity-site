@@ -1,0 +1,84 @@
+---
+export interface Props {
+  lang?: 'ja' | 'en'
+}
+
+const { lang = 'ja' } = Astro.props
+
+const title = lang === 'ja' 
+  ? '日本全国の旅ログを発信' 
+  : 'Discover Japan Through Travel Stories'
+
+const subtitle = lang === 'ja'
+  ? '美しい景色、美味しい食べ物、文化体験を多言語で共有'
+  : 'Beautiful places, delicious food, and cultural experiences shared in multiple languages'
+
+const ctaText = lang === 'ja' ? '記事を読む' : 'Read Stories'
+---
+
+<section class="relative overflow-hidden bg-gradient-japan py-24 lg:py-32">
+  <!-- Japan Map SVG Background -->
+  <div class="absolute inset-0 opacity-10">
+    <svg class="w-full h-full object-cover" viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Simplified Japan outline -->
+      <path d="M300 50c20 0 40 15 45 35l15 25c5 15-5 30-20 35l-25 15c-15 5-30 20-25 40l10 30c5 20-10 35-30 40l-40 10c-25 5-45-10-50-35l-5-25c-5-20-25-30-45-25l-30 10c-20 5-40-15-35-35l5-20c5-15-5-35-25-40l-20-10c-15-5-25-25-15-40l15-25c10-15 30-20 45-15l25 10c20 5 40-5 45-25l10-20c5-15 25-25 40-20l25 10c15 5 35 0 40-15l10-15c5-10 20-15 30-10z" 
+            fill="currentColor" 
+            class="text-white dark:text-gray-200"/>
+    </svg>
+  </div>
+  
+  <!-- Gradient Overlay -->
+  <div class="absolute inset-0 bg-gradient-to-br from-primary-500/20 via-accent-500/20 to-sunset-500/20"></div>
+  
+  <!-- Content -->
+  <div class="relative max-w-6xl mx-auto px-4 text-center">
+    <h1 class="text-4xl md:text-6xl lg:text-7xl font-extrabold text-white mb-6 leading-tight">
+      {title}
+    </h1>
+    
+    <p class="text-xl md:text-2xl text-white/90 mb-8 max-w-3xl mx-auto leading-relaxed">
+      {subtitle}
+    </p>
+    
+    <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+      <a 
+        href="#articles" 
+        class="inline-flex items-center px-8 py-4 bg-white text-primary-600 rounded-full font-semibold text-lg hover:bg-gray-50 hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
+      >
+        {ctaText}
+        <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+        </svg>
+      </a>
+      
+      <a 
+        href={lang === 'ja' ? '/en' : '/'} 
+        class="inline-flex items-center px-6 py-3 border-2 border-white text-white rounded-full font-medium hover:bg-white hover:text-primary-600 transition-all duration-300"
+      >
+        {lang === 'ja' ? '🌐 English' : '🌐 日本語'}
+      </a>
+    </div>
+  </div>
+  
+  <!-- Floating Elements -->
+  <div class="absolute top-20 left-10 animate-bounce delay-1000">
+    <div class="w-8 h-8 bg-sunset-400 rounded-full opacity-60"></div>
+  </div>
+  <div class="absolute top-40 right-20 animate-bounce delay-2000">
+    <div class="w-6 h-6 bg-accent-400 rounded-full opacity-60"></div>
+  </div>
+  <div class="absolute bottom-20 left-20 animate-bounce delay-3000">
+    <div class="w-4 h-4 bg-primary-300 rounded-full opacity-60"></div>
+  </div>
+</section>
+
+<style>
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+  }
+  
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+</style>
