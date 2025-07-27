@@ -1,0 +1,100 @@
+---
+interface Props {
+  service: 'booking' | 'rakuten' | 'klook'
+  url: string
+  title?: string
+  description?: string
+}
+
+const { service, url, title, description } = Astro.props
+
+const serviceInfo = {
+  booking: {
+    name: 'Booking.com',
+    icon: '🏨',
+    color: 'blue',
+    bgColor: 'bg-blue-50',
+    textColor: 'text-blue-900',
+    buttonColor: 'bg-blue-600 hover:bg-blue-700'
+  },
+  rakuten: {
+    name: 'Rakuten Travel',
+    icon: '🛎️',
+    color: 'red',
+    bgColor: 'bg-red-50',
+    textColor: 'text-red-900',
+    buttonColor: 'bg-red-600 hover:bg-red-700'
+  },
+  klook: {
+    name: 'Klook',
+    icon: '🎫',
+    color: 'orange',
+    bgColor: 'bg-orange-50',
+    textColor: 'text-orange-900',
+    buttonColor: 'bg-orange-600 hover:bg-orange-700'
+  }
+}
+
+const info = serviceInfo[service]
+const displayTitle = title || `${info.name}で予約する`
+---
+
+<div class={`affiliate-block p-6 rounded-lg border-l-4 border-${info.color}-500 ${info.bgColor} my-6`}>
+  <div class="flex items-start gap-4">
+    <div class="text-3xl">{info.icon}</div>
+    
+    <div class="flex-1">
+      <div class="flex items-center gap-2 mb-2">
+        <h3 class={`font-semibold text-lg ${info.textColor}`}>
+          {displayTitle}
+        </h3>
+        <span class="text-xs bg-white px-2 py-1 rounded-full text-gray-600 font-medium">
+          PR
+        </span>
+      </div>
+      
+      {description && (
+        <p class="text-gray-700 mb-4 text-sm leading-relaxed">
+          {description}
+        </p>
+      )}
+      
+      <a
+        href={url}
+        target="_blank"
+        rel="noopener noreferrer sponsored"
+        class={`inline-flex items-center gap-2 px-6 py-3 ${info.buttonColor} text-white font-medium rounded-lg transition-colors hover:shadow-md`}
+      >
+        <span>{info.name}で確認</span>
+        <svg 
+          class="w-4 h-4" 
+          fill="none" 
+          stroke="currentColor" 
+          viewBox="0 0 24 24"
+        >
+          <path 
+            stroke-linecap="round" 
+            stroke-linejoin="round" 
+            stroke-width="2" 
+            d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+          />
+        </svg>
+      </a>
+      
+      <p class="mt-3 text-xs text-gray-500">
+        ※ このリンクから予約すると、当サイトに紹介料が支払われる場合があります
+      </p>
+    </div>
+  </div>
+</div>
+
+<style>
+  .affiliate-block {
+    background: linear-gradient(135deg, var(--bg-color) 0%, rgba(255,255,255,0.8) 100%);
+  }
+  
+  .affiliate-block:hover {
+    transform: translateY(-1px);
+    transition: transform 0.2s ease;
+  }
+</style>
