@@ -125,9 +125,50 @@ npm run dev
 
 ### 記事投稿フロー
 1. Sanity Studio で記事作成・編集
-2. 経費フィールド入力（節税対応）
-3. 言語設定（ja/en）
-4. 公開 → 自動的にサイト更新
+2. 記事タイプ選択（spot/food/transport/hotel/note）
+3. ギャラリー画像アップロード（最大12枚）
+4. 位置情報・場所名入力
+5. 言語設定（ja/en）
+6. 公開 → Webhook経由で自動サイト更新
+
+### 環境変数設定 (Vercel Dashboard)
+
+**必須設定項目:**
+```bash
+# Sanity 接続
+PUBLIC_SANITY_PROJECT_ID=fcz6on8p
+PUBLIC_SANITY_DATASET=production
+PUBLIC_SANITY_API_VERSION=2024-01-01
+
+# サイト設定
+PUBLIC_SITE_URL=https://my-sanity-site.vercel.app
+PUBLIC_SITE_TITLE=旅ログ - 日本全国の旅記録
+
+# 収益化
+PUBLIC_BOOKING_AFFILIATE_ID=your-booking-affiliate-id
+PUBLIC_ADSENSE_CLIENT_ID=ca-pub-your-adsense-id
+
+# ISR (自動更新)
+REVALIDATE_SECRET=your-secure-random-string
+VERCEL_DEPLOY_HOOK=your-vercel-deploy-hook-id
+```
+
+### Sanity Webhook 設定 (自動更新)
+
+1. **Sanity ダッシュボード** → **API** → **Webhooks**
+2. **新規作成**:
+   - Name: `Vercel ISR Trigger`
+   - URL: `https://my-sanity-site.vercel.app/api/revalidate`
+   - Dataset: `production`
+   - Trigger on: `Create`, `Update`, `Delete`
+   - Document types: `article`
+   - Secret: `REVALIDATE_SECRET` と同じ値
+
+### E2E テスト実行
+```bash
+cd site
+npm run e2e  # サイト全機能テスト
+```
 
 ### 収益化
 - **Booking.com**: 宿泊施設アフィリエイト
@@ -136,7 +177,7 @@ npm run dev
 ## 🔧 カスタマイズ
 
 ### 新しいフィールド追加
-1. `schema/post.js` でスキーマ拡張
+1. `schema/article.js` でスキーマ拡張
 2. `site/src/lib/sanity.ts` でクエリ更新
 3. Astro コンポーネントで表示処理
 
@@ -164,6 +205,14 @@ npm run dev
 - [x] Studio デプロイ（travel-blog-jp.sanity.studio）
 - [x] サンプルデータ作成（浅草寺・銀座寿司）
 - [x] Production デプロイ（Vercel + Studio）
+
+### 🔧 v0.2.1 - 運用自動化 & 本番安定化 - 🚧 進行中
+- [x] ISR Webhook 設定（Sanity → Vercel 自動更新）
+- [x] 旧URL リダイレクト（/posts/* → /note/*）
+- [x] E2E テストスイート（npm run e2e）
+- [x] 環境変数 完全ドキュメント化
+- [ ] パフォーマンス監視
+- [ ] 本番運用ガイド完成
 
 ### 🤖 v0.3.0 - 自動化強化
 - [ ] 記事検索機能

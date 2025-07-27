@@ -188,3 +188,44 @@ v1.0	20 言語フル自動翻訳 + マップ埋込
 - **Studio Production**: https://travel-blog-jp.sanity.studio 稼働中
 - **Redirects**: `/posts/*` → `/note/*` (301 redirect)
 - **Sample Data**: 浅草寺・銀座寿司記事 本番環境で表示確認
+
+#### 🔧 v0.2.1 運用自動化 (進行中)
+**目標**: ISR Webhook + 環境変数最終整備
+
+##### 必須環境変数 (Vercel Dashboard)
+```bash
+# === Core Sanity Configuration ===
+PUBLIC_SANITY_PROJECT_ID=fcz6on8p
+PUBLIC_SANITY_DATASET=production  
+PUBLIC_SANITY_API_VERSION=2024-01-01
+
+# === Site Configuration ===
+PUBLIC_SITE_URL=https://my-sanity-site.vercel.app
+PUBLIC_SITE_TITLE=旅ログ - 日本全国の旅記録
+
+# === Revenue Stream ===
+PUBLIC_BOOKING_AFFILIATE_ID=your-booking-affiliate-id
+PUBLIC_ADSENSE_CLIENT_ID=ca-pub-your-adsense-id
+
+# === ISR Automation ===
+REVALIDATE_SECRET=your-secure-random-32char-string
+VERCEL_DEPLOY_HOOK=your-vercel-deploy-hook-id
+```
+
+##### Sanity Webhook 設定
+**Location**: Sanity Dashboard → API → Webhooks
+```
+Name: Vercel ISR Trigger
+URL: https://my-sanity-site.vercel.app/api/revalidate
+Method: POST
+Dataset: production
+Trigger: Create, Update, Delete
+Document types: article
+Secret: [REVALIDATE_SECRET と同じ値]
+```
+
+##### E2E Test Suite
+```bash
+cd site && npm run e2e
+```
+**チェック項目**: Homepage(JA/EN), Article routes, 404 handling, ISR endpoint, CORS headers, Redirects
