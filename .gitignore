@@ -27,3 +27,11 @@
 
 # Dotenv and similar local-only files
 *.local
+
+# Astro site/ directory exclusions
+site/.astro/
+site/dist/
+site/node_modules/
+site/.env
+site/.env.*
+!site/.env.example
