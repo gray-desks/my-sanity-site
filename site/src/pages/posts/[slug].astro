@@ -67,7 +67,7 @@ const totalCost = (post.travelCost || 0) + (post.lodgingCost || 0)
         ← {lang === 'ja' ? '記事一覧に戻る' : 'Back to Posts'}
       </a>
       
-      {translatedPost && (
+      {translatedPost && translatedPost.slug?.current && (
         <a 
           href={`/posts/${translatedPost.slug.current}?lang=${lang === 'ja' ? 'en' : 'ja'}`}
           class="bg-gray-100 hover:bg-gray-200 px-3 py-1 rounded text-sm"

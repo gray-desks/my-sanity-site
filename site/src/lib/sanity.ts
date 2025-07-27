@@ -10,7 +10,7 @@ export const client = createClient({
 export interface Post {
   _id: string
   title: string
-  slug: { current: string }
+  slug: { current: string } | null
   publishedAt: string
   excerpt: string
   mainImage?: {
@@ -32,7 +32,34 @@ export interface Post {
 // 日本語記事一覧取得
 export async function getJapanesePosts(): Promise<Post[]> {
   const query = `
-    *[_type == "post" && lang == "ja"] | order(publishedAt desc) {
+    *[_type == "post" && lang == "ja" && defined(slug.current)] | order(publishedAt desc) {
+      _id,
+      title,
+      slug,
+      publishedAt,
+      excerpt,
+      mainImage {
+        asset->{
+          _id,
+          url
+        }
+      },
+      tags,
+      tripDate,
+      travelCost,
+      lodgingCost,
+      lang,
+      __i18n_lang,
+      __i18n_refs
+    }
+  `
+  return await client.fetch(query)
+}
+
+// 英語記事一覧取得
+export async function getEnglishPosts(): Promise<Post[]> {
+  const query = `
+    *[_type == "post" && lang == "en" && defined(slug.current)] | order(publishedAt desc) {
       _id,
       title,
       slug,
@@ -59,7 +86,7 @@ export async function getJapanesePosts(): Promise<Post[]> {
 // スラッグで記事取得（多言語対応）
 export async function getPostBySlug(slug: string, lang: 'ja' | 'en' = 'ja'): Promise<Post | null> {
   const query = `
-    *[_type == "post" && slug.current == $slug && lang == $lang][0] {
+    *[_type == "post" && slug.current == $slug && lang == $lang && defined(slug.current)][0] {
       _id,
       title,
       slug,
