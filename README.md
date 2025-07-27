@@ -1,6 +1,6 @@
 # 🗾 旅ログ - Japan Travel Blog
 
-[![Version](https://img.shields.io/badge/version-v0.2--dev-blue?style=flat-square)](https://github.com/HIDE-Kanazawa/my-sanity-site/tree/v0.2-dev)
+[![Version](https://img.shields.io/badge/version-v0.2.0-green?style=flat-square)](https://github.com/HIDE-Kanazawa/my-sanity-site/releases/tag/v0.2.0)
 [![Schema](https://img.shields.io/badge/schema-Article%20v0.2-green?style=flat-square)](https://github.com/HIDE-Kanazawa/my-sanity-site/blob/v0.2-dev/schema/article.js)
 [![Deploy](https://img.shields.io/badge/deploy-vercel-black?style=flat-square&logo=vercel)](https://my-sanity-site.vercel.app)
 [![Studio](https://img.shields.io/badge/studio-sanity.studio-green?style=flat-square&logo=sanity)](https://travel-blog-jp.sanity.studio)
@@ -153,7 +153,7 @@ npm run dev
 - [x] 収益化導線
 - [x] Vercel 自動デプロイ
 
-### 🚀 v0.2.0 - Article Schema Migration - 🔄 進行中
+### 🚀 v0.2.0 - Article Schema Migration - ✅ 完了
 - [x] Article スキーマ（単一ドキュメント型）
 - [x] 記事タイプ別分類（spot/food/transport/hotel/note）
 - [x] ギャラリー機能（最大12枚、LazyLoad）
@@ -162,10 +162,12 @@ npm run dev
 - [x] 新ルーティング（[type]/[slug]）
 - [x] 20言語対応準備
 - [x] Studio デプロイ（travel-blog-jp.sanity.studio）
-- [ ] 記事検索機能
-- [ ] RSS フィード生成
+- [x] サンプルデータ作成（浅草寺・銀座寿司）
+- [x] Production デプロイ（Vercel + Studio）
 
 ### 🤖 v0.3.0 - 自動化強化
+- [ ] 記事検索機能
+- [ ] RSS フィード生成
 - [ ] n8n による投稿自動化
 - [ ] 写真の自動リサイズ・最適化
 - [ ] SNS 自動投稿

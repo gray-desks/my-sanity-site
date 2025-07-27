@@ -178,3 +178,13 @@ v1.0	20 言語フル自動翻訳 + マップ埋込
 - 20言語設定: 準備完了（n8n 翻訳待ち）
 - サンプルデータ: 4記事作成完了（浅草寺・銀座寿司 JA/EN）
 - ルート生成: `/spot/asakusa-morning`, `/food/ginza-sushi` 正常
+
+### v0.2.0 Production Release (2025-01-27)
+**本番リリース**: Article schema v0.2.0 完了
+
+#### ✅ デプロイ結果
+- **Main Branch**: PR #1 squash merge 完了
+- **Vercel Production**: https://my-sanity-site.vercel.app 自動デプロイ
+- **Studio Production**: https://travel-blog-jp.sanity.studio 稼働中
+- **Redirects**: `/posts/*` → `/note/*` (301 redirect)
+- **Sample Data**: 浅草寺・銀座寿司記事 本番環境で表示確認
