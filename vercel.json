@@ -1,0 +1,17 @@
+{
+  "buildCommand": "cd site && npm ci && npm run build",
+  "outputDirectory": "site/dist",
+  "installCommand": "cd site && npm ci",
+  "framework": "astro",
+  "functions": {
+    "site/src/pages/api/revalidate.ts": {
+      "maxDuration": 10
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/site/src/pages/api/$1"
+    }
+  ]
+}
