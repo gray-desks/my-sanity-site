@@ -4,6 +4,7 @@ import Layout from '../../layouts/Layout.astro'
 import Gallery from '../../components/Gallery.astro'
 import AffiliateBlock from '../../components/AffiliateBlock.astro'
 import AdSense from '../../components/AdSense.astro'
+import SocialShare from '../../components/ui/SocialShare.astro'
 import { getArticleBySlug, getAllArticleSlugs, type Article } from '../../lib/sanity'
 
 export async function getStaticPaths() {
@@ -132,6 +133,8 @@ const typeLabels = {
       lang="ja"
       className="mt-12"
     />
+
+    <SocialShare title={article.title} lang={lang} />
 
     <!-- ナビゲーション -->
     <nav class="mt-12 pt-8 border-t">

@@ -12,7 +12,7 @@ export default {
           200: '#bfdbfe',
           300: '#93c5fd',
           400: '#60a5fa',
-          500: '#2C8CF4', // Main Brand Color
+          500: '#1773EB', // Main Brand Color
           600: '#2563eb',
           700: '#1d4ed8',
           800: '#1e40af',
@@ -31,7 +31,7 @@ export default {
           200: '#bbf7d0', 
           300: '#86efac',
           400: '#4ade80',
-          500: '#26D47F', // Accent Green
+          500: '#2DD574', // Accent Green
           600: '#16a34a',
           700: '#15803d',
           800: '#166534',
@@ -50,7 +50,7 @@ export default {
           200: '#fde68a',
           300: '#fcd34d', 
           400: '#fbbf24',
-          500: '#FFB457', // Secondary Orange
+          500: '#FF7847', // Secondary Orange
           600: '#d97706',
           700: '#b45309',
           800: '#92400e',
@@ -77,9 +77,9 @@ export default {
         widest: '0.1em',
       },
       backgroundImage: {
-        'gradient-brand': 'linear-gradient(135deg, rgb(44, 140, 244) 0%, rgb(38, 212, 127) 100%)',
-        'gradient-brand-soft': 'linear-gradient(135deg, rgba(44, 140, 244, 0.8) 0%, rgba(38, 212, 127, 0.8) 100%)',
-        'gradient-hero': 'linear-gradient(135deg, rgba(44, 140, 244, 0.8) 0%, rgba(38, 212, 127, 0.8) 100%)',
+        'gradient-brand': 'linear-gradient(135deg, #1773EB 0%, #2DD574 100%)',
+        'gradient-brand-soft': 'linear-gradient(135deg, rgba(23, 115, 235, 0.8) 0%, rgba(45, 213, 116, 0.8) 100%)',
+        'gradient-hero': 'linear-gradient(135deg, rgba(23, 115, 235, 0.8) 0%, rgba(45, 213, 116, 0.8) 100%)',
         'radial-highlight': 'radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 70%)',
       },
       animation: {
@@ -110,8 +110,8 @@ export default {
           '100%': { transform: 'translateX(100%)' }
         },
         glow: {
-          '0%': { boxShadow: '0 0 20px #2C8CF4' },
-          '100%': { boxShadow: '0 0 40px #26D47F' }
+          '0%': { boxShadow: '0 0 20px #1773EB' },
+          '100%': { boxShadow: '0 0 40px #2DD574' }
         }
       },
       backdropBlur: {
