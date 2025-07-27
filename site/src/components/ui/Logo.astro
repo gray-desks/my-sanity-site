@@ -1,0 +1,18 @@
+---
+export interface Props {
+  size?: number | string     // icon size (height in px or Tailwind class e.g. 'h-8')
+  subtitle?: boolean         // show “旅ログ” subtitle
+}
+const { size = 8, subtitle = true } = Astro.props
+---
+<a href="/" class="group inline-flex items-center gap-2">
+  <img src="/logo.svg" alt="Travel Log logo" class={typeof size === 'number' ? `h-${size} w-${size}` : size} />
+  <span class="font-black text-xl md:text-2xl tracking-tight text-brand-primary group-hover:text-brand-secondary transition-colors">
+    旅ログ
+  </span>
+  {subtitle && (
+    <span class="ml-1 text-xs md:text-sm font-medium text-gray-500 dark:text-gray-400 group-hover:text-gray-700 dark:group-hover:text-gray-300 transition-colors">
+      Japan Travel Log
+    </span>
+  )}
+</a>
