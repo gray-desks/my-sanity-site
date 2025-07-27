@@ -35,3 +35,36 @@ site/node_modules/
 site/.env
 site/.env.*
 !site/.env.example
+
+# Vercel
+.vercel/
+
+# IDE / Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+
+# Coverage and testing
+/coverage
+.nyc_output
+.coverage
+htmlcov/
+
+# Build artifacts
+*.tsbuildinfo
+.turbo/

@@ -1,0 +1,85 @@
+name: 🧪 CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, development ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test-build:
+    name: 🏗️ Test & Build
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: 📦 Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: 'site/package-lock.json'
+          
+      - name: 🔧 Install dependencies
+        working-directory: ./site
+        run: npm ci
+        
+      - name: 🎯 Type check
+        working-directory: ./site
+        run: npx tsc --noEmit
+        
+      - name: 🏗️ Build Astro site
+        working-directory: ./site
+        run: npm run build
+        env:
+          PUBLIC_SANITY_PROJECT_ID: ${{ secrets.PUBLIC_SANITY_PROJECT_ID }}
+          PUBLIC_SANITY_DATASET: production
+          
+      - name: 📊 Build summary
+        run: |
+          echo "✅ Build completed successfully!"
+          echo "📁 Site output: site/dist"
+          ls -la site/dist/ || echo "No dist directory found"
+
+  lighthouse-audit:
+    name: 🔍 Performance Audit
+    needs: test-build
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: 📦 Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: 'site/package-lock.json'
+          
+      - name: 🔧 Install dependencies
+        working-directory: ./site
+        run: npm ci
+        
+      - name: 🏗️ Build for audit
+        working-directory: ./site
+        run: npm run build
+        env:
+          PUBLIC_SANITY_PROJECT_ID: ${{ secrets.PUBLIC_SANITY_PROJECT_ID }}
+          PUBLIC_SANITY_DATASET: production
+          
+      - name: 🚀 Start preview server
+        working-directory: ./site
+        run: |
+          npm run preview &
+          sleep 5
+          
+      - name: 🔍 Run Lighthouse audit
+        uses: treosh/lighthouse-ci-action@v10
+        with:
+          configPath: './.github/lighthouse/config.json'
+          uploadArtifacts: true
+          temporaryPublicStorage: true

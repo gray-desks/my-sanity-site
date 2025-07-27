@@ -24,7 +24,8 @@
       "Bash(npm create:*)",
       "Bash(npx astro add:*)",
       "Bash(git rm:*)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "Bash(git tag:*)"
     ],
     "deny": []
   }

@@ -1,0 +1,112 @@
+name: ✨ Feature Request
+description: 新機能の提案
+title: '[Feature] '
+labels: ['enhancement', 'needs-discussion']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ✨ **新機能の提案**をありがとうございます！
+        あなたのアイデアがプロダクトをより良くします。
+
+  - type: textarea
+    id: summary
+    attributes:
+      label: 📝 機能概要
+      description: 提案する機能を簡潔に説明してください
+      placeholder: |
+        例: 記事にいいね機能を追加したい
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: 🤔 解決したい課題
+      description: この機能によってどのような課題が解決されますか？
+      placeholder: |
+        例: 読者の反応を知りたいが、現在はコメント機能しかない
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: 💡 提案する解決策
+      description: 具体的にどのような機能・実装を想定していますか？
+      placeholder: |
+        例: 
+        - 各記事に❤️ボタンを配置
+        - クリックするとカウントが増加
+        - Sanity CMSにいいね数を保存
+        - 人気記事ランキング表示
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: scope
+    attributes:
+      label: 🎯 対象範囲
+      description: この機能はどの部分に関連しますか？
+      options:
+        - label: フロントエンド (Astro)
+        - label: CMS (Sanity)
+        - label: API機能
+        - label: UI/UX改善
+        - label: パフォーマンス
+        - label: SEO対応
+        - label: 多言語対応
+        - label: 収益化機能
+        - label: 管理・運用機能
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: 📈 優先度
+      description: この機能の重要度をお選びください
+      options:
+        - 'Low - あったら嬉しい'
+        - 'Medium - 中程度の改善'
+        - 'High - 重要な機能'
+        - 'Critical - 必須機能'
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: 🔄 代替案
+      description: 他にも考えられる解決方法があれば記載してください
+      placeholder: |
+        例: 
+        - Google Analytics で記事の滞在時間を確認
+        - SNSシェア数で人気度を測定
+        - アンケート機能の追加
+    validations:
+      required: false
+
+  - type: textarea
+    id: technical
+    attributes:
+      label: 🛠 技術的な考慮点
+      description: 実装時に考慮すべき技術的な点があれば記載してください
+      placeholder: |
+        例:
+        - リアルタイム更新の必要性
+        - データベース設計の変更
+        - パフォーマンスへの影響
+        - セキュリティ対策
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: 📋 追加情報
+      description: その他参考になる情報があれば記載してください
+      placeholder: |
+        - 参考サイトのURL
+        - デザインモックアップ
+        - 関連するIssue番号
+    validations:
+      required: false
