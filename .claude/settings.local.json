@@ -33,7 +33,9 @@
       "Bash(SANITY_LOG_LEVEL=debug npx sanity dev --port 9999)",
       "Bash(SANITY_LOG_LEVEL=debug npx sanity build --clean)",
       "Bash(SANITY_TOKEN=skBGZBgsjc6HR2ouOvbIiDoNxIn6f2gKkqcIymaOEdPJpXNdQU0x0yT07Zpu2Liq90CbpNmaYHIrhEg8C node seed/seed-articles.js)",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "Bash(npx vercel:*)",
+      "Bash(npm run e2e:*)"
     ],
     "deny": []
   }

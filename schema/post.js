@@ -13,6 +13,19 @@ export default defineType({
     defineField({ name: 'mainImage',  title: 'Main image', type: 'image' }),
     defineField({ name: 'content',    title: 'Content',    type: 'array', of: [{ type: 'block' }] }),
     defineField({ name: 'tags',       title: 'Tags',       type: 'array', of: [{ type: 'string' }] }),
+    // 位置情報フィールド（Google Maps 連携用）
+    defineField({
+      name: 'location',
+      title: 'Location',
+      type: 'geopoint',
+      description: '緯度経度（Google Maps 用）'
+    }),
+    defineField({
+      name: 'placeName',
+      title: 'Place Name',
+      type: 'string',
+      description: '場所名（オプション）'
+    }),
     // 旅行記・経費フィールド
     defineField({ 
       name: 'tripDate', 
