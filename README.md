@@ -3,7 +3,7 @@
 [![Version](https://img.shields.io/badge/version-v0.2--dev-blue?style=flat-square)](https://github.com/HIDE-Kanazawa/my-sanity-site/tree/v0.2-dev)
 [![Schema](https://img.shields.io/badge/schema-Article%20v0.2-green?style=flat-square)](https://github.com/HIDE-Kanazawa/my-sanity-site/blob/v0.2-dev/schema/article.js)
 [![Deploy](https://img.shields.io/badge/deploy-vercel-black?style=flat-square&logo=vercel)](https://my-sanity-site.vercel.app)
-[![Studio](https://img.shields.io/badge/studio-dev%20mode-yellow?style=flat-square&logo=sanity)](http://localhost:3333)
+[![Studio](https://img.shields.io/badge/studio-sanity.studio-green?style=flat-square&logo=sanity)](https://travel-blog-jp.sanity.studio)
 [![License](https://img.shields.io/badge/license-UNLICENSED-red?style=flat-square)](LICENSE)
 [![Astro](https://img.shields.io/badge/astro-5.x-orange?style=flat-square&logo=astro)](https://astro.build)
 [![Sanity](https://img.shields.io/badge/sanity-v4-red?style=flat-square&logo=sanity)](https://sanity.io)
@@ -161,7 +161,7 @@ npm run dev
 - [x] アフィリエイトブロック（Booking/Rakuten/Klook）
 - [x] 新ルーティング（[type]/[slug]）
 - [x] 20言語対応準備
-- [ ] Studio デプロイ（ビルドエラー調査中）
+- [x] Studio デプロイ（travel-blog-jp.sanity.studio）
 - [ ] 記事検索機能
 - [ ] RSS フィード生成
 
@@ -192,14 +192,14 @@ A: `PUBLIC_ADSENSE_CLIENT_ID` が正しく設定されているか確認
 **Q: ISR が動作しない**
 A: Webhook URL とシークレットが正しく設定されているか確認
 
-### 🔧 既知の問題 (v0.2-dev)
+### 🔧 解決済み問題 (v0.2-dev)
 
 **Q: Sanity Studio のビルド・デプロイが失敗する**
 ```
 Could not resolve entry module ".sanity/runtime/app.js"
 ```
-A: 開発サーバー（`npm run dev`）は正常動作。ビルドエラーは調査中  
-現在の対応策: `http://localhost:3333` で Studio 利用可能
+A: ✅ **解決済み** - [build-fix.md](docs/build-fix.md) 参照  
+Studio URL: https://travel-blog-jp.sanity.studio
 
 ### デバッグ用エンドポイント
 - `/api/revalidate?secret=your-secret` - ISR エンドポイント確認

@@ -166,12 +166,15 @@ v1.0	20 言語フル自動翻訳 + マップ埋込
 - コンポーネント: `ArticleCard`, `Gallery`（LazyLoad）, `AffiliateBlock`
 - 既存 Post 機能は後方互換性維持
 
-#### 🔧 既知の問題
-- Sanity Studio ビルドエラー: `.sanity/runtime/app.js` 解決できず
-- 対応策: 開発サーバー（`npm run dev`）で Studio 利用可能
-- Astro フロントエンド: ビルド・動作正常
+#### 🔧 問題解決
+- Sanity Studio ビルドエラー: ✅ **解決済み**
+- 原因: `site/schema.json` 配置ミス + `.sanity` runtime 未生成
+- 解決策: クリーン → dev 起動 → runtime 再生成 → build 成功
+- デプロイ: https://travel-blog-jp.sanity.studio ✅
 
 #### 📊 移行結果
 - JA/EN 一覧ページ: Article 対応完了
 - 詳細ページ: Gallery + アフィリエイト表示
 - 20言語設定: 準備完了（n8n 翻訳待ち）
+- サンプルデータ: 4記事作成完了（浅草寺・銀座寿司 JA/EN）
+- ルート生成: `/spot/asakusa-morning`, `/food/ginza-sushi` 正常
