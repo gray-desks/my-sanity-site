@@ -1,0 +1,75 @@
+---
+import '../styles/global.css'
+
+export interface Props {
+  title: string
+  description?: string
+  lang?: 'ja' | 'en'
+}
+
+const { 
+  title, 
+  description = '日本全国の旅ログを多言語で発信するブログ',
+  lang = 'ja'
+} = Astro.props
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content={description} />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title}</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content={lang === 'ja' ? 'ja_JP' : 'en_US'} />
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+  </head>
+  <body class="min-h-screen bg-gray-50 text-gray-900">
+    <header class="bg-white shadow-sm border-b sticky top-0 z-50">
+      <nav class="max-w-6xl mx-auto px-4 py-4">
+        <div class="flex justify-between items-center">
+          <a href="/" class="text-xl md:text-2xl font-bold text-blue-600 hover:text-blue-700">
+            🗾 旅ログ
+          </a>
+          <div class="flex space-x-2 md:space-x-4">
+            <a href="/" class="text-sm md:text-base text-gray-600 hover:text-gray-900 px-2 py-1 rounded hover:bg-gray-100">
+              {lang === 'ja' ? 'ホーム' : 'Home'}
+            </a>
+            <a href={lang === 'ja' ? '/en' : '/'} class="text-sm md:text-base text-gray-600 hover:text-gray-900 px-2 py-1 rounded hover:bg-gray-100">
+              {lang === 'ja' ? 'English' : '日本語'}
+            </a>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 py-8">
+      <slot />
+    </main>
+
+    <footer class="bg-gray-100 mt-16">
+      <div class="max-w-6xl mx-auto px-4 py-8">
+        <div class="text-center text-gray-600">
+          <p>&copy; 2024 旅ログ. All rights reserved.</p>
+          <p class="mt-2 text-sm">日本全国の旅記録を多言語で発信</p>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
+
+<style>
+  body {
+    font-family: 'Noto Sans JP', 'Inter', sans-serif;
+  }
+</style>

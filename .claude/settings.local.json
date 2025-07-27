@@ -20,7 +20,10 @@
       "Bash(mv:*)",
       "Bash(npm run dev:*)",
       "Bash(pkill:*)",
-      "Bash(true)"
+      "Bash(true)",
+      "Bash(npm create:*)",
+      "Bash(npx astro add:*)",
+      "Bash(git rm:*)"
     ],
     "deny": []
   }
