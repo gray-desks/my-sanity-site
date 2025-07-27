@@ -2,6 +2,7 @@
 
 [![Version](https://img.shields.io/github/v/release/HIDE-Kanazawa/my-sanity-site?style=flat-square&color=blue)](https://github.com/HIDE-Kanazawa/my-sanity-site/releases)
 [![Deploy](https://img.shields.io/badge/deploy-vercel-black?style=flat-square&logo=vercel)](https://my-sanity-site.vercel.app)
+[![Studio](https://img.shields.io/badge/studio-sanity.studio-red?style=flat-square&logo=sanity)](https://travel-blog-jp.sanity.studio)
 [![CI Status](https://img.shields.io/github/actions/workflow/status/HIDE-Kanazawa/my-sanity-site/ci.yml?style=flat-square&label=CI)](https://github.com/HIDE-Kanazawa/my-sanity-site/actions)
 [![License](https://img.shields.io/badge/license-UNLICENSED-red?style=flat-square)](LICENSE)
 [![Astro](https://img.shields.io/badge/astro-5.x-orange?style=flat-square&logo=astro)](https://astro.build)
@@ -13,6 +14,7 @@
 
 - **目的**: 日本全国の旅行記を日本語・英語で発信
 - **CMS**: Sanity (Free プラン)
+- **Studio**: [travel-blog-jp.sanity.studio](https://travel-blog-jp.sanity.studio)
 - **フロントエンド**: Astro + Tailwind CSS
 - **ホスティング**: Vercel Hobby
 - **収益化**: Booking.com アフィリエイト + Google AdSense
