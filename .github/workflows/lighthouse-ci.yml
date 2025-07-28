@@ -111,7 +111,7 @@ jobs:
           echo "🎉 All Phase 1 languages passed SEO compliance checks!"
           
       - name: Upload Lighthouse reports
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: lighthouse-reports
@@ -180,8 +180,8 @@ jobs:
       - name: Install dependencies
         run: npm ci
         
-      - name: Deploy Sanity dataset
-        run: sanity dataset deploy production
+      - name: Deploy Sanity Studio
+        run: sanity deploy
         env:
           SANITY_AUTH_TOKEN: ${{ secrets.SANITY_AUTH_TOKEN }}
           
