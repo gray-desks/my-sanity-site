@@ -1,10 +1,12 @@
 {
+  "buildCommand": "cd site && npm install && npm run build",
+  "outputDirectory": "site/dist",
+  "installCommand": "cd site && npm install",
   "redirects": [
     {
       "source": "/posts/(.*)",
-      "destination": "/note/$1",
-      "permanent": true,
-      "statusCode": 301
+      "destination": "/",
+      "permanent": true
     }
   ],
   "headers": [
