@@ -35,7 +35,8 @@
       "Bash(SANITY_TOKEN=skBGZBgsjc6HR2ouOvbIiDoNxIn6f2gKkqcIymaOEdPJpXNdQU0x0yT07Zpu2Liq90CbpNmaYHIrhEg8C node seed/seed-articles.js)",
       "Bash(curl:*)",
       "Bash(npx vercel:*)",
-      "Bash(npm run e2e:*)"
+      "Bash(npm run e2e:*)",
+      "Bash(npm i:*)"
     ],
     "deny": []
   }
