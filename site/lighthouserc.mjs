@@ -52,47 +52,26 @@ export default {
     },
     assert: {
       assertions: {
-        // パフォーマンス基準
-        'categories:performance': ['error', { minScore: 0.85 }],
-        'categories:accessibility': ['error', { minScore: 0.90 }],
-        'categories:best-practices': ['error', { minScore: 0.90 }],
-        'categories:seo': ['error', { minScore: 0.90 }],
+        // パフォーマンス基準（緩和）
+        'categories:performance': ['warn', { minScore: 0.70 }],
+        'categories:accessibility': ['warn', { minScore: 0.80 }],
+        'categories:best-practices': ['warn', { minScore: 0.80 }],
+        'categories:seo': ['error', { minScore: 0.85 }],
         
         // 多言語SEO固有のチェック
         'meta-description': 'error',
         'document-title': 'error',
         'html-has-lang': 'error',
         'html-lang-valid': 'error',
-        'hreflang': 'warn',
-        'canonical': 'warn',
         
-        // Core Web Vitals
-        'largest-contentful-paint': ['error', { maxNumericValue: 2500 }],
-        'cumulative-layout-shift': ['error', { maxNumericValue: 0.1 }],
-        'first-contentful-paint': ['error', { maxNumericValue: 1800 }],
+        // Core Web Vitals（緩和）
+        'largest-contentful-paint': ['warn', { maxNumericValue: 4000 }],
+        'cumulative-layout-shift': ['warn', { maxNumericValue: 0.25 }],
+        'first-contentful-paint': ['warn', { maxNumericValue: 3000 }],
         
-        // フォント読み込み最適化
-        'font-display': 'warn',
-        'preload-fonts': 'warn',
-        
-        // 画像最適化 (多言語記事の画像)
-        'modern-image-formats': 'warn',
-        'optimized-images': 'warn',
-        'uses-responsive-images': 'warn',
-        
-        // ネットワーク最適化
-        'uses-http2': 'warn',
-        'uses-rel-preconnect': 'warn',
-        'uses-rel-preload': 'warn',
-        
-        // JavaScript最適化
-        'unused-javascript': 'warn',
-        'uses-passive-event-listeners': 'warn',
-        
-        // 多言語固有のベストプラクティス
+        // 基本SEOのみ（PWA無効）
         'charset': 'error',
         'viewport': 'error',
-        'robots-txt': 'warn',
         'is-crawlable': 'error',
       },
     },

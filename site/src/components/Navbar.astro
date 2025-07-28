@@ -87,13 +87,11 @@ if (import.meta.env.DEV) {
             <a
               href={cleanPath}
               aria-label={`Switch to ${language.nativeName}`}
-              role="button"
-              tabindex="0"
               class={`
                 relative group inline-flex items-center justify-center min-w-[3rem] h-12 px-3 rounded-lg transition-all duration-200 ease-out focus:ring-2 focus:ring-brand-400 focus:outline-none
                 ${isCurrentLang 
-                  ? 'bg-brand-500 text-white shadow-md' 
-                  : 'bg-gray-100 text-gray-700 hover:bg-brand-50 hover:text-brand-600'
+                  ? 'bg-brand-600 text-white shadow-md' 
+                  : 'bg-gray-200 text-gray-800 hover:bg-brand-100 hover:text-brand-700'
                 }
               `}
               title={language.nativeName}

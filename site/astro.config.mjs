@@ -43,4 +43,20 @@ export default defineConfig({
   // ビルド設定
   output: 'static',
   
+  // CSS最適化
+  vite: {
+    build: {
+      cssMinify: true,
+      minify: 'esbuild',
+      rollupOptions: {
+        output: {
+          manualChunks: undefined,
+        }
+      }
+    },
+    css: {
+      devSourcemap: false
+    }
+  },
+  
 });
