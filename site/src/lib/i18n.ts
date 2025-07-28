@@ -8,6 +8,7 @@ export interface Language {
   id: string
   title: string
   nativeName: string
+  shortName: string
   dir: 'ltr' | 'rtl'
   phase: 1 | 2 | 3
   enabled: boolean
@@ -16,30 +17,30 @@ export interface Language {
 // 全20言語の定義
 export const ALL_LANGUAGES: Language[] = [
   // Phase 1: 基幹7言語 (ja, en, zh-CN, zh-TW, ko, th, vi)
-  { id: 'ja', title: 'Japanese', nativeName: '日本語', dir: 'ltr', phase: 1, enabled: true },
-  { id: 'en', title: 'English', nativeName: 'English', dir: 'ltr', phase: 1, enabled: true },
-  { id: 'zh-cn', title: 'Chinese (Simplified)', nativeName: '中文（简体）', dir: 'ltr', phase: 1, enabled: true },
-  { id: 'zh-tw', title: 'Chinese (Traditional)', nativeName: '中文（繁體）', dir: 'ltr', phase: 1, enabled: true },
-  { id: 'ko', title: 'Korean', nativeName: '한국어', dir: 'ltr', phase: 1, enabled: true },
-  { id: 'th', title: 'Thai', nativeName: 'ไทย', dir: 'ltr', phase: 1, enabled: true },
-  { id: 'vi', title: 'Vietnamese', nativeName: 'Tiếng Việt', dir: 'ltr', phase: 1, enabled: true },
+  { id: 'ja', title: 'Japanese', nativeName: '日本語', shortName: 'JA', dir: 'ltr', phase: 1, enabled: true },
+  { id: 'en', title: 'English', nativeName: 'English', shortName: 'EN', dir: 'ltr', phase: 1, enabled: true },
+  { id: 'zh-cn', title: 'Chinese (Simplified)', nativeName: '中文（简体）', shortName: '中', dir: 'ltr', phase: 1, enabled: true },
+  { id: 'zh-tw', title: 'Chinese (Traditional)', nativeName: '中文（繁體）', shortName: '繁', dir: 'ltr', phase: 1, enabled: true },
+  { id: 'ko', title: 'Korean', nativeName: '한국어', shortName: '한', dir: 'ltr', phase: 1, enabled: true },
+  { id: 'th', title: 'Thai', nativeName: 'ไทย', shortName: 'TH', dir: 'ltr', phase: 1, enabled: true },
+  { id: 'vi', title: 'Vietnamese', nativeName: 'Tiếng Việt', shortName: 'VI', dir: 'ltr', phase: 1, enabled: true },
 
   // Phase 2: 拡張6言語 (id, ms, tl, fr, de, es)
-  { id: 'id', title: 'Indonesian', nativeName: 'Bahasa Indonesia', dir: 'ltr', phase: 2, enabled: false },
-  { id: 'ms', title: 'Malay', nativeName: 'Bahasa Melayu', dir: 'ltr', phase: 2, enabled: false },
-  { id: 'tl', title: 'Filipino', nativeName: 'Filipino', dir: 'ltr', phase: 2, enabled: false },
-  { id: 'fr', title: 'French', nativeName: 'Français', dir: 'ltr', phase: 2, enabled: false },
-  { id: 'de', title: 'German', nativeName: 'Deutsch', dir: 'ltr', phase: 2, enabled: false },
-  { id: 'es', title: 'Spanish', nativeName: 'Español', dir: 'ltr', phase: 2, enabled: false },
+  { id: 'id', title: 'Indonesian', nativeName: 'Bahasa Indonesia', shortName: 'ID', dir: 'ltr', phase: 2, enabled: false },
+  { id: 'ms', title: 'Malay', nativeName: 'Bahasa Melayu', shortName: 'MS', dir: 'ltr', phase: 2, enabled: false },
+  { id: 'tl', title: 'Filipino', nativeName: 'Filipino', shortName: 'TL', dir: 'ltr', phase: 2, enabled: false },
+  { id: 'fr', title: 'French', nativeName: 'Français', shortName: 'FR', dir: 'ltr', phase: 2, enabled: false },
+  { id: 'de', title: 'German', nativeName: 'Deutsch', shortName: 'DE', dir: 'ltr', phase: 2, enabled: false },
+  { id: 'es', title: 'Spanish', nativeName: 'Español', shortName: 'ES', dir: 'ltr', phase: 2, enabled: false },
 
   // Phase 3: 多様化7言語 (it, pt, ru, ar, hi, tr, pt-BR)
-  { id: 'it', title: 'Italian', nativeName: 'Italiano', dir: 'ltr', phase: 3, enabled: false },
-  { id: 'pt', title: 'Portuguese', nativeName: 'Português', dir: 'ltr', phase: 3, enabled: false },
-  { id: 'ru', title: 'Russian', nativeName: 'Русский', dir: 'ltr', phase: 3, enabled: false },
-  { id: 'ar', title: 'Arabic', nativeName: 'العربية', dir: 'rtl', phase: 3, enabled: false },
-  { id: 'hi', title: 'Hindi', nativeName: 'हिन्दी', dir: 'ltr', phase: 3, enabled: false },
-  { id: 'tr', title: 'Turkish', nativeName: 'Türkçe', dir: 'ltr', phase: 3, enabled: false },
-  { id: 'pt-br', title: 'Portuguese (Brazil)', nativeName: 'Português (Brasil)', dir: 'ltr', phase: 3, enabled: false },
+  { id: 'it', title: 'Italian', nativeName: 'Italiano', shortName: 'IT', dir: 'ltr', phase: 3, enabled: false },
+  { id: 'pt', title: 'Portuguese', nativeName: 'Português', shortName: 'PT', dir: 'ltr', phase: 3, enabled: false },
+  { id: 'ru', title: 'Russian', nativeName: 'Русский', shortName: 'RU', dir: 'ltr', phase: 3, enabled: false },
+  { id: 'ar', title: 'Arabic', nativeName: 'العربية', shortName: 'AR', dir: 'rtl', phase: 3, enabled: false },
+  { id: 'hi', title: 'Hindi', nativeName: 'हिन्दी', shortName: 'HI', dir: 'ltr', phase: 3, enabled: false },
+  { id: 'tr', title: 'Turkish', nativeName: 'Türkçe', shortName: 'TR', dir: 'ltr', phase: 3, enabled: false },
+  { id: 'pt-br', title: 'Portuguese (Brazil)', nativeName: 'Português (Brasil)', shortName: 'BR', dir: 'ltr', phase: 3, enabled: false },
 ]
 
 // 現在有効な言語のみを取得
