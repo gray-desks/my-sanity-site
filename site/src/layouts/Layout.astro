@@ -118,6 +118,23 @@ const fontFamily = getFontFamily(lang)
       </div>
     </footer>
 
+    <!-- Vercel Analytics & Speed Insights -->
+    <script>
+      // Vercel Analytics
+      import('@vercel/analytics').then(module => {
+        if (module.inject) {
+          module.inject();
+        }
+      });
+
+      // Vercel Speed Insights  
+      import('@vercel/speed-insights').then(module => {
+        if (module.injectSpeedInsights) {
+          module.injectSpeedInsights();
+        }
+      });
+    </script>
+
   </body>
 </html>
 
