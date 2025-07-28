@@ -1,0 +1,380 @@
+{
+  "name": "Travel Blog Multi-Language Translation Pipeline",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "sanity-webhook",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-trigger",
+      "name": "Sanity Article Published",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [240, 300],
+      "webhookId": "travel-blog-translation"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json.type}}",
+              "operation": "equal",
+              "value2": "article"
+            },
+            {
+              "value1": "={{$json.event}}",
+              "operation": "equal", 
+              "value2": "create"
+            },
+            {
+              "value1": "={{$json.language}}",
+              "operation": "equal",
+              "value2": "ja"
+            }
+          ]
+        }
+      },
+      "id": "filter-japanese-articles",
+      "name": "Filter Japanese Articles Only",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "projectId": "fcz6on8p",
+        "dataset": "production",
+        "operation": "get",
+        "documentId": "={{$json.documentId}}"
+      },
+      "id": "get-article-content",
+      "name": "Get Article Content",
+      "type": "n8n-nodes-base.sanity",
+      "typeVersion": 1,
+      "position": [680, 180],
+      "credentials": {
+        "sanityApi": {
+          "id": "1",
+          "name": "Sanity API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "phase1-languages",
+              "name": "targetLanguages",
+              "value": "[\"en\", \"zh-cn\", \"zh-tw\", \"ko\", \"th\", \"vi\"]",
+              "type": "array"
+            },
+            {
+              "id": "source-content",
+              "name": "sourceTitle",
+              "value": "={{$json.title}}",
+              "type": "string"
+            },
+            {
+              "id": "source-body",
+              "name": "sourceBody", 
+              "value": "={{$json.body}}",
+              "type": "object"
+            },
+            {
+              "id": "article-type",
+              "name": "articleType",
+              "value": "={{$json.type}}",
+              "type": "string"
+            },
+            {
+              "id": "original-id",
+              "name": "originalId",
+              "value": "={{$json._id}}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "prepare-translation-data",
+      "name": "Prepare Translation Data",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3,
+      "position": [900, 180]
+    },
+    {
+      "parameters": {
+        "batchSize": 1,
+        "options": {}
+      },
+      "id": "split-by-language",
+      "name": "Split by Target Language",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [1120, 180]
+    },
+    {
+      "parameters": {
+        "resource": "chat",
+        "operation": "create",
+        "chatInput": {
+          "model": "gpt-4o-mini",
+          "messages": {
+            "values": [
+              {
+                "role": "system",
+                "content": "You are a professional travel content translator specializing in Japanese tourism content. Translate the given travel article content accurately while maintaining the cultural context and appeal for international tourists.\n\nTranslation Guidelines:\n1. Preserve proper nouns (place names, station names, etc.) in their original form\n2. Maintain the tone and style appropriate for travel content\n3. Adapt cultural references for international audiences\n4. Keep HTML/Markdown formatting intact\n5. Translate to: {{$json.targetLanguage}}\n\nRespond ONLY with the translated JSON in this exact format:\n{\n  \"title\": \"translated title\",\n  \"body\": \"translated body content preserving all formatting\"\n}"
+              },
+              {
+                "role": "user", 
+                "content": "Translate this Japanese travel article to {{$json.targetLanguage}}:\n\nTitle: {{$node[\"Prepare Translation Data\"].json[\"sourceTitle\"]}}\n\nBody: {{$node[\"Prepare Translation Data\"].json[\"sourceBody\"]}}\n\nTarget Language: {{$json.targetLanguage}}"
+              }
+            ]
+          },
+          "options": {
+            "temperature": 0.3,
+            "maxTokens": "={{Math.ceil($node['Prepare Translation Data'].json['sourceBody'].length * 1.3)}}"
+          }
+        }
+      },
+      "id": "translate-with-gpt4",
+      "name": "Translate with GPT-4",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [1340, 180],
+      "credentials": {
+        "openAiApi": {
+          "id": "2",
+          "name": "OpenAI API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parse GPT-4 response and prepare Sanity document\nconst gptResponse = $input.all()[0].json.message.content;\n\ntry {\n  const translatedContent = JSON.parse(gptResponse);\n  const targetLang = $input.all()[0].json.targetLanguage;\n  const originalData = $node[\"Prepare Translation Data\"].json;\n  \n  // Generate slug from translated title\n  const generateSlug = (title) => {\n    return title\n      .toLowerCase()\n      .replace(/[^a-z0-9\\s-]/g, '')\n      .trim()\n      .replace(/\\s+/g, '-')\n      .substring(0, 96);\n  };\n  \n  // Prepare document for Sanity\n  const translatedDocument = {\n    _type: 'article',\n    title: translatedContent.title,\n    slug: {\n      _type: 'slug',\n      current: generateSlug(translatedContent.title)\n    },\n    body: translatedContent.body,\n    type: originalData.articleType,\n    lang: targetLang,\n    publishedAt: new Date().toISOString(),\n    // Reference to original article for i18n\n    __i18n_base: {\n      _type: 'reference',\n      _ref: originalData.originalId\n    },\n    __i18n_lang: targetLang\n  };\n  \n  return [{\n    json: {\n      document: translatedDocument,\n      targetLanguage: targetLang,\n      originalId: originalData.originalId\n    }\n  }];\n  \n} catch (error) {\n  throw new Error(`Failed to parse GPT-4 response: ${error.message}`);\n}"
+      },
+      "id": "prepare-sanity-document",
+      "name": "Prepare Sanity Document",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1560, 180]
+    },
+    {
+      "parameters": {
+        "resource": "document",
+        "operation": "create",
+        "projectId": "fcz6on8p",
+        "dataset": "production",
+        "body": "={{$json.document}}"
+      },
+      "id": "create-translated-article",
+      "name": "Create Translated Article",
+      "type": "n8n-nodes-base.sanity",
+      "typeVersion": 1,
+      "position": [1780, 180],
+      "credentials": {
+        "sanityApi": {
+          "id": "1",
+          "name": "Sanity API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "={{$env.VERCEL_DEPLOY_HOOK}}",
+        "options": {}
+      },
+      "id": "trigger-vercel-deploy",
+      "name": "Trigger Vercel Deploy",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [2000, 180]
+    },
+    {
+      "parameters": {
+        "channel": "#travel-blog-alerts",
+        "text": "✅ Article translation completed successfully!\\n\\n📄 Original: {{$node[\"Get Article Content\"].json[\"title\"]}}\\n🌐 Language: {{$json.targetLanguage}}\\n📝 New Article ID: {{$node[\"Create Translated Article\"].json[\"_id\"]}}\\n🚀 Vercel deployment triggered",
+        "otherOptions": {}
+      },
+      "id": "success-notification",
+      "name": "Success Notification",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2,
+      "position": [2220, 100],
+      "credentials": {
+        "slackApi": {
+          "id": "3",
+          "name": "Slack API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "channel": "#travel-blog-alerts",
+        "text": "❌ Translation pipeline failed\\n\\n📄 Article: {{$node[\"Get Article Content\"].json[\"title\"] || 'Unknown'}}\\n🌐 Target Language: {{$json.targetLanguage || 'Unknown'}}\\n💥 Error: {{$json.error || 'Unknown error'}}\\n\\n@channel Please check n8n workflow",
+        "otherOptions": {}
+      },
+      "id": "error-notification",
+      "name": "Error Notification",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2,
+      "position": [2220, 260],
+      "credentials": {
+        "slackApi": {
+          "id": "3",
+          "name": "Slack API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\\n  \\\"status\\\": \\\"success\\\",\\n  \\\"message\\\": \\\"Translation pipeline initiated\\\",\\n  \\\"articleId\\\": \\\"{{$json.documentId}}\\\",\\n  \\\"targetLanguages\\\": {{$node[\\\"Prepare Translation Data\\\"].json[\\\"targetLanguages\\\"]}}\\n}",
+        "options": {}
+      },
+      "id": "webhook-response",
+      "name": "Webhook Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [680, 300]
+    }
+  ],
+  "connections": {
+    "Sanity Article Published": {
+      "main": [
+        [
+          {
+            "node": "Filter Japanese Articles Only",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter Japanese Articles Only": {
+      "main": [
+        [
+          {
+            "node": "Get Article Content",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Webhook Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Article Content": {
+      "main": [
+        [
+          {
+            "node": "Prepare Translation Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Translation Data": {
+      "main": [
+        [
+          {
+            "node": "Split by Target Language",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split by Target Language": {
+      "main": [
+        [
+          {
+            "node": "Translate with GPT-4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Translate with GPT-4": {
+      "main": [
+        [
+          {
+            "node": "Prepare Sanity Document",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Sanity Document": {
+      "main": [
+        [
+          {
+            "node": "Create Translated Article",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Translated Article": {
+      "main": [
+        [
+          {
+            "node": "Trigger Vercel Deploy",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Trigger Vercel Deploy": {
+      "main": [
+        [
+          {
+            "node": "Success Notification",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": {
+      "errorNotification": {
+        "node": "Error Notification"
+      }
+    }
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "createdAt": "2024-01-15T00:00:00.000Z",
+      "updatedAt": "2024-01-15T00:00:00.000Z",
+      "id": "travel-blog",
+      "name": "Travel Blog"
+    },
+    {
+      "createdAt": "2024-01-15T00:00:00.000Z", 
+      "updatedAt": "2024-01-15T00:00:00.000Z",
+      "id": "translation",
+      "name": "Translation"
+    }
+  ],
+  "triggerCount": 1,
+  "updatedAt": "2024-01-15T00:00:00.000Z",
+  "versionId": "1"
+}

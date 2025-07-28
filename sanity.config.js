@@ -16,26 +16,31 @@ export default defineConfig({
     visionTool(),
     documentInternationalization({
       supportedLanguages: [
+        // Phase 1: 基幹7言語
         {id: 'ja', title: '日本語'},
         {id: 'en', title: 'English'},
         {id: 'zh-cn', title: '中文（简体）'},
-        {id: 'fr', title: 'Français'},
-        {id: 'de', title: 'Deutsch'},
-        {id: 'es', title: 'Español'},
-        {id: 'it', title: 'Italiano'},
-        {id: 'pt', title: 'Português'},
-        {id: 'ru', title: 'Русский'},
+        {id: 'zh-tw', title: '中文（繁體）'},
         {id: 'ko', title: '한국어'},
         {id: 'th', title: 'ไทย'},
         {id: 'vi', title: 'Tiếng Việt'},
+        
+        // Phase 2: 拡張6言語
         {id: 'id', title: 'Bahasa Indonesia'},
         {id: 'ms', title: 'Bahasa Melayu'},
-        {id: 'fil', title: 'Filipino'},
-        {id: 'hi', title: 'हिन्दी'},
+        {id: 'tl', title: 'Filipino'},
+        {id: 'fr', title: 'Français'},
+        {id: 'de', title: 'Deutsch'},
+        {id: 'es', title: 'Español'},
+        
+        // Phase 3: 多様化7言語
+        {id: 'it', title: 'Italiano'},
+        {id: 'pt', title: 'Português'},
+        {id: 'ru', title: 'Русский'},
         {id: 'ar', title: 'العربية'},
+        {id: 'hi', title: 'हिन्दी'},
         {id: 'tr', title: 'Türkçe'},
-        {id: 'nl', title: 'Nederlands'},
-        {id: 'sv', title: 'Svenska'},
+        {id: 'pt-br', title: 'Português (Brasil)'},
       ],
       schemaTypes: ['post', 'article'],
     }),

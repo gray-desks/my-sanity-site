@@ -1,20 +1,15 @@
 ---
+import { getUILabel, getLocalizedPath, DEFAULT_LANGUAGE } from '../lib/i18n'
+
 export interface Props {
-  lang?: 'ja' | 'en'
+  lang?: string
 }
 
-const { lang = 'ja' } = Astro.props
+const { lang = DEFAULT_LANGUAGE } = Astro.props
 
-const title = lang === 'ja' 
-  ? '日本全国の旅ログを発信' 
-  : 'Japan Travel Stories'
-
-const subtitle = lang === 'ja'
-  ? '美しい景色、美味しい食べ物、文化体験を多言語で共有'
-  : 'Beautiful places, delicious food, and cultural experiences shared in multiple languages'
-
-const ctaText = lang === 'ja' ? '記事を読む' : 'Read Stories'
-const ctaSecondary = lang === 'ja' ? 'English' : '日本語'
+const title = getUILabel(lang, 'heroTitle')
+const subtitle = getUILabel(lang, 'heroSubtitle')
+const ctaText = getUILabel(lang, 'readStories')
 ---
 
 <section class="relative overflow-hidden bg-gradient-hero py-8 lg:py-10 min-h-[30vh] flex items-center">
@@ -53,26 +48,15 @@ const ctaSecondary = lang === 'ja' ? 'English' : '日本語'
       {subtitle}
     </p>
     
-    <div class="flex flex-col sm:flex-row gap-4 justify-center items-center animate-slide-up" style="animation-delay: 0.4s;">
+    <div class="flex justify-center animate-slide-up" style="animation-delay: 0.4s;">
       <a 
         href="#articles"
         class="group inline-flex items-center px-6 py-2.5 bg-white text-brand-600 rounded-xl font-semibold text-sm hover:bg-white/95 hover:scale-105 transition-all duration-300 shadow-lg"
-        aria-label={lang === 'ja' ? '最新記事を読む' : 'Read latest articles'}
+        aria-label={getUILabel(lang, 'readMore')}
       >
         <span class="mr-2">{ctaText}</span>
         <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
-        </svg>
-      </a>
-      
-      <a 
-        href={lang === 'ja' ? '/en' : '/'}
-        class="group inline-flex items-center px-6 py-2.5 bg-white/10 text-white rounded-xl font-semibold text-sm hover:bg-white/20 transition-all duration-300 border border-white/20 hover:border-white/40 backdrop-blur-sm hover:scale-105"
-        aria-label={lang === 'ja' ? 'Switch to English' : 'Switch to Japanese'}
-      >
-        <span class="mr-2">🌐 {ctaSecondary}</span>
-        <svg class="w-4 h-4 group-hover:rotate-12 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path>
         </svg>
       </a>
     </div>

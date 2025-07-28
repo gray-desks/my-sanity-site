@@ -1,0 +1,260 @@
+---
+import Layout from '../../../layouts/Layout.astro'
+import Gallery from '../../../components/Gallery.astro'
+import AffiliateBlock from '../../../components/AffiliateBlock.astro'
+import { getArticleBySlug, getEnabledLanguageArticleSlugs, getArticleTranslations } from '../../../lib/sanity'
+import { ENABLED_LANGUAGES, DEFAULT_LANGUAGE, getLanguageInfo, isLanguageEnabled, getUILabel } from '../../../lib/i18n'
+import { PortableText } from 'astro-portabletext'
+
+export async function getStaticPaths() {
+  // Phase 1の有効言語のみで記事ページを生成
+  const slugs = await getEnabledLanguageArticleSlugs()
+  
+  // 日本語以外の言語のパスを生成
+  const paths = slugs
+    .filter(item => item.lang !== DEFAULT_LANGUAGE)
+    .map(item => ({
+      params: {
+        lang: item.lang,
+        type: item.type,
+        slug: item.slug
+      }
+    }))
+  
+  return paths
+}
+
+const { lang, type, slug } = Astro.params
+
+// パラメータ検証
+if (!lang || !type || !slug || !isLanguageEnabled(lang)) {
+  return Astro.redirect('/')
+}
+
+const languageInfo = getLanguageInfo(lang)!
+
+// 記事データ取得
+const article = await getArticleBySlug(slug, lang)
+
+if (!article) {
+  return Astro.redirect(`/${lang}`)
+}
+
+// 翻訳版記事を取得
+let translations: any[] = []
+try {
+  translations = await getArticleTranslations(article._id)
+} catch (error) {
+  console.warn('Failed to fetch translations:', error)
+}
+
+// 日付フォーマット
+const formatDate = (dateString: string, langCode: string) => {
+  const date = new Date(dateString)
+  const locale = langCode === 'zh-cn' ? 'zh-CN' : 
+                langCode === 'zh-tw' ? 'zh-TW' :
+                langCode === 'pt-br' ? 'pt-BR' :
+                langCode
+  
+  return date.toLocaleDateString(locale, {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  })
+}
+
+// タイプのローカライズ
+const getLocalizedType = (type: string, lang: string) => {
+  const typeMap: Record<string, Record<string, string>> = {
+    spot: {
+      ja: 'スポット',
+      en: 'Spot',
+      'zh-cn': '景点',
+      'zh-tw': '景點',
+      ko: '명소',
+      th: 'สถานที่',
+      vi: 'Điểm tham quan'
+    },
+    food: {
+      ja: 'グルメ',
+      en: 'Food',
+      'zh-cn': '美食',
+      'zh-tw': '美食',
+      ko: '음식',
+      th: 'อาหาร',
+      vi: 'Ẩm thực'
+    },
+    transport: {
+      ja: '交通',
+      en: 'Transport',
+      'zh-cn': '交通',
+      'zh-tw': '交通',
+      ko: '교통',
+      th: 'การเดินทาง',
+      vi: 'Giao thông'
+    },
+    hotel: {
+      ja: '宿泊',
+      en: 'Hotel',
+      'zh-cn': '住宿',
+      'zh-tw': '住宿',
+      ko: '숙박',
+      th: 'โรงแรม',
+      vi: 'Khách sạn'
+    },
+    note: {
+      ja: 'メモ',
+      en: 'Note',
+      'zh-cn': '笔记',
+      'zh-tw': '筆記',
+      ko: '메모',
+      th: 'บันทึก',
+      vi: 'Ghi chú'
+    }
+  }
+  
+  return typeMap[type]?.[lang] || typeMap[type]?.en || type
+}
+
+// Portable Text コンポーネント設定
+const components = {
+  types: {
+    affiliate: AffiliateBlock,
+  },
+}
+---
+
+<Layout 
+  title={article.title}
+  description={`${getLocalizedType(article.type, lang)} - ${article.title}`}
+  lang={lang as 'ja' | 'en'}
+>
+  <article class="max-w-4xl mx-auto px-4 py-8">
+    <!-- Article Header -->
+    <header class="mb-8">
+      <!-- Breadcrumb -->
+      <nav class="mb-6 text-sm">
+        <ol class="flex items-center space-x-2 text-gray-500">
+          <li><a href={`/${lang === DEFAULT_LANGUAGE ? '' : lang}`} class="hover:text-brand-600 transition-colors">{getUILabel(lang, 'backToHome')}</a></li>
+          <li class="before:content-['/'] before:mx-2">{getLocalizedType(article.type, lang)}</li>
+          <li class="before:content-['/'] before:mx-2 text-gray-800 font-medium truncate">{article.title}</li>
+        </ol>
+      </nav>
+
+      <!-- Article Meta -->
+      <div class="flex flex-wrap items-center gap-4 mb-6">
+        <span class={`inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold
+          ${article.type === 'spot' ? 'bg-brand-100 text-brand-700' :
+            article.type === 'food' ? 'bg-secondary-100 text-secondary-700' :
+            article.type === 'transport' ? 'bg-accent-100 text-accent-700' :
+            article.type === 'hotel' ? 'bg-purple-100 text-purple-700' :
+            'bg-gray-100 text-gray-700'}
+        `}>
+          <span class="mr-1 text-base">
+            {article.type === 'spot' ? '🗾' :
+             article.type === 'food' ? '🍣' :
+             article.type === 'transport' ? '🚄' :
+             article.type === 'hotel' ? '🛏️' : '📝'}
+          </span>
+          {getLocalizedType(article.type, lang)}
+        </span>
+        
+        <time datetime={article.publishedAt} class="text-gray-500 text-sm">
+          {getUILabel(lang, 'publishedOn')} {formatDate(article.publishedAt, lang)}
+        </time>
+        
+        {article.location && (
+          <span class="flex items-center text-gray-500 text-sm">
+            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+            </svg>
+            {article.placeName || `${article.location.lat}, ${article.location.lng}`}
+          </span>
+        )}
+      </div>
+
+      <!-- Title -->
+      <h1 class="text-3xl md:text-4xl lg:text-5xl font-black text-gray-900 mb-6 leading-tight">
+        {article.title}
+      </h1>
+
+      <!-- Cover Image -->
+      {article.coverImage?.asset?.url && (
+        <div class="relative overflow-hidden rounded-2xl mb-8 aspect-[16/9] shadow-xl">
+          <img 
+            src={article.coverImage.asset.url}
+            alt={article.title}
+            class="w-full h-full object-cover"
+            loading="eager"
+          />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+        </div>
+      )}
+    </header>
+
+    <!-- Article Content -->
+    <div class="prose prose-lg max-w-none prose-headings:text-gray-900 prose-p:text-gray-700 prose-p:leading-relaxed prose-a:text-brand-600 prose-a:no-underline hover:prose-a:underline prose-strong:text-gray-900 prose-img:rounded-xl prose-img:shadow-lg">
+      <PortableText value={article.body} components={components} />
+    </div>
+
+    <!-- Gallery -->
+    {article.gallery && article.gallery.length > 0 && (
+      <div class="mt-12">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6">
+          {lang === 'en' ? 'Gallery' : 
+           lang === 'zh-cn' ? '图片集' :
+           lang === 'zh-tw' ? '圖片集' :
+           lang === 'ko' ? '갤러리' :
+           lang === 'th' ? 'แกลเลอรี่' :
+           lang === 'vi' ? 'Thư viện ảnh' :
+           'ギャラリー'}
+        </h2>
+        <Gallery images={article.gallery} />
+      </div>
+    )}
+
+    <!-- Language Versions -->
+    {translations.length > 1 && (
+      <div class="mt-12 p-6 bg-gradient-to-r from-gray-50 to-brand-50/30 rounded-2xl border border-gray-200">
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">
+          {getUILabel(lang, 'switchLanguage')}
+        </h3>
+        <div class="flex flex-wrap gap-3">
+          {translations
+            .filter(t => isLanguageEnabled(t.lang))
+            .map(translation => {
+              const translationLangInfo = getLanguageInfo(translation.lang)
+              if (!translationLangInfo) return null
+              
+              const isCurrentLang = translation.lang === lang
+              const href = translation.lang === DEFAULT_LANGUAGE 
+                ? `/${translation.type}/${translation.slug?.current}`
+                : `/${translation.lang}/${translation.type}/${translation.slug?.current}`
+              
+              return (
+                <a
+                  href={href}
+                  class={`inline-flex items-center px-4 py-2 rounded-xl text-sm font-medium transition-all
+                    ${isCurrentLang 
+                      ? 'bg-brand-600 text-white shadow-lg' 
+                      : 'bg-white text-gray-700 hover:bg-brand-50 hover:text-brand-700 border border-gray-200 hover:border-brand-200'
+                    }
+                  `}
+                >
+                  <span class="mr-2">{translationLangInfo.id === 'ja' ? '🇯🇵' : 
+                                      translationLangInfo.id === 'en' ? '🇺🇸' :
+                                      translationLangInfo.id === 'zh-cn' ? '🇨🇳' :
+                                      translationLangInfo.id === 'zh-tw' ? '🇹🇼' :
+                                      translationLangInfo.id === 'ko' ? '🇰🇷' :
+                                      translationLangInfo.id === 'th' ? '🇹🇭' :
+                                      translationLangInfo.id === 'vi' ? '🇻🇳' : '🌐'}</span>
+                  {translationLangInfo.nativeName}
+                </a>
+              )
+            })}
+        </div>
+      </div>
+    )}
+  </article>
+</Layout>

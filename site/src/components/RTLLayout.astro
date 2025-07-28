@@ -1,0 +1,193 @@
+---
+/**
+ * RTL Layout Component for Arabic and other RTL languages
+ * アラビア語などRTL言語対応レイアウトコンポーネント
+ */
+
+interface Props {
+  lang: string
+  class?: string
+}
+
+const { lang, class: className = '' } = Astro.props
+
+import { isRTL } from '../lib/i18n'
+
+const isRightToLeft = isRTL(lang)
+const dirAttribute = isRightToLeft ? 'rtl' : 'ltr'
+const alignmentClass = isRightToLeft ? 'text-right' : 'text-left'
+const marginClass = isRightToLeft ? 'mr-auto' : 'ml-auto'
+---
+
+<div 
+  dir={dirAttribute}
+  class:list={[
+    className,
+    alignmentClass,
+    {
+      'rtl-layout': isRightToLeft,
+      'ltr-layout': !isRightToLeft
+    }
+  ]}
+>
+  <slot />
+</div>
+
+<style>
+  /* RTL-specific styles */
+  .rtl-layout {
+    direction: rtl;
+  }
+  
+  .rtl-layout .flex {
+    flex-direction: row-reverse;
+  }
+  
+  .rtl-layout .text-left {
+    text-align: right;
+  }
+  
+  .rtl-layout .text-right {
+    text-align: left;
+  }
+  
+  .rtl-layout .ml-auto {
+    margin-left: unset;
+    margin-right: auto;
+  }
+  
+  .rtl-layout .mr-auto {
+    margin-right: unset;
+    margin-left: auto;
+  }
+  
+  .rtl-layout .pl-4 {
+    padding-left: unset;
+    padding-right: 1rem;
+  }
+  
+  .rtl-layout .pr-4 {
+    padding-right: unset;
+    padding-left: 1rem;
+  }
+  
+  .rtl-layout .border-l {
+    border-left: none;
+    border-right: 1px solid;
+  }
+  
+  .rtl-layout .border-r {
+    border-right: none;
+    border-left: 1px solid;
+  }
+  
+  /* Navigation adjustments for RTL */
+  .rtl-layout .navbar {
+    direction: rtl;
+  }
+  
+  .rtl-layout .navbar .logo {
+    order: 2;
+  }
+  
+  .rtl-layout .navbar .nav-items {
+    order: 1;
+  }
+  
+  /* Article content RTL */
+  .rtl-layout .prose {
+    direction: rtl;
+    text-align: right;
+  }
+  
+  .rtl-layout .prose h1,
+  .rtl-layout .prose h2,
+  .rtl-layout .prose h3,
+  .rtl-layout .prose h4,
+  .rtl-layout .prose h5,
+  .rtl-layout .prose h6 {
+    text-align: right;
+  }
+  
+  .rtl-layout .prose p {
+    text-align: right;
+  }
+  
+  .rtl-layout .prose ul,
+  .rtl-layout .prose ol {
+    padding-right: 1.5rem;
+    padding-left: 0;
+  }
+  
+  .rtl-layout .prose blockquote {
+    border-right: 4px solid;
+    border-left: none;
+    padding-right: 1rem;
+    padding-left: 0;
+    margin-right: 0;
+    margin-left: 1rem;
+  }
+  
+  /* Card layouts RTL */
+  .rtl-layout .card {
+    direction: rtl;
+  }
+  
+  .rtl-layout .card-meta {
+    direction: rtl;
+    text-align: right;
+  }
+  
+  .rtl-layout .badge {
+    direction: rtl;
+  }
+  
+  /* Form elements RTL */
+  .rtl-layout input,
+  .rtl-layout textarea,
+  .rtl-layout select {
+    direction: rtl;
+    text-align: right;
+  }
+  
+  .rtl-layout input::placeholder,
+  .rtl-layout textarea::placeholder {
+    text-align: right;
+  }
+  
+  /* Button groups RTL */
+  .rtl-layout .btn-group {
+    direction: rtl;
+  }
+  
+  .rtl-layout .btn-group .btn:first-child {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 0.375rem;
+    border-bottom-right-radius: 0.375rem;
+  }
+  
+  .rtl-layout .btn-group .btn:last-child {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-top-left-radius: 0.375rem;
+    border-bottom-left-radius: 0.375rem;
+  }
+  
+  /* Arrow and chevron icons RTL */
+  .rtl-layout .icon-arrow-right {
+    transform: scaleX(-1);
+  }
+  
+  .rtl-layout .icon-arrow-left {
+    transform: scaleX(-1);
+  }
+  
+  .rtl-layout .icon-chevron-right {
+    transform: scaleX(-1);
+  }
+  
+  .rtl-layout .icon-chevron-left {
+    transform: scaleX(-1);
+  }
+</style>

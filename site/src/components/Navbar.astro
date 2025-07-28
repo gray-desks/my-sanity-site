@@ -1,11 +1,62 @@
 ---
 import Logo from './ui/Logo.astro'
+import { ENABLED_LANGUAGES, DEFAULT_LANGUAGE, getLanguageInfo, getLocalizedPath } from '../lib/i18n'
 
 export interface Props {
-  lang?: 'ja' | 'en'
+  lang?: string
+  currentPath?: string
 }
 
-const { lang = 'ja' } = Astro.props
+const { lang = DEFAULT_LANGUAGE, currentPath = '/' } = Astro.props
+
+// 現在の言語情報
+const currentLanguage = getLanguageInfo(lang) || getLanguageInfo(DEFAULT_LANGUAGE)!
+
+// 各言語の国旗絵文字マッピング
+const getFlagEmoji = (langId: string): string => {
+  const flagMap: Record<string, string> = {
+    'ja': '🇯🇵',
+    'en': '🇺🇸', 
+    'zh-cn': '🇨🇳',
+    'zh-tw': '🇹🇼',
+    'ko': '🇰🇷',
+    'th': '🇹🇭',
+    'vi': '🇻🇳',
+    'id': '🇮🇩',
+    'ms': '🇲🇾',
+    'tl': '🇵🇭',
+    'fr': '🇫🇷',
+    'de': '🇩🇪',
+    'es': '🇪🇸',
+    'it': '🇮🇹',
+    'pt': '🇵🇹',
+    'ru': '🇷🇺',
+    'ar': '🇸🇦',
+    'hi': '🇮🇳',
+    'tr': '🇹🇷',
+    'pt-br': '🇧🇷'
+  }
+  return flagMap[langId] || '🌐'
+}
+
+// Phase別言語のグループ化
+const phaseGroups = {
+  1: ENABLED_LANGUAGES.filter(l => l.phase === 1),
+  2: ENABLED_LANGUAGES.filter(l => l.phase === 2 && l.enabled),
+  3: ENABLED_LANGUAGES.filter(l => l.phase === 3 && l.enabled)
+}
+
+// 現在のパスを他言語用に変換
+const generateLanguageUrl = (targetLang: string): string => {
+  if (targetLang === DEFAULT_LANGUAGE) {
+    // 日本語の場合、/lang プレフィックスを削除
+    return currentPath.replace(/^\/[a-z]{2}(-[a-z]{2})?/, '') || '/'
+  } else {
+    // 他言語の場合、適切な言語プレフィックスを追加
+    const basePath = currentPath.replace(/^\/[a-z]{2}(-[a-z]{2})?/, '') || '/'
+    return `/${targetLang}${basePath === '/' ? '' : basePath}`
+  }
+}
 ---
 
 <header class="sticky top-0 z-50 bg-white/70 backdrop-blur-xl border-b border-white/20 shadow-lg shadow-gray-200/20">
@@ -25,39 +76,152 @@ const { lang = 'ja' } = Astro.props
             aria-haspopup="true"
             id="language-button"
           >
-            <span class="mr-2 text-lg">{lang === 'ja' ? '🇯🇵' : '🇺🇸'}</span>
-            <span class="hidden sm:inline">{lang === 'ja' ? '日本語' : 'English'}</span>
+            <span class="mr-2 text-lg">{getFlagEmoji(lang)}</span>
+            <span class="hidden sm:inline">{currentLanguage.nativeName}</span>
+            <span class="sm:hidden text-xs font-bold">{lang.toUpperCase()}</span>
             <svg class="ml-2 h-4 w-4 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
             </svg>
           </button>
           
           <div 
-            class="absolute right-0 mt-3 w-56 rounded-2xl shadow-2xl bg-white/90 backdrop-blur-xl ring-1 ring-black/5 hidden border border-white/20 overflow-hidden"
+            class="absolute right-0 mt-3 w-72 max-h-96 overflow-y-auto rounded-2xl shadow-2xl bg-white/95 backdrop-blur-xl ring-1 ring-black/5 hidden border border-white/20"
             id="language-menu"
             role="menu"
             aria-orientation="vertical"
             aria-labelledby="language-button"
           >
-            <div class="py-2" role="none">
-              <a 
-                href="/" 
-                class="flex items-center px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gradient-to-r hover:from-brand-50 hover:to-accent-50 transition-all duration-200 hover:text-brand-700 group"
-                role="menuitem"
-              >
-                <span class="mr-3 text-lg group-hover:scale-110 transition-transform">🇯🇵</span>
-                <span>日本語</span>
-                <span class="ml-auto text-xs text-gray-400 group-hover:text-brand-500">JA</span>
-              </a>
-              <a 
-                href="/en" 
-                class="flex items-center px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gradient-to-r hover:from-brand-50 hover:to-accent-50 transition-all duration-200 hover:text-brand-700 group"
-                role="menuitem"
-              >
-                <span class="mr-3 text-lg group-hover:scale-110 transition-transform">🇺🇸</span>
-                <span>English</span>
-                <span class="ml-auto text-xs text-gray-400 group-hover:text-brand-500">EN</span>
-              </a>
+            <!-- Phase 1: 基幹言語 -->
+            {phaseGroups[1].length > 0 && (
+              <div class="py-2">
+                <div class="px-4 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider border-b border-gray-100">
+                  Phase 1 - Core Languages
+                </div>
+                {phaseGroups[1].map((language) => {
+                  const isCurrentLang = language.id === lang
+                  const href = generateLanguageUrl(language.id)
+                  
+                  return (
+                    <a 
+                      href={href}
+                      class={`flex items-center px-4 py-3 text-sm font-medium transition-all duration-200 group
+                        ${isCurrentLang 
+                          ? 'bg-gradient-to-r from-brand-50 to-accent-50 text-brand-700 border-l-4 border-brand-500' 
+                          : 'text-gray-700 hover:bg-gradient-to-r hover:from-brand-50/50 hover:to-accent-50/50 hover:text-brand-700'
+                        }
+                      `}
+                      role="menuitem"
+                    >
+                      <span class="mr-3 text-lg group-hover:scale-110 transition-transform">{getFlagEmoji(language.id)}</span>
+                      <div class="flex-1">
+                        <div class="font-medium">{language.nativeName}</div>
+                        <div class="text-xs text-gray-500">{language.title}</div>
+                      </div>
+                      <span class="text-xs font-bold text-gray-400 group-hover:text-brand-500">
+                        {language.id.toUpperCase()}
+                      </span>
+                      {isCurrentLang && (
+                        <span class="ml-2 text-brand-500">
+                          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                          </svg>
+                        </span>
+                      )}
+                    </a>
+                  )
+                })}
+              </div>
+            )}
+
+            <!-- Phase 2: 拡張言語 -->
+            {phaseGroups[2].length > 0 && (
+              <div class="py-2 border-t border-gray-100">
+                <div class="px-4 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider border-b border-gray-100">
+                  Phase 2 - Extended Languages
+                </div>
+                {phaseGroups[2].map((language) => {
+                  const isCurrentLang = language.id === lang
+                  const href = generateLanguageUrl(language.id)
+                  
+                  return (
+                    <a 
+                      href={href}
+                      class={`flex items-center px-4 py-3 text-sm font-medium transition-all duration-200 group
+                        ${isCurrentLang 
+                          ? 'bg-gradient-to-r from-brand-50 to-accent-50 text-brand-700 border-l-4 border-brand-500' 
+                          : 'text-gray-700 hover:bg-gradient-to-r hover:from-brand-50/50 hover:to-accent-50/50 hover:text-brand-700'
+                        }
+                      `}
+                      role="menuitem"
+                    >
+                      <span class="mr-3 text-lg group-hover:scale-110 transition-transform">{getFlagEmoji(language.id)}</span>
+                      <div class="flex-1">
+                        <div class="font-medium">{language.nativeName}</div>
+                        <div class="text-xs text-gray-500">{language.title}</div>
+                      </div>
+                      <span class="text-xs font-bold text-gray-400 group-hover:text-brand-500">
+                        {language.id.toUpperCase()}
+                      </span>
+                      {isCurrentLang && (
+                        <span class="ml-2 text-brand-500">
+                          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                          </svg>
+                        </span>
+                      )}
+                    </a>
+                  )
+                })}
+              </div>
+            )}
+
+            <!-- Phase 3: 多様化言語 -->
+            {phaseGroups[3].length > 0 && (
+              <div class="py-2 border-t border-gray-100">
+                <div class="px-4 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider border-b border-gray-100">
+                  Phase 3 - Diverse Languages
+                </div>
+                {phaseGroups[3].map((language) => {
+                  const isCurrentLang = language.id === lang
+                  const href = generateLanguageUrl(language.id)
+                  
+                  return (
+                    <a 
+                      href={href}
+                      class={`flex items-center px-4 py-3 text-sm font-medium transition-all duration-200 group
+                        ${isCurrentLang 
+                          ? 'bg-gradient-to-r from-brand-50 to-accent-50 text-brand-700 border-l-4 border-brand-500' 
+                          : 'text-gray-700 hover:bg-gradient-to-r hover:from-brand-50/50 hover:to-accent-50/50 hover:text-brand-700'
+                        }
+                      `}
+                      role="menuitem"
+                    >
+                      <span class="mr-3 text-lg group-hover:scale-110 transition-transform">{getFlagEmoji(language.id)}</span>
+                      <div class="flex-1">
+                        <div class="font-medium">{language.nativeName}</div>
+                        <div class="text-xs text-gray-500">{language.title}</div>
+                      </div>
+                      <span class="text-xs font-bold text-gray-400 group-hover:text-brand-500">
+                        {language.id.toUpperCase()}
+                      </span>
+                      {isCurrentLang && (
+                        <span class="ml-2 text-brand-500">
+                          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                          </svg>
+                        </span>
+                      )}
+                    </a>
+                  )
+                })}
+              </div>
+            )}
+
+            <!-- 言語追加予定の通知 -->
+            <div class="py-3 px-4 bg-gradient-to-r from-gray-50 to-blue-50 border-t border-gray-100">
+              <p class="text-xs text-gray-600 text-center">
+                🚀 More languages coming soon in Phase 2 & 3
+              </p>
             </div>
           </div>
         </div>
