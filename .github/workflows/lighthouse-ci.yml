@@ -61,7 +61,7 @@ jobs:
           
       - name: Run Lighthouse CI
         working-directory: ./site
-        run: lhci autorun
+        run: lhci autorun --config=lighthouserc.mjs
         env:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
           LHCI_TOKEN: ${{ secrets.LHCI_TOKEN }}
@@ -159,33 +159,30 @@ jobs:
               body: comment
             });
 
-  # Sanity Schema deployment job
-  deploy-sanity:
-    runs-on: ubuntu-latest
-    if: contains(github.event.pull_request.labels.*.name, 'schema-change') || github.ref == 'refs/heads/main'
-    
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: 'npm'
-          
-      - name: Install Sanity CLI
-        run: npm install -g @sanity/cli
-        
-      - name: Install dependencies
-        run: npm ci
-        
-      - name: Deploy Sanity Studio
-        run: sanity deploy
-        env:
-          SANITY_AUTH_TOKEN: ${{ secrets.SANITY_AUTH_TOKEN }}
-          
-      - name: Deploy Sanity GraphQL API
-        run: sanity graphql deploy production
-        env:
-          SANITY_AUTH_TOKEN: ${{ secrets.SANITY_AUTH_TOKEN }}
+  # Sanity Schema deployment job (disabled until authentication is resolved)
+  # deploy-sanity:
+  #   runs-on: ubuntu-latest
+  #   if: contains(github.event.pull_request.labels.*.name, 'schema-change') || github.ref == 'refs/heads/main'
+  #   
+  #   steps:
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v4
+  #       
+  #     - name: Setup Node.js
+  #       uses: actions/setup-node@v4
+  #       with:
+  #         node-version: 20
+  #         cache: 'npm'
+  #         
+  #     - name: Install Sanity CLI
+  #       run: npm install -g @sanity/cli
+  #       
+  #     - name: Install dependencies
+  #       run: npm ci
+  #       
+  #     - name: Deploy Sanity Studio
+  #       run: |
+  #         echo "Sanity deployment temporarily disabled"
+  #         # Manual deployment required until authentication is resolved
+  #       env:
+  #         SANITY_AUTH_TOKEN: ${{ secrets.SANITY_AUTH_TOKEN }}
