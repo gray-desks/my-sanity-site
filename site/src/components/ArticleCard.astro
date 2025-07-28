@@ -20,27 +20,27 @@ const typeConfig = {
   spot: {
     emoji: '🗾',
     label: { ja: 'スポット', en: 'Spot' },
-    colors: 'bg-primary-100 text-primary-700 dark:bg-primary-900/30 dark:text-primary-300'
+    colors: 'bg-brand-100 text-brand-700'
   },
   food: {
     emoji: '🍣',
     label: { ja: 'グルメ', en: 'Food' },
-    colors: 'bg-sunset-100 text-sunset-700 dark:bg-sunset-900/30 dark:text-sunset-300'
+    colors: 'bg-secondary-100 text-secondary-700'
   },
   transport: {
     emoji: '🚄',
     label: { ja: '交通', en: 'Transport' },
-    colors: 'bg-accent-100 text-accent-700 dark:bg-accent-900/30 dark:text-accent-300'
+    colors: 'bg-accent-100 text-accent-700'
   },
   hotel: {
     emoji: '🛏️',
     label: { ja: '宿泊', en: 'Hotel' },
-    colors: 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300'
+    colors: 'bg-purple-100 text-purple-700'
   },
   note: {
     emoji: '📝',
     label: { ja: 'メモ', en: 'Note' },
-    colors: 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300'
+    colors: 'bg-gray-100 text-gray-700'
   }
 }
 
@@ -52,7 +52,7 @@ const articleUrl = lang === 'en'
   : `/${article.type}/${article.slug?.current}`
 ---
 
-<article class="break-inside-avoid mb-6 bg-white/80 dark:bg-gray-800/80 backdrop-blur-md rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 overflow-hidden group border border-white/20 dark:border-gray-700/50 hover:border-primary-300/50 dark:hover:border-primary-500/50 hover:-translate-y-2 hover:scale-[1.02] relative">
+<article class="break-inside-avoid mb-6 bg-white/80 backdrop-blur-md rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 overflow-hidden group border border-white/20 hover:border-brand-300/50 hover:-translate-y-2 hover:scale-[1.02] relative">
   <!-- Shimmer effect overlay -->
   <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out"></div>
   
@@ -90,7 +90,7 @@ const articleUrl = lang === 'en'
         {typeLabel}
       </span>
       {article.location && (
-        <div class="flex items-center text-gray-500 dark:text-gray-400 text-sm group-hover:text-primary-500 transition-colors duration-300">
+        <div class="flex items-center text-gray-500 text-sm group-hover:text-brand-500 transition-colors duration-300">
           <svg class="w-4 h-4 mr-1 group-hover:animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
@@ -101,14 +101,14 @@ const articleUrl = lang === 'en'
     </div>
 
     <!-- Title with enhanced typography -->
-    <h3 class="text-xl font-bold mb-3 text-gray-900 dark:text-gray-100 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-primary-600 group-hover:to-accent-600 transition-all duration-500 leading-tight">
+    <h3 class="text-xl font-bold mb-3 text-gray-900 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-brand-600 group-hover:to-accent-600 transition-all duration-500 leading-tight">
       <a href={articleUrl} class="block hover:translate-x-1 transition-transform duration-300">
         {article.title}
       </a>
     </h3>
     
     <!-- Date -->
-    <div class="text-sm text-gray-500 dark:text-gray-400 mb-4 flex items-center">
+    <div class="text-sm text-gray-500 mb-4 flex items-center">
       <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
       </svg>
@@ -127,16 +127,16 @@ const articleUrl = lang === 'en'
                 <img 
                   src={image.asset.url}
                   alt=""
-                  class="w-14 h-14 object-cover rounded-xl flex-shrink-0 ring-2 ring-white/50 dark:ring-gray-600/50 shadow-lg hover:ring-primary-400 hover:scale-110 transition-all duration-300 hover:shadow-xl"
+                  class="w-14 h-14 object-cover rounded-xl flex-shrink-0 ring-2 ring-white/50 shadow-lg hover:ring-brand-400 hover:scale-110 transition-all duration-300 hover:shadow-xl"
                   loading="lazy"
                   style={`animation-delay: ${index * 100}ms;`}
                 />
-                <div class="absolute inset-0 bg-gradient-to-t from-primary-500/20 to-transparent opacity-0 group-hover/gallery:opacity-100 transition-opacity duration-300 rounded-xl"></div>
+                <div class="absolute inset-0 bg-gradient-to-t from-brand-500/20 to-transparent opacity-0 group-hover/gallery:opacity-100 transition-opacity duration-300 rounded-xl"></div>
               </div>
             )
           ))}
           {article.gallery.length > 4 && (
-            <div class="w-14 h-14 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600 rounded-xl flex items-center justify-center text-gray-600 dark:text-gray-300 text-xs font-bold flex-shrink-0 ring-2 ring-white/50 dark:ring-gray-600/50 shadow-lg hover:scale-110 transition-all duration-300 hover:shadow-xl cursor-pointer">
+            <div class="w-14 h-14 bg-gradient-to-br from-gray-100 to-gray-200 rounded-xl flex items-center justify-center text-gray-600 text-xs font-bold flex-shrink-0 ring-2 ring-white/50 shadow-lg hover:scale-110 transition-all duration-300 hover:shadow-xl cursor-pointer">
               <span class="text-xs">+{article.gallery.length - 4}</span>
             </div>
           )}
@@ -146,7 +146,7 @@ const articleUrl = lang === 'en'
 
     <!-- Place Name (if no location but has place name) -->
     {!article.location && article.placeName && (
-      <div class="mt-3 text-xs text-gray-500 dark:text-gray-400 flex items-center gap-1">
+      <div class="mt-3 text-xs text-gray-500 flex items-center gap-1">
         <span>📍</span>
         <span>{article.placeName}</span>
       </div>

@@ -1,7 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'],
-  darkMode: 'class',
   theme: {
     extend: {
       colors: {
@@ -17,12 +16,6 @@ export default {
           700: '#1d4ed8',
           800: '#1e40af',
           900: '#1e3a8a',
-          // Dark mode (15% saturation down + 10% lightness down)
-          dark: {
-            500: '#2D7DD4', // Reduced saturation and lightness
-            600: '#1F5BA8',
-            700: '#1A4A8F',
-          }
         },
         accent: {
           // Green Accent
@@ -36,12 +29,6 @@ export default {
           700: '#15803d',
           800: '#166534',
           900: '#14532d',
-          // Dark mode
-          dark: {
-            500: '#22B86B',
-            600: '#1A8F55',
-            700: '#157A47',
-          }
         },
         secondary: {
           // Sunset Orange
@@ -55,12 +42,6 @@ export default {
           700: '#b45309',
           800: '#92400e',
           900: '#78350f',
-          // Dark mode
-          dark: {
-            500: '#D9984A',
-            600: '#B8803E',
-            700: '#9A6B33',
-          }
         }
       },
       fontFamily: {
