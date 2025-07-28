@@ -44,7 +44,7 @@ export default defineConfig({
         {id: 'tr', title: 'Türkçe'},
         {id: 'pt-br', title: 'Português (Brasil)'},
       ],
-      schemaTypes: ['post', 'article'],
+      schemaTypes: ['article'],
     }),
   ],
 

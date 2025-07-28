@@ -36,7 +36,9 @@
       "Bash(curl:*)",
       "Bash(npx vercel:*)",
       "Bash(npm run e2e:*)",
-      "Bash(npm i:*)"
+      "Bash(npm i:*)",
+      "Bash(npm run deploy:studio:*)",
+      "WebFetch(domain:travel-blog-jp.sanity.studio)"
     ],
     "deny": []
   }
