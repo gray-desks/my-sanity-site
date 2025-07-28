@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "sanity dev",
     "start": "sanity start",
-    "build": "cd site && npm ci && npm run build",
+    "build": "cd site && npm ci && npm run build && cp -r dist ../dist",
     "deploy": "sanity deploy",
     "deploy:studio": "sanity deploy",
     "deploy-graphql": "sanity graphql deploy"
