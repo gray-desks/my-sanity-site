@@ -48,7 +48,10 @@ export default defineConfig({
     }),
   ],
 
-  templates: [articleWithLang],
+
+  studio: {
+    templates: [articleWithLang],
+  },
   schema: {
     types: schemaTypes,
   },
