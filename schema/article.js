@@ -24,6 +24,8 @@ export default defineType({
           .replace(/\s+/g, '-')
           .slice(0, 96)
       },
+      hidden: true,
+      readOnly: true,
       validation: Rule => Rule.required()
     }),
     defineField({
@@ -40,11 +42,6 @@ export default defineType({
         ]
       },
       validation: Rule => Rule.required()
-    }),
-    defineField({
-      name: 'location',
-      title: 'Location',
-      type: 'geopoint'
     }),
     defineField({
       name: 'placeName',
