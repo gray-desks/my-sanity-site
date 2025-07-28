@@ -67,8 +67,28 @@ if (import.meta.env.DEV) {
       </span>
     </a>
     
-    <!-- 言語切り替えボタン -->
-    <div class="flex items-center gap-2">
+    <!-- モバイル用言語メニュー -->
+    <details class="sm:hidden relative">
+      <summary class="flex items-center gap-1 px-3 h-10 rounded-lg bg-gray-200 text-gray-800 focus:ring-2 focus:ring-brand-400 cursor-pointer">
+        🌐
+      </summary>
+      <div class="absolute right-0 mt-2 w-44 bg-white rounded-lg shadow-lg border border-gray-200 z-50 max-h-80 overflow-y-auto">
+        {ENABLED_LANGUAGES.map((language) => (
+          <a
+            href={language.id === 'ja' ? '/' : `/${language.id}/`}
+            class={`block px-4 py-2 text-sm hover:bg-brand-50 ${
+              language.id === lang ? 'font-semibold text-brand-600' : 'text-gray-700'
+            }`}
+          >
+            <span class="mr-2">{languageFlags[language.id as keyof typeof languageFlags] || '🌐'}</span>
+            {language.nativeName}
+          </a>
+        ))}
+      </div>
+    </details>
+
+    <!-- デスクトップ用言語ボタン -->
+    <div class="hidden sm:flex items-center gap-2 flex-wrap">
       {ENABLED_LANGUAGES.map((language) => {
           const isCurrentLang = language.id === lang
           
@@ -87,9 +107,7 @@ if (import.meta.env.DEV) {
             <a
               href={cleanPath}
               aria-label={`Switch to ${language.nativeName}`}
-              class={`
-                relative group inline-flex items-center justify-center min-w-[3rem] h-12 px-3 rounded-lg transition-all duration-200 ease-out focus:ring-2 focus:ring-brand-400 focus:outline-none
-                ${isCurrentLang 
+              class={`\n                 relative group inline-flex items-center justify-center min-w-[3rem] h-12 px-3 rounded-lg transition-all duration-200 ease-out focus:ring-2 focus:ring-brand-400 focus:outline-none shrink-0\n                 ${isCurrentLang 
                   ? 'bg-brand-600 text-white shadow-md' 
                   : 'bg-gray-200 text-gray-800 hover:bg-brand-100 hover:text-brand-700'
                 }
