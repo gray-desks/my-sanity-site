@@ -3,7 +3,8 @@
     {
       "source": "/posts/(.*)",
       "destination": "/note/$1",
-      "permanent": true
+      "permanent": true,
+      "statusCode": 301
     }
   ],
   "headers": [
