@@ -26,7 +26,6 @@ export default defineType({
       },
       hidden: true,
       readOnly: true,
-      validation: Rule => Rule.required()
     }),
     defineField({
       name: 'type',
@@ -119,7 +118,6 @@ export default defineType({
       options: {
         hotspot: true
       },
-      validation: Rule => Rule.required()
     }),
     defineField({
       name: 'gallery',
