@@ -48,8 +48,8 @@ const config = typeConfig[article.type as keyof typeof typeConfig] || typeConfig
 const typeLabel = config.label[lang as keyof typeof config.label] || config.label.ja
 
 const articleUrl = lang === 'en' 
-  ? `/en/${article.type}/${article.slug?.current}` 
-  : `/${article.type}/${article.slug?.current}`
+  ? `/en/article/${article._id}` 
+  : `/article/${article._id}`
 ---
 
 <a 

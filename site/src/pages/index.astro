@@ -8,7 +8,7 @@ import { getArticles, type Article } from '../lib/sanity'
 
 let articles: Article[] = []
 try {
-  articles = await getArticles('ja')
+  articles = await getArticles()
 } catch (error) {
   console.error('Failed to fetch articles:', error)
 }
