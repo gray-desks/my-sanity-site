@@ -35,13 +35,11 @@ export interface Article {
   title: string
   slug: { current: string } | null
   type: 'spot' | 'food' | 'transport' | 'hotel' | 'note'
-  location?: {
-    lat: number
-    lng: number
-  }
   placeName?: string
   prefecture?: string
   publishedAt: string
+  visitDate?: string
+  tags?: string[]
   coverImage: {
     asset: {
       _ref: string
@@ -200,10 +198,11 @@ export async function getArticles(lang = DEFAULT_LANGUAGE): Promise<Article[]> {
       title,
       slug,
       type,
-      location,
       placeName,
       prefecture,
       publishedAt,
+      visitDate,
+      tags,
       coverImage {
         asset->{
           _id,
@@ -249,10 +248,11 @@ export async function getArticleTranslations(articleId: string): Promise<Article
       title,
       slug,
       type,
-      location,
       placeName,
       prefecture,
       publishedAt,
+      visitDate,
+      tags,
       coverImage {
         asset->{
           _id,
@@ -276,10 +276,11 @@ export async function getArticleBySlug(slug: string, lang = DEFAULT_LANGUAGE): P
       title,
       slug,
       type,
-      location,
       placeName,
       prefecture,
       publishedAt,
+      visitDate,
+      tags,
       coverImage {
         asset->{
           _id,
@@ -310,10 +311,11 @@ export async function getArticlesByType(type: string, lang = DEFAULT_LANGUAGE): 
       title,
       slug,
       type,
-      location,
       placeName,
       prefecture,
       publishedAt,
+      visitDate,
+      tags,
       coverImage {
         asset->{
           _id,

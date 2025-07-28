@@ -15,11 +15,14 @@
     "@sanity/client": "^7.8.1",
     "astro": "^5.12.3",
     "astro-portabletext": "^0.11.1",
+    "sharp": "^0.34.3",
     "tailwindcss": "^3.4.17"
   },
   "devDependencies": {
     "@tailwindcss/forms": "^0.5.10",
     "@tailwindcss/typography": "^0.5.16",
-    "lucide-react": "^0.526.0"
+    "lucide-react": "^0.526.0",
+    "prettier": "^3.6.2",
+    "prettier-plugin-astro": "^0.14.1"
   }
 }

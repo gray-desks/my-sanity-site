@@ -117,11 +117,7 @@ const getLocalizedType = (type: string, lang: string) => {
 }
 
 // Portable Text コンポーネント設定
-const components = {
-  types: {
-    affiliate: AffiliateBlock,
-  },
-}
+const components = {}
 ---
 
 <Layout 
@@ -160,18 +156,15 @@ const components = {
         </span>
         
         <time datetime={article.publishedAt} class="text-gray-500 text-sm">
-          {getUILabel(lang, 'publishedOn')} {formatDate(article.publishedAt, lang)}
+          {getUILabel(lang, 'publishedOn')}: {formatDate(article.publishedAt, lang)}
         </time>
-        
-        {article.location && (
-          <span class="flex items-center text-gray-500 text-sm">
-            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-            </svg>
-            {article.placeName || `${article.location.lat}, ${article.location.lng}`}
-          </span>
+        {article.visitDate && (
+          <time datetime={article.visitDate} class="text-gray-500 text-sm">
+            {getUILabel(lang, 'visitedOn')}: {formatDate(article.visitDate, lang)}
+          </time>
         )}
+        
+        
       </div>
 
       <!-- Title -->
@@ -197,6 +190,22 @@ const components = {
     <div class="prose prose-lg max-w-none prose-headings:text-gray-900 prose-p:text-gray-700 prose-p:leading-relaxed prose-a:text-brand-600 prose-a:no-underline hover:prose-a:underline prose-strong:text-gray-900 prose-img:rounded-xl prose-img:shadow-lg">
       <PortableText value={article.body} components={components} />
     </div>
+
+    <!-- Tags -->
+    {article.tags && article.tags.length > 0 && (
+      <div class="mt-12">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6">
+          {getUILabel(lang, 'tags')}
+        </h2>
+        <div class="flex flex-wrap gap-3">
+          {article.tags.map(tag => (
+            <span class="bg-gray-100 text-gray-800 px-4 py-2 rounded-full font-medium">
+              {tag}
+            </span>
+          ))}
+        </div>
+      </div>
+    )}
 
     <!-- Gallery -->
     {article.gallery && article.gallery.length > 0 && (

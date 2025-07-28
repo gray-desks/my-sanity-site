@@ -64,8 +64,13 @@ const typeLabels = {
       
       <div class="flex items-center gap-4 text-gray-600 mb-6">
         <time datetime={article.publishedAt}>
-          {formatDate(article.publishedAt)}
+          公開: {formatDate(article.publishedAt)}
         </time>
+        {article.visitDate && (
+          <time datetime={article.visitDate}>
+            訪問: {formatDate(article.visitDate)}
+          </time>
+        )}
         <a 
           href="/en/[type]/[slug]" 
           class="flex items-center gap-1 text-blue-600 hover:text-blue-800"
@@ -110,19 +115,21 @@ const typeLabels = {
               />
             </div>
           )
-        } else if (block._type === 'affiliate') {
-          return <AffiliateBlock {...block} />
         }
       })}
     </div>
 
-    <!-- 位置情報 -->
-    {article.location && (
-      <div class="mb-8 p-4 bg-gray-50 rounded-lg">
-        <h3 class="text-lg font-semibold mb-2">📍 位置情報</h3>
-        <p class="text-gray-600">
-          緯度: {article.location.lat}, 経度: {article.location.lng}
-        </p>
+    
+
+    <!-- Tags -->
+    {article.tags && article.tags.length > 0 && (
+      <div class="mt-8 flex flex-wrap items-center gap-2">
+        <h3 class="text-lg font-semibold mr-2">タグ:</h3>
+        {article.tags.map(tag => (
+          <span class="bg-gray-200 text-gray-800 px-3 py-1 rounded-full text-sm font-medium">
+            {tag}
+          </span>
+        ))}
       </div>
     )}
 
@@ -134,7 +141,7 @@ const typeLabels = {
       className="mt-12"
     />
 
-    <SocialShare title={article.title} lang="ja" />
+    
 
     <!-- ナビゲーション -->
     <nav class="mt-12 pt-8 border-t">
