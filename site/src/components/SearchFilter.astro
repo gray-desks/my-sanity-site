@@ -49,7 +49,7 @@ const prefectures = [
       <!-- 記事タイプフィルター -->
       <select
         id="type-filter"
-        class="w-full sm:w-auto px-4 py-3 text-gray-700 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-all duration-200"
+        class="w-full sm:w-auto pl-4 pr-10 py-3 text-gray-700 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-all duration-200 appearance-none cursor-pointer"
       >
         {articleTypes.map(type => (
           <option value={type.value}>{type.label}</option>
@@ -59,7 +59,7 @@ const prefectures = [
       <!-- 都道府県フィルター -->
       <select
         id="prefecture-filter"
-        class="w-full sm:w-auto px-4 py-3 text-gray-700 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-all duration-200"
+        class="w-full sm:w-auto pl-4 pr-10 py-3 text-gray-700 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-all duration-200 appearance-none cursor-pointer"
       >
         {prefectures.map(prefecture => (
           <option value={prefecture.code}>{prefecture.name}</option>
@@ -94,6 +94,17 @@ const prefectures = [
     </div>
   </div>
 </div>
+
+<!-- カスタム矢印アイコンをCSSで追加 -->
+<style>
+  /* selectボックスの矢印をカスタマイズ */
+  #type-filter, #prefecture-filter {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 0.75rem center;
+    background-repeat: no-repeat;
+    background-size: 1.5em 1.5em;
+  }
+</style>
 
 <script>
   class SearchFilter {
