@@ -52,7 +52,15 @@ const articleUrl = lang === 'en'
   : `/${article.type}/${article.slug?.current}`
 ---
 
-<article class="break-inside-avoid mb-6 bg-gradient-card backdrop-blur-xl rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 overflow-hidden group border border-white/30 hover:border-brand-300/60 hover:-translate-y-3 hover:scale-[1.02] relative animate-fade-in">
+<article 
+  class="break-inside-avoid mb-6 bg-gradient-card backdrop-blur-xl rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 overflow-hidden group border border-white/30 hover:border-brand-300/60 hover:-translate-y-3 hover:scale-[1.02] relative animate-fade-in"
+  data-article
+  data-title={article.title}
+  data-type={article.type}
+  data-place-name={article.placeName || ''}
+  data-prefecture={article.prefecture || ''}
+  data-body-text={article.bodyText || ''}
+>
   <!-- Shimmer effect overlay -->
   <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out"></div>
   

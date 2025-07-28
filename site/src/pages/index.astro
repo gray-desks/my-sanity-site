@@ -3,6 +3,7 @@ import Layout from '../layouts/Layout.astro'
 import Hero from '../components/Hero.astro'
 import AdSense from '../components/AdSense.astro'
 import ArticleCard from '../components/ArticleCard.astro'
+import SearchFilter from '../components/SearchFilter.astro'
 import { getArticles, type Article } from '../lib/sanity'
 
 let articles: Article[] = []
@@ -21,6 +22,9 @@ try {
   <Hero lang="ja" />
 
   <div class="max-w-7xl mx-auto px-4 py-16 space-y-16">
+    <!-- Search and Filter Section -->
+    <SearchFilter lang="ja" />
+    
     <!-- Articles Section -->
     <section id="articles" class="relative">
       <!-- Background decoration -->

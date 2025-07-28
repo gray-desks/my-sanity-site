@@ -40,6 +40,7 @@ export interface Article {
     lng: number
   }
   placeName?: string
+  prefecture?: string
   publishedAt: string
   coverImage: {
     asset: {
@@ -54,6 +55,7 @@ export interface Article {
     }
   }[]
   body: any[]
+  bodyText?: string
   lang: string
   __i18n_lang?: string
   __i18n_refs?: { _ref: string; _key: string }[]
@@ -200,6 +202,7 @@ export async function getArticles(lang = DEFAULT_LANGUAGE): Promise<Article[]> {
       type,
       location,
       placeName,
+      prefecture,
       publishedAt,
       coverImage {
         asset->{
@@ -213,6 +216,7 @@ export async function getArticles(lang = DEFAULT_LANGUAGE): Promise<Article[]> {
           url
         }
       },
+      "bodyText": pt::text(body),
       lang,
       __i18n_lang,
       __i18n_refs
@@ -247,6 +251,7 @@ export async function getArticleTranslations(articleId: string): Promise<Article
       type,
       location,
       placeName,
+      prefecture,
       publishedAt,
       coverImage {
         asset->{
@@ -254,6 +259,7 @@ export async function getArticleTranslations(articleId: string): Promise<Article
           url
         }
       },
+      "bodyText": pt::text(body),
       lang,
       __i18n_lang,
       __i18n_refs
@@ -272,6 +278,7 @@ export async function getArticleBySlug(slug: string, lang = DEFAULT_LANGUAGE): P
       type,
       location,
       placeName,
+      prefecture,
       publishedAt,
       coverImage {
         asset->{
@@ -286,6 +293,7 @@ export async function getArticleBySlug(slug: string, lang = DEFAULT_LANGUAGE): P
         }
       },
       body,
+      "bodyText": pt::text(body),
       lang,
       __i18n_lang,
       __i18n_refs
@@ -304,6 +312,7 @@ export async function getArticlesByType(type: string, lang = DEFAULT_LANGUAGE): 
       type,
       location,
       placeName,
+      prefecture,
       publishedAt,
       coverImage {
         asset->{
@@ -317,6 +326,7 @@ export async function getArticlesByType(type: string, lang = DEFAULT_LANGUAGE): 
           url
         }
       },
+      "bodyText": pt::text(body),
       lang,
       __i18n_lang,
       __i18n_refs

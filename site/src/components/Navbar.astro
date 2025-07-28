@@ -1,260 +1,118 @@
 ---
-import Logo from './ui/Logo.astro'
-import { ENABLED_LANGUAGES, DEFAULT_LANGUAGE, getLanguageInfo, getLocalizedPath } from '../lib/i18n'
+import { getUILabel, getLocalizedPath, ENABLED_LANGUAGES } from '../lib/i18n'
 
-export interface Props {
-  lang?: string
-  currentPath?: string
+interface Props {
+  lang: string
 }
 
-const { lang = DEFAULT_LANGUAGE, currentPath = '/' } = Astro.props
+const { lang } = Astro.props
 
-// 現在の言語情報
-const currentLanguage = getLanguageInfo(lang) || getLanguageInfo(DEFAULT_LANGUAGE)!
+// 言語別フラグエモジ
+const languageFlags = {
+  ja: '🇯🇵',
+  en: '🇺🇸',
+  'zh-cn': '🇨🇳',
+  'zh-tw': '🇹🇼',
+  ko: '🇰🇷',
+  th: '🇹🇭',
+  vi: '🇻🇳'
+} as const
 
-// 各言語の国旗絵文字マッピング
-const getFlagEmoji = (langId: string): string => {
-  const flagMap: Record<string, string> = {
-    'ja': '🇯🇵',
-    'en': '🇺🇸', 
-    'zh-cn': '🇨🇳',
-    'zh-tw': '🇹🇼',
-    'ko': '🇰🇷',
-    'th': '🇹🇭',
-    'vi': '🇻🇳',
-    'id': '🇮🇩',
-    'ms': '🇲🇾',
-    'tl': '🇵🇭',
-    'fr': '🇫🇷',
-    'de': '🇩🇪',
-    'es': '🇪🇸',
-    'it': '🇮🇹',
-    'pt': '🇵🇹',
-    'ru': '🇷🇺',
-    'ar': '🇸🇦',
-    'hi': '🇮🇳',
-    'tr': '🇹🇷',
-    'pt-br': '🇧🇷'
+// 現在のページパスを取得して言語プレフィックスを除去
+const currentPath = Astro.url.pathname
+
+// 言語プレフィックスを除去してベースパスを取得
+function getBasePath(path: string): string {
+  // 有効な言語のリストを作成
+  const enabledLangCodes = ENABLED_LANGUAGES.map(l => l.id)
+  
+  // パスが言語プレフィックスで始まるかチェック
+  for (const langCode of enabledLangCodes) {
+    if (langCode === 'ja') continue // 日本語はプレフィックスなし
+    
+    const prefix = `/${langCode}`
+    if (path === prefix || path === `${prefix}/`) {
+      return '/' // ルートページ
+    }
+    if (path.startsWith(`${prefix}/`)) {
+      return path.slice(prefix.length) // 言語プレフィックスを除去
+    }
   }
-  return flagMap[langId] || '🌐'
+  
+  // 言語プレフィックスがない場合（日本語）
+  return path
 }
 
-// Phase別言語のグループ化
-const phaseGroups = {
-  1: ENABLED_LANGUAGES.filter(l => l.phase === 1),
-  2: ENABLED_LANGUAGES.filter(l => l.phase === 2 && l.enabled),
-  3: ENABLED_LANGUAGES.filter(l => l.phase === 3 && l.enabled)
-}
+const basePath = getBasePath(currentPath)
 
-// 現在のパスを他言語用に変換
-const generateLanguageUrl = (targetLang: string): string => {
-  if (targetLang === DEFAULT_LANGUAGE) {
-    // 日本語の場合、/lang プレフィックスを削除
-    return currentPath.replace(/^\/[a-z]{2}(-[a-z]{2})?/, '') || '/'
-  } else {
-    // 他言語の場合、適切な言語プレフィックスを追加
-    const basePath = currentPath.replace(/^\/[a-z]{2}(-[a-z]{2})?/, '') || '/'
-    return `/${targetLang}${basePath === '/' ? '' : basePath}`
-  }
+// デバッグ用ログ（開発時のみ）
+if (import.meta.env.DEV) {
+  console.log('Navbar Debug:', {
+    currentPath,
+    basePath,
+    currentLang: lang
+  })
 }
 ---
 
-<header class="sticky top-0 z-50 bg-white/70 backdrop-blur-xl border-b border-white/20 shadow-lg shadow-gray-200/20">
-  <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="flex justify-between items-center h-16">
-      <!-- Logo -->
-      <Logo />
-
-      <!-- Right side: Language -->
-      <div class="flex items-center">
-        <!-- Language Dropdown -->
-        <div class="relative" id="language-dropdown">
-          <button 
-            type="button"
-            class="inline-flex items-center px-4 py-2.5 rounded-xl text-sm font-semibold text-gray-700 bg-gradient-card hover:bg-white/90 transition-all duration-300 border border-white/30 shadow-lg hover:shadow-xl hover:scale-105 backdrop-blur-sm"
-            aria-expanded="false"
-            aria-haspopup="true"
-            id="language-button"
-          >
-            <span class="mr-2 text-lg">{getFlagEmoji(lang)}</span>
-            <span class="hidden sm:inline">{currentLanguage.nativeName}</span>
-            <span class="sm:hidden text-xs font-bold">{lang.toUpperCase()}</span>
-            <svg class="ml-2 h-4 w-4 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-            </svg>
-          </button>
-          
-          <div 
-            class="absolute right-0 mt-3 w-72 max-h-96 overflow-y-auto rounded-2xl shadow-2xl bg-white/95 backdrop-blur-xl ring-1 ring-black/5 hidden border border-white/20"
-            id="language-menu"
-            role="menu"
-            aria-orientation="vertical"
-            aria-labelledby="language-button"
-          >
-            <!-- Phase 1: 基幹言語 -->
-            {phaseGroups[1].length > 0 && (
-              <div class="py-2">
-                <div class="px-4 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider border-b border-gray-100">
-                  Phase 1 - Core Languages
-                </div>
-                {phaseGroups[1].map((language) => {
-                  const isCurrentLang = language.id === lang
-                  const href = generateLanguageUrl(language.id)
-                  
-                  return (
-                    <a 
-                      href={href}
-                      class={`flex items-center px-4 py-3 text-sm font-medium transition-all duration-200 group
-                        ${isCurrentLang 
-                          ? 'bg-gradient-to-r from-brand-50 to-accent-50 text-brand-700 border-l-4 border-brand-500' 
-                          : 'text-gray-700 hover:bg-gradient-to-r hover:from-brand-50/50 hover:to-accent-50/50 hover:text-brand-700'
-                        }
-                      `}
-                      role="menuitem"
-                    >
-                      <span class="mr-3 text-lg group-hover:scale-110 transition-transform">{getFlagEmoji(language.id)}</span>
-                      <div class="flex-1">
-                        <div class="font-medium">{language.nativeName}</div>
-                        <div class="text-xs text-gray-500">{language.title}</div>
-                      </div>
-                      <span class="text-xs font-bold text-gray-400 group-hover:text-brand-500">
-                        {language.id.toUpperCase()}
-                      </span>
-                      {isCurrentLang && (
-                        <span class="ml-2 text-brand-500">
-                          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                          </svg>
-                        </span>
-                      )}
-                    </a>
-                  )
-                })}
-              </div>
-            )}
-
-            <!-- Phase 2: 拡張言語 -->
-            {phaseGroups[2].length > 0 && (
-              <div class="py-2 border-t border-gray-100">
-                <div class="px-4 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider border-b border-gray-100">
-                  Phase 2 - Extended Languages
-                </div>
-                {phaseGroups[2].map((language) => {
-                  const isCurrentLang = language.id === lang
-                  const href = generateLanguageUrl(language.id)
-                  
-                  return (
-                    <a 
-                      href={href}
-                      class={`flex items-center px-4 py-3 text-sm font-medium transition-all duration-200 group
-                        ${isCurrentLang 
-                          ? 'bg-gradient-to-r from-brand-50 to-accent-50 text-brand-700 border-l-4 border-brand-500' 
-                          : 'text-gray-700 hover:bg-gradient-to-r hover:from-brand-50/50 hover:to-accent-50/50 hover:text-brand-700'
-                        }
-                      `}
-                      role="menuitem"
-                    >
-                      <span class="mr-3 text-lg group-hover:scale-110 transition-transform">{getFlagEmoji(language.id)}</span>
-                      <div class="flex-1">
-                        <div class="font-medium">{language.nativeName}</div>
-                        <div class="text-xs text-gray-500">{language.title}</div>
-                      </div>
-                      <span class="text-xs font-bold text-gray-400 group-hover:text-brand-500">
-                        {language.id.toUpperCase()}
-                      </span>
-                      {isCurrentLang && (
-                        <span class="ml-2 text-brand-500">
-                          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                          </svg>
-                        </span>
-                      )}
-                    </a>
-                  )
-                })}
-              </div>
-            )}
-
-            <!-- Phase 3: 多様化言語 -->
-            {phaseGroups[3].length > 0 && (
-              <div class="py-2 border-t border-gray-100">
-                <div class="px-4 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider border-b border-gray-100">
-                  Phase 3 - Diverse Languages
-                </div>
-                {phaseGroups[3].map((language) => {
-                  const isCurrentLang = language.id === lang
-                  const href = generateLanguageUrl(language.id)
-                  
-                  return (
-                    <a 
-                      href={href}
-                      class={`flex items-center px-4 py-3 text-sm font-medium transition-all duration-200 group
-                        ${isCurrentLang 
-                          ? 'bg-gradient-to-r from-brand-50 to-accent-50 text-brand-700 border-l-4 border-brand-500' 
-                          : 'text-gray-700 hover:bg-gradient-to-r hover:from-brand-50/50 hover:to-accent-50/50 hover:text-brand-700'
-                        }
-                      `}
-                      role="menuitem"
-                    >
-                      <span class="mr-3 text-lg group-hover:scale-110 transition-transform">{getFlagEmoji(language.id)}</span>
-                      <div class="flex-1">
-                        <div class="font-medium">{language.nativeName}</div>
-                        <div class="text-xs text-gray-500">{language.title}</div>
-                      </div>
-                      <span class="text-xs font-bold text-gray-400 group-hover:text-brand-500">
-                        {language.id.toUpperCase()}
-                      </span>
-                      {isCurrentLang && (
-                        <span class="ml-2 text-brand-500">
-                          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                          </svg>
-                        </span>
-                      )}
-                    </a>
-                  )
-                })}
-              </div>
-            )}
-
-            <!-- 言語追加予定の通知 -->
-            <div class="py-3 px-4 bg-gradient-to-r from-gray-50 to-blue-50 border-t border-gray-100">
-              <p class="text-xs text-gray-600 text-center">
-                🚀 More languages coming soon in Phase 2 & 3
-              </p>
-            </div>
-          </div>
-        </div>
+<nav class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-100 shadow-sm">
+  <div class="max-w-7xl mx-auto px-4 py-3 sm:py-4 flex items-center justify-between">
+    <!-- Logo -->
+    <a href={lang === 'ja' ? '/' : `/${lang}/`} class="flex items-center gap-3 group">
+      <div class="w-10 h-10 bg-gradient-to-br from-brand-500 to-accent-500 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-110">
+        <span class="text-white font-bold text-lg">旅</span>
       </div>
-    </div>
-  </nav>
-</header>
-
-<script>
-  // Language dropdown functionality
-  document.addEventListener('DOMContentLoaded', () => {
-    const languageButton = document.getElementById('language-button');
-    const languageMenu = document.getElementById('language-menu');
+      <span class="text-2xl font-bold bg-gradient-to-r from-brand-400 to-accent-400 bg-clip-text text-transparent">
+        {getUILabel(lang, 'siteTitle')}
+      </span>
+    </a>
     
-    if (languageButton && languageMenu) {
-      languageButton.addEventListener('click', () => {
-        const isHidden = languageMenu.classList.contains('hidden');
-        if (isHidden) {
-          languageMenu.classList.remove('hidden');
-          languageButton.setAttribute('aria-expanded', 'true');
-        } else {
-          languageMenu.classList.add('hidden');
-          languageButton.setAttribute('aria-expanded', 'false');
+    <!-- 言語切り替えボタン -->
+    <div class="flex items-center flex-wrap gap-1 sm:gap-2">
+      {ENABLED_LANGUAGES.map((language) => {
+        const isCurrentLang = language.id === lang
+        
+        // 言語別URLを生成
+        function generateLanguageUrl(targetLang: string, basePath: string): string {
+          if (targetLang === 'ja') {
+            // 日本語の場合は言語プレフィックスなし
+            return basePath || '/'
+          } else {
+            // 他言語の場合は /{lang}{basePath} 形式
+            if (basePath === '/' || basePath === '') {
+              return `/${targetLang}/`
+            } else {
+              // basePathが/で始まっていない場合は追加
+              const normalizedBasePath = basePath.startsWith('/') ? basePath : `/${basePath}`
+              return `/${targetLang}${normalizedBasePath}`
+            }
+          }
         }
-      });
-      
-      // Close dropdown when clicking outside
-      document.addEventListener('click', (event) => {
-        if (!languageButton.contains(event.target) && !languageMenu.contains(event.target)) {
-          languageMenu.classList.add('hidden');
-          languageButton.setAttribute('aria-expanded', 'false');
-        }
-      });
-    }
-  });
-</script>
+        
+        const cleanPath = generateLanguageUrl(language.id, basePath)
+        
+        return (
+          <a
+            href={cleanPath}
+            class={`
+              relative inline-flex items-center gap-1 px-2 py-1.5 sm:px-3 sm:py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:transform hover:scale-105
+              ${isCurrentLang 
+                ? 'bg-gradient-to-r from-brand-500 to-accent-500 text-white shadow-lg ring-2 ring-brand-200' 
+                : 'text-gray-600 hover:text-brand-600 hover:bg-brand-50 hover:shadow-md'
+              }
+            `}
+            title={language.nativeName}
+          >
+            <span class="text-sm sm:text-base">{languageFlags[language.id as keyof typeof languageFlags] || '🌐'}</span>
+            <span class="hidden sm:inline text-xs font-bold uppercase tracking-wider">
+              {language.id}
+            </span>
+            {isCurrentLang && (
+              <div class="absolute -bottom-0.5 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-white rounded-full animate-pulse"></div>
+            )}
+          </a>
+        )
+      })}
+    </div>
+  </div>
+</nav>

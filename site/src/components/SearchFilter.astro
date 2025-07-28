@@ -1,0 +1,238 @@
+---
+import { getUILabel } from '../lib/i18n'
+import { getPrefecturesForLanguage } from '../lib/prefectures'
+
+export interface Props {
+  lang: string
+}
+
+const { lang } = Astro.props
+
+// 記事タイプの定義
+const articleTypes = [
+  { value: '', label: getUILabel(lang, 'allTypes') || 'すべて' },
+  { value: 'spot', label: getUILabel(lang, 'spot') || '観光地' },
+  { value: 'food', label: getUILabel(lang, 'food') || 'グルメ' },
+  { value: 'transport', label: getUILabel(lang, 'transport') || '交通' },
+  { value: 'hotel', label: getUILabel(lang, 'hotel') || '宿泊' },
+  { value: 'note', label: getUILabel(lang, 'note') || 'メモ' }
+]
+
+// 都道府県の定義
+const prefectures = [
+  { code: '', name: getUILabel(lang, 'allPrefectures') || 'すべての都道府県' },
+  ...getPrefecturesForLanguage(lang)
+]
+---
+
+<div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 mb-8">
+  <div class="flex flex-col lg:flex-row gap-4">
+    <!-- 検索フィールド -->
+    <div class="flex-1">
+      <div class="relative">
+        <input
+          type="text"
+          id="search-input"
+          placeholder={getUILabel(lang, 'searchPlaceholder') || 'キーワードで検索...'}
+          class="w-full pl-12 pr-4 py-3 text-gray-700 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-all duration-200"
+        />
+        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+          <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- フィルター選択 -->
+    <div class="flex flex-col sm:flex-row gap-4 flex-shrink-0">
+      <!-- 記事タイプフィルター -->
+      <select
+        id="type-filter"
+        class="w-full sm:w-auto px-4 py-3 text-gray-700 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-all duration-200"
+      >
+        {articleTypes.map(type => (
+          <option value={type.value}>{type.label}</option>
+        ))}
+      </select>
+      
+      <!-- 都道府県フィルター -->
+      <select
+        id="prefecture-filter"
+        class="w-full sm:w-auto px-4 py-3 text-gray-700 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-all duration-200"
+      >
+        {prefectures.map(prefecture => (
+          <option value={prefecture.code}>{prefecture.name}</option>
+        ))}
+      </select>
+    </div>
+
+    <!-- ボタングループ -->
+    <div class="flex gap-2">
+      <!-- 検索ボタン -->
+      <button
+        id="search-button"
+        class="px-6 py-3 bg-gradient-to-r from-brand-500 to-brand-600 text-white font-medium rounded-xl hover:from-brand-600 hover:to-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 transition-all duration-200 transform hover:scale-105"
+      >
+        <span class="hidden sm:inline">{getUILabel(lang, 'search') || '検索'}</span>
+        <svg class="h-5 w-5 sm:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+        </svg>
+      </button>
+      
+      <!-- リセットボタン -->
+      <button
+        id="reset-button"
+        class="px-4 py-3 bg-gray-500 hover:bg-gray-600 text-white font-medium rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-all duration-200 transform hover:scale-105"
+        title={getUILabel(lang, 'reset') || 'リセット'}
+      >
+        <span class="hidden sm:inline">{getUILabel(lang, 'reset') || 'リセット'}</span>
+        <svg class="h-5 w-5 sm:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  class SearchFilter {
+    constructor() {
+      this.searchInput = document.getElementById('search-input') as HTMLInputElement
+      this.typeFilter = document.getElementById('type-filter') as HTMLSelectElement
+      this.prefectureFilter = document.getElementById('prefecture-filter') as HTMLSelectElement
+      this.searchButton = document.getElementById('search-button') as HTMLButtonElement
+      this.resetButton = document.getElementById('reset-button') as HTMLButtonElement
+      this.articles = Array.from(document.querySelectorAll('[data-article]'))
+      
+      this.bindEvents()
+    }
+
+    bindEvents() {
+      // リアルタイム検索
+      this.searchInput?.addEventListener('input', () => this.filterArticles())
+      this.typeFilter?.addEventListener('change', () => this.filterArticles())
+      this.prefectureFilter?.addEventListener('change', () => this.filterArticles())
+      
+      // 検索ボタン
+      this.searchButton?.addEventListener('click', () => this.filterArticles())
+      
+      // リセットボタン
+      this.resetButton?.addEventListener('click', () => this.resetFilters())
+      
+      // Enterキーで検索
+      this.searchInput?.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          this.filterArticles()
+        }
+      })
+    }
+
+    filterArticles() {
+      const searchTerm = this.searchInput?.value.toLowerCase() || ''
+      const selectedType = this.typeFilter?.value || ''
+      const selectedPrefecture = this.prefectureFilter?.value || ''
+      
+      let visibleCount = 0
+      
+      this.articles.forEach((article) => {
+        const element = article as HTMLElement
+        const title = element.dataset.title?.toLowerCase() || ''
+        const type = element.dataset.type || ''
+        const placeName = element.dataset.placeName?.toLowerCase() || ''
+        const prefecture = element.dataset.prefecture || ''
+        const bodyText = element.dataset.bodyText?.toLowerCase() || ''
+        
+        const matchesSearch = !searchTerm || 
+          title.includes(searchTerm) || 
+          placeName.includes(searchTerm) ||
+          bodyText.includes(searchTerm)
+        
+        const matchesType = !selectedType || type === selectedType
+        const matchesPrefecture = !selectedPrefecture || prefecture === selectedPrefecture
+        
+        const shouldShow = matchesSearch && matchesType && matchesPrefecture
+        
+        if (shouldShow) {
+          element.style.display = 'block'
+          element.style.animation = 'fadeIn 0.3s ease-in-out'
+          visibleCount++
+        } else {
+          element.style.display = 'none'
+        }
+      })
+      
+      // 結果が0件の場合のメッセージ表示
+      this.updateNoResultsMessage(visibleCount)
+    }
+
+    resetFilters() {
+      // 全ての入力フィールドをリセット
+      if (this.searchInput) {
+        this.searchInput.value = ''
+      }
+      if (this.typeFilter) {
+        this.typeFilter.selectedIndex = 0
+      }
+      if (this.prefectureFilter) {
+        this.prefectureFilter.selectedIndex = 0
+      }
+      
+      // 全ての記事を表示
+      this.articles.forEach((article) => {
+        const element = article as HTMLElement
+        element.style.display = 'block'
+        element.style.animation = 'fadeIn 0.3s ease-in-out'
+      })
+      
+      // 「結果なし」メッセージを非表示
+      const noResultsEl = document.getElementById('no-results-message')
+      if (noResultsEl) {
+        noResultsEl.style.display = 'none'
+      }
+    }
+
+    updateNoResultsMessage(visibleCount: number) {
+      let noResultsEl = document.getElementById('no-results-message')
+      
+      if (visibleCount === 0) {
+        if (!noResultsEl) {
+          noResultsEl = document.createElement('div')
+          noResultsEl.id = 'no-results-message'
+          noResultsEl.className = 'text-center py-16 bg-white rounded-2xl shadow-lg border border-gray-100'
+          noResultsEl.innerHTML = `
+            <div class="text-6xl mb-4">🔍</div>
+            <p class="text-gray-500 text-xl mb-2">検索結果が見つかりませんでした</p>
+            <p class="text-gray-400">他のキーワードで検索してみてください</p>
+          `
+          
+          const articlesContainer = document.querySelector('#articles .columns-1, #articles .columns-2, #articles .columns-3')
+          articlesContainer?.parentNode?.appendChild(noResultsEl)
+        }
+        noResultsEl.style.display = 'block'
+      } else {
+        if (noResultsEl) {
+          noResultsEl.style.display = 'none'
+        }
+      }
+    }
+  }
+
+  // ページ読み込み時に初期化
+  document.addEventListener('DOMContentLoaded', () => {
+    new SearchFilter()
+  })
+</script>
+
+<style>
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>

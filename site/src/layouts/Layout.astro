@@ -1,7 +1,6 @@
 ---
 import '../styles/global.css'
 import Navbar from '../components/Navbar.astro'
-import Sidebar from '../components/ui/Sidebar.astro'
 import { isRTL, getFontFamily, getUILabel, getLocalizedPath } from '../lib/i18n'
 
 export interface Props {
@@ -76,11 +75,10 @@ const fontFamily = getFontFamily(lang)
 
     <Navbar lang={lang} />
 
-    <div class="max-w-7xl mx-auto px-4 py-8 lg:flex lg:gap-10 relative">
-      <main class="flex-1">
+    <div class="max-w-7xl mx-auto px-4 py-8 relative">
+      <main class="w-full">
         <slot />
       </main>
-      <Sidebar lang={lang} />
     </div>
 
     <footer class="relative mt-20 bg-gradient-to-r from-slate-900 via-gray-900 to-slate-900 text-white overflow-hidden">

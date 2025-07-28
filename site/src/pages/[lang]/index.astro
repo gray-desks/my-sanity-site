@@ -2,6 +2,7 @@
 import Layout from '../../layouts/Layout.astro'
 import Hero from '../../components/Hero.astro'
 import ArticleCard from '../../components/ArticleCard.astro'
+import SearchFilter from '../../components/SearchFilter.astro'
 import { getArticles } from '../../lib/sanity'
 import { ENABLED_LANGUAGES, DEFAULT_LANGUAGE, getLanguageInfo, isLanguageEnabled } from '../../lib/i18n'
 
@@ -95,6 +96,9 @@ const localizedContent = getLocalizedContent(lang)
   <Hero lang={lang} />
 
   <div class="max-w-7xl mx-auto px-4 py-16 space-y-16">
+    <!-- Search and Filter Section -->
+    <SearchFilter lang={lang} />
+    
     <!-- Articles Section -->
     <section id="articles" class="relative">
       <!-- Background decoration -->
