@@ -20,10 +20,11 @@ const galleryId = `gallery-${Math.random().toString(36).substr(2, 9)}`
     <div class="gallery-main aspect-video bg-gray-100 rounded-lg overflow-hidden">
       <img 
         id={`${galleryId}-main`}
-        src={images[0]?.asset?.url}
+        src={`${images[0]?.asset?.url}?w=800&h=450&fit=crop&auto=format`}
         alt=""
         class="w-full h-full object-cover transition-opacity duration-300"
         loading="lazy"
+        decoding="async"
       />
     </div>
 
@@ -70,10 +71,11 @@ const galleryId = `gallery-${Math.random().toString(36).substr(2, 9)}`
           data-index={index}
         >
           <img 
-            src={image.asset?.url}
+            src={`${image.asset?.url}?w=80&h=80&fit=crop&auto=format`}
             alt=""
             class="w-full h-full object-cover"
             loading="lazy"
+            decoding="async"
           />
         </button>
       ))}

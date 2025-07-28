@@ -71,12 +71,6 @@ const typeLabels = {
             訪問: {formatDate(article.visitDate)}
           </time>
         )}
-        <a 
-          href="/en/[type]/[slug]" 
-          class="flex items-center gap-1 text-blue-600 hover:text-blue-800"
-        >
-          🇺🇸 English
-        </a>
       </div>
     </header>
 
@@ -84,9 +78,11 @@ const typeLabels = {
     {article.coverImage?.asset?.url && (
       <div class="mb-8">
         <img 
-          src={article.coverImage.asset.url}
+          src={`${article.coverImage.asset.url}?w=1200&h=600&fit=crop&auto=format`}
           alt={article.title}
           class="w-full h-96 object-cover rounded-lg shadow-lg"
+          loading="lazy"  
+          decoding="async"
         />
       </div>
     )}
@@ -109,9 +105,11 @@ const typeLabels = {
           return (
             <div class="my-8">
               <img 
-                src={block.asset?.url}
+                src={`${block.asset?.url}?w=800&auto=format`}
                 alt=""
                 class="w-full rounded-lg shadow-md"
+                loading="lazy"
+                decoding="async"
               />
             </div>
           )
