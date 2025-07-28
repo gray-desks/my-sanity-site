@@ -1,8 +1,10 @@
 import {defineConfig} from 'sanity'
 import {structureTool} from 'sanity/structure'
+import deskStructure from './deskStructure.js'
 import {visionTool} from '@sanity/vision'
 import {documentInternationalization} from '@sanity/document-internationalization'
 import schemaTypes from './schema/index'
+import articleWithLang from './templates/articleWithLang.js'
 
 export default defineConfig({
   name: 'default',
@@ -12,7 +14,7 @@ export default defineConfig({
   dataset: 'production',
 
   plugins: [
-    structureTool(),
+    structureTool({structure: deskStructure}),
     visionTool(),
     documentInternationalization({
       supportedLanguages: [
@@ -46,6 +48,7 @@ export default defineConfig({
     }),
   ],
 
+  templates: [articleWithLang],
   schema: {
     types: schemaTypes,
   },

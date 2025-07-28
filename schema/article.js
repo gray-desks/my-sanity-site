@@ -154,35 +154,19 @@ export default defineType({
       ]
     }),
     defineField({
-      name: 'lang',
-      title: 'Language',
+      name: 'translationStatus',
+      title: 'Translation Status',
       type: 'string',
+      initialValue: 'pending',
       options: {
         list: [
-          { title: '日本語', value: 'ja' },
-          { title: 'English', value: 'en' },
-          { title: '中文（简体）', value: 'zh-cn' },
-          { title: 'Français', value: 'fr' },
-          { title: 'Deutsch', value: 'de' },
-          { title: 'Español', value: 'es' },
-          { title: 'Italiano', value: 'it' },
-          { title: 'Português', value: 'pt' },
-          { title: 'Русский', value: 'ru' },
-          { title: '한국어', value: 'ko' },
-          { title: 'ไทย', value: 'th' },
-          { title: 'Tiếng Việt', value: 'vi' },
-          { title: 'Bahasa Indonesia', value: 'id' },
-          { title: 'Bahasa Melayu', value: 'ms' },
-          { title: 'Filipino', value: 'fil' },
-          { title: 'हिन्दी', value: 'hi' },
-          { title: 'العربية', value: 'ar' },
-          { title: 'Türkçe', value: 'tr' },
-          { title: 'Nederlands', value: 'nl' },
-          { title: 'Svenska', value: 'sv' }
-        ]
+          { title: 'Pending', value: 'pending' },
+          { title: 'In Progress', value: 'inProgress' },
+          { title: 'Done', value: 'done' }
+        ],
+        layout: 'dropdown'
       },
-      initialValue: 'ja',
-      validation: Rule => Rule.required()
+      description: '翻訳の進行状況 (n8n が自動更新)'
     })
   ],
   preview: {
@@ -190,13 +174,14 @@ export default defineType({
       title: 'title',
       media: 'coverImage',
       type: 'type',
-      lang: 'lang'
+      lang: '__i18n_lang',
+      status: 'translationStatus'
     },
-    prepare({ title, media, type, lang }) {
+    prepare({ title, media, type, lang, status }) {
       return {
-        title: title,
-        subtitle: `${type} (${lang})`,
-        media: media
+        title,
+        subtitle: `${type} (${lang}) [${status}]`,
+        media
       }
     }
   }
