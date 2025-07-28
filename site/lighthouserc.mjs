@@ -3,7 +3,7 @@
  * 多言語SEO最適化のためのLighthouse CI設定
  */
 
-module.exports = {
+export default {
   ci: {
     collect: {
       // Phase 1の7言語をテスト
