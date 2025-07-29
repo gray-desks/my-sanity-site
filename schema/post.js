@@ -7,21 +7,6 @@ export default defineType({
   type: 'document',
   fields: [
     defineField({
-      name: 'translationStatus',
-      title: 'Translation Status',
-      type: 'string',
-      initialValue: 'pending',
-      options: {
-        list: [
-          { title: 'Pending', value: 'pending' },
-          { title: 'In Progress', value: 'inProgress' },
-          { title: 'Done', value: 'done' },
-        ],
-        layout: 'dropdown',
-      },
-      description: '翻訳の進行状況 (n8n が自動更新)'
-    }),
-    defineField({
       name: 'title',
       title: 'Title',
       type: 'string',

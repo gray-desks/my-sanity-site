@@ -160,21 +160,6 @@ export default defineType({
           type: 'affiliate'
         }
       ]
-    }),
-    defineField({
-      name: 'translationStatus',
-      title: 'Translation Status',
-      type: 'string',
-      initialValue: 'pending',
-      options: {
-        list: [
-          { title: 'Pending', value: 'pending' },
-          { title: 'In Progress', value: 'inProgress' },
-          { title: 'Done', value: 'done' }
-        ],
-        layout: 'dropdown'
-      },
-      description: '翻訳の進行状況 (n8n が自動更新)'
     })
   ],
   preview: {
@@ -182,13 +167,12 @@ export default defineType({
       title: 'title',
       media: 'coverImage',
       type: 'type',
-      lang: '__i18n_lang',
-      status: 'translationStatus'
+      lang: '__i18n_lang'
     },
-    prepare({ title, media, type, lang, status }) {
+    prepare({ title, media, type, lang }) {
       return {
         title,
-        subtitle: `${type} (${lang}) [${status}]`,
+        subtitle: `${type} (${lang})`,
         media
       }
     }
