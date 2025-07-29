@@ -5,23 +5,24 @@ import { getArticleById, client, type Article } from '../../../lib/sanity'
 import { ENABLED_LANGUAGES, getLocalizedPath, getUILabel } from '../../../lib/i18n'
 
 export async function getStaticPaths() {
-  // 全記事のIDを取得
-  const articles = await client.fetch(`*[_type == "article"]{ _id }`)
-  
-  // 日本語以外の各言語ページを生成
   const paths = []
-  
-  for (const lang of ENABLED_LANGUAGES.filter(l => l.id !== 'ja')) {
+
+  // 各言語ごとに、その言語の記事のみでパスを生成
+  for (const { id: langId } of ENABLED_LANGUAGES.filter(l => l.id !== 'ja')) {
+    const langFilter = langId === 'ja' ? '(!defined(lang) || lang == "ja")' : `lang == "${langId}"`
+    const articles = await client.fetch(`*[_type == "article" && ${langFilter}]{ _id }`)
+
     for (const article of articles) {
+      // 日本語はルートに言語コードを含めない
       paths.push({
-        params: { 
-          lang: lang.id,
-          id: article._id 
+        params: {
+          lang: langId === 'ja' ? undefined : langId,
+          id: article._id
         }
       })
     }
   }
-  
+
   return paths
 }
 
