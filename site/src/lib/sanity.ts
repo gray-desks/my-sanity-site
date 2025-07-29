@@ -54,9 +54,9 @@ export interface MultiLanguageArticles {
 
 // 記事一覧取得（言語別）
 export async function getArticles(lang = DEFAULT_LANGUAGE): Promise<Article[]> {
-  // 指定言語または言語が未設定（デフォルト日本語）の記事を取得
+  // 国際化プラグインの __i18n_lang フィールドを使用してフィルタリング
   const query = `
-    *[_type == "article" && (lang == $lang || (!defined(lang) && $lang == "ja"))] | order(publishedAt desc) {
+    *[_type == "article" && (__i18n_lang == $lang || (!defined(__i18n_lang) && $lang == "ja"))] | order(publishedAt desc) {
       _id,
       title,
       slug,
@@ -203,9 +203,9 @@ export async function getArticleBySlug(slug: string, lang = DEFAULT_LANGUAGE): P
 
 // タイプ別記事取得（言語別）
 export async function getArticlesByType(type: string, lang = DEFAULT_LANGUAGE): Promise<Article[]> {
-  // 指定言語かつ指定タイプの記事を取得
+  // 国際化プラグインの __i18n_lang フィールドを使用してフィルタリング
   const query = `
-    *[_type == "article" && type == $type && (lang == $lang || (!defined(lang) && $lang == "ja"))] | order(publishedAt desc) {
+    *[_type == "article" && type == $type && (__i18n_lang == $lang || (!defined(__i18n_lang) && $lang == "ja"))] | order(publishedAt desc) {
       _id,
       title,
       slug,

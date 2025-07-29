@@ -11,11 +11,8 @@ export default function deskStructure(S) {
           .child(
             S.documentTypeList('article')
               .title('Articles')
-              .filter('_type == "article" && (__i18n_lang == $lang || (!defined(__i18n_lang) && $lang == "ja"))')
+              .filter('_type == "article" && lang == $lang')
               .params({ lang: id })
-              .initialValueTemplates([
-                {templateId: 'article', parameters: {lang: id}}
-              ])
           )
       )
     )

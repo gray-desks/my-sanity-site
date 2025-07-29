@@ -1,5 +1,6 @@
 // schemas/article.js
 import { defineType, defineField } from 'sanity'
+import { supportedLanguages } from '../supportedLanguages.js'
 
 export default defineType({
   name: 'article',
@@ -26,6 +27,15 @@ export default defineType({
       },
       hidden: true,
       readOnly: true,
+    }),
+    defineField({
+      name: 'lang',
+      title: 'Language',
+      type: 'string',
+      options: {
+        list: supportedLanguages.map(({id, title}) => ({title, value: id}))
+      },
+      validation: Rule => Rule.required(),
     }),
     defineField({
       name: 'type',
