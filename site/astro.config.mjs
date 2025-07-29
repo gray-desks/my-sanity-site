@@ -3,6 +3,10 @@ import { defineConfig } from 'astro/config';
 import tailwind from '@astrojs/tailwind';
 import sitemap from '@astrojs/sitemap';
 import { getLangIds, getHreflangCode } from './src/lib/getSupportedLangs.js';
+import { exec } from 'child_process';
+import { promisify } from 'util';
+
+const execAsync = promisify(exec);
 
 // https://astro.build/config
 export default defineConfig({
@@ -34,6 +38,18 @@ export default defineConfig({
   
   // ビルド設定
   output: 'static',
+
+  // Build hooks
+  hooks: {
+    'astro:build:before': async () => {
+      console.log('🚀 Starting OG image generation...');
+      try {
+        await execAsync('node scripts/generate-og.js');
+      } catch (error) {
+        console.error('Failed to generate OG images:', error);
+      }
+    }
+  },
   
   // CSS最適化
   vite: {

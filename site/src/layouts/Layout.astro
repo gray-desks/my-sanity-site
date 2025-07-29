@@ -2,18 +2,23 @@
 import '../styles/global.css'
 import Navbar from '../components/Navbar.astro'
 import HreflangLinks from '../components/HreflangLinks.astro'
+import Seo from '../components/Seo.astro'
 import { isRTL, getFontFamily, getUILabel, getLocalizedPath, DEFAULT_LANGUAGE } from '../lib/i18n'
 
 export interface Props {
   title: string
   description?: string
   lang?: string
+  frontmatter?: any
+  pageType?: 'article' | 'website'
 }
 
 const { 
   title, 
   description = '日本全国の旅ログを多言語で発信するブログ',
-  lang = DEFAULT_LANGUAGE
+  lang = DEFAULT_LANGUAGE,
+  frontmatter = { title, description, lang },
+  pageType = 'website'
 } = Astro.props
 
 const isRightToLeft = isRTL(lang)
@@ -32,22 +37,16 @@ const currentPath = Astro.url.pathname
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title}</title>
     
+    <!-- Comprehensive SEO: Canonical, OG, JSON-LD -->
+    <Seo 
+      frontmatter={frontmatter} 
+      pathname={currentPath} 
+      lang={lang} 
+      pageType={pageType}
+    />
+    
     <!-- Hreflang links for 20 languages + x-default -->
     <HreflangLinks currentPath={currentPath} />
-    
-    <!-- SEO Meta Tags -->
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
-    <meta property="og:type" content="website" />
-    <meta property="og:locale" content={
-      lang === 'ja' ? 'ja_JP' : 
-      lang === 'en' ? 'en_US' :
-      lang === 'zh-cn' ? 'zh_CN' :
-      lang === 'zh-tw' ? 'zh_TW' :
-      lang === 'ko' ? 'ko_KR' :
-      lang === 'ar' ? 'ar_AR' :
-      'en_US'
-    } />
     
     <!-- Multi-language Font Loading -->
     <link rel="preconnect" href="https://fonts.googleapis.com">

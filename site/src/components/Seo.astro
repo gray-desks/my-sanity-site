@@ -1,0 +1,149 @@
+---
+import { SITE_URL, SITE_TITLE } from '../lib/env';
+import { getLangIds, getHreflangCode } from '../lib/getSupportedLangs';
+
+export interface Props {
+  frontmatter?: {
+    title?: string;
+    description?: string;
+    heroImage?: string;
+    coverImage?: string;
+    publishedAt?: string;
+    type?: string;
+    lang?: string;
+    seo?: {
+      title?: string;
+      description?: string;
+      image?: string;
+      type?: string;
+    };
+  };
+  pathname: string;
+  lang: string;
+  pageType?: 'article' | 'website';
+}
+
+const { 
+  frontmatter = {}, 
+  pathname, 
+  lang = 'ja',
+  pageType = 'website'
+} = Astro.props;
+
+// SEO values with fallbacks
+const seoTitle = frontmatter.seo?.title || frontmatter.title || SITE_TITLE;
+const seoDescription = frontmatter.seo?.description || frontmatter.description || '日本全国の旅ログを多言語で発信するブログ。各地の魅力を写真と文章でお届けします。';
+const seoImage = frontmatter.seo?.image || frontmatter.heroImage || frontmatter.coverImage;
+const seoType = frontmatter.seo?.type || (pageType === 'article' ? 'article' : 'website');
+
+// Canonical URL generation  
+// Clean pathname to avoid double language codes
+const cleanPathname = pathname.startsWith(`/${lang}`) ? pathname.slice(lang.length + 1) : pathname;
+const canonicalURL = lang === 'ja' 
+  ? new URL(cleanPathname || '/', SITE_URL).toString()
+  : new URL(`/${lang}${cleanPathname || '/'}`, SITE_URL).toString();
+
+// OG Image handling
+const ogImageUrl = seoImage 
+  ? (seoImage.startsWith('http') ? seoImage : new URL(seoImage, SITE_URL).toString())
+  : new URL(`/og/default-${lang}.webp`, SITE_URL).toString();
+
+// Locale mapping for og:locale
+const getOgLocale = (langCode: string): string => {
+  const localeMap: Record<string, string> = {
+    'ja': 'ja_JP',
+    'en': 'en_US',
+    'zh-cn': 'zh_CN',
+    'zh-tw': 'zh_TW',
+    'ko': 'ko_KR',
+    'th': 'th_TH',
+    'vi': 'vi_VN',
+    'id': 'id_ID',
+    'ms': 'ms_MY',
+    'tl': 'tl_PH',
+    'fr': 'fr_FR',
+    'de': 'de_DE',
+    'es': 'es_ES',
+    'it': 'it_IT',
+    'pt': 'pt_PT',
+    'ru': 'ru_RU',
+    'ar': 'ar_AR',
+    'hi': 'hi_IN',
+    'tr': 'tr_TR',
+    'pt-br': 'pt_BR'
+  };
+  return localeMap[langCode] || 'en_US';
+};
+
+// JSON-LD structured data
+const generateJsonLd = () => {
+  const baseData = {
+    '@context': 'https://schema.org',
+    '@type': seoType === 'article' ? 'Article' : 'WebPage',
+    name: seoTitle,
+    description: seoDescription,
+    url: canonicalURL,
+    inLanguage: getHreflangCode(lang),
+    publisher: {
+      '@type': 'Organization',
+      name: SITE_TITLE,
+      url: SITE_URL
+    }
+  };
+
+  if (seoType === 'article') {
+    return {
+      ...baseData,
+      headline: seoTitle,
+      image: ogImageUrl,
+      datePublished: frontmatter.publishedAt || new Date().toISOString(),
+      dateModified: frontmatter.publishedAt || new Date().toISOString(),
+      author: {
+        '@type': 'Person',
+        name: 'Travel Logger'
+      },
+      mainEntityOfPage: {
+        '@type': 'WebPage',
+        '@id': canonicalURL
+      }
+    };
+  }
+
+  return {
+    ...baseData,
+    image: ogImageUrl
+  };
+};
+
+const jsonLd = generateJsonLd();
+---
+
+<!-- Canonical URL -->
+<link rel="canonical" href={canonicalURL} />
+
+<!-- Open Graph Meta Tags -->
+<meta property="og:title" content={seoTitle} />
+<meta property="og:description" content={seoDescription} />
+<meta property="og:type" content={seoType} />
+<meta property="og:url" content={canonicalURL} />
+<meta property="og:image" content={ogImageUrl} />
+<meta property="og:locale" content={getOgLocale(lang)} />
+<meta property="og:site_name" content={SITE_TITLE} />
+
+<!-- Twitter Card Meta Tags -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={seoTitle} />
+<meta name="twitter:description" content={seoDescription} />
+<meta name="twitter:image" content={ogImageUrl} />
+
+<!-- Additional Article Meta Tags -->
+{seoType === 'article' && frontmatter.publishedAt && (
+  <>
+    <meta property="article:published_time" content={frontmatter.publishedAt} />
+    <meta property="article:modified_time" content={frontmatter.publishedAt} />
+    <meta property="article:author" content="Travel Logger" />
+  </>
+)}
+
+<!-- JSON-LD Structured Data -->
+<script type="application/ld+json" set:html={JSON.stringify(jsonLd, null, 2)} />
