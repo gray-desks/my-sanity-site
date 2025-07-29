@@ -247,6 +247,8 @@ export const UI_LABELS = {
     note: '笔记',
     allPrefectures: '所有省份',
     reset: '重置',
+    noArticlesTitle: '暂无文章',
+    noArticlesSubtitle: '请在 Sanity Studio 中创建您的第一篇文章',
   },
   'zh-tw': {
     readMore: '閱讀更多',
@@ -276,6 +278,8 @@ export const UI_LABELS = {
     note: '筆記',
     allPrefectures: '所有県市',
     reset: '重置',
+    noArticlesTitle: '暫無文章',
+    noArticlesSubtitle: '請在 Sanity Studio 中創建您的第一篇文章',
   },
   ko: {
     readMore: '더 읽기',
@@ -305,6 +309,8 @@ export const UI_LABELS = {
     note: '노트',
     allPrefectures: '모든 도도부현',
     reset: '초기화',
+    noArticlesTitle: '아직 기사가 없습니다',
+    noArticlesSubtitle: 'Sanity Studio에서 첫 번째 기사를 작성하세요',
   },
   th: {
     readMore: 'อ่านเพิ่มเติม',
@@ -315,25 +321,27 @@ export const UI_LABELS = {
     language: 'ภาษา',
     switchLanguage: 'เปลี่ยนภาษา',
     siteTitle: 'บันทึกการเดินทาง',
-    siteDescription: 'Multilingual travel journal across Japan',
+    siteDescription: 'บันทึกการเดินทางแบบหลายภาษาทั่วประเทศญี่ปุ่น',
     home: 'หน้าแรก',
-    english: 'English',
-    privacy: 'Privacy',
-    allRightsReserved: 'All rights reserved.',
-    heroTitle: 'Japan Travel Stories',
-    heroSubtitle: 'Beautiful places, delicious food, and cultural experiences shared in multiple languages',
-    readStories: 'Read Stories',
+    english: 'อังกฤษ',
+    privacy: 'ความเป็นส่วนตัว',
+    allRightsReserved: 'สงวนลิขสิทธิ์',
+    heroTitle: 'เรื่องราวการเดินทางในญี่ปุ่น',
+    heroSubtitle: 'สถานที่สวยงาม อาหารอร่อย และประสบการณ์วัฒนธรรมที่แบ่งปันในหลายภาษา',
+    readStories: 'อ่านเรื่องราว',
     switchToEnglish: '日本語',
-    search: 'Search',
-    searchPlaceholder: 'Search by keyword...',
-    allTypes: 'All Types',
-    spot: 'Spot',
-    food: 'Food',
-    transport: 'Transport',
-    hotel: 'Hotel',
-    note: 'Note',
-    allPrefectures: 'All Prefectures',
-    reset: 'Reset',
+    search: 'ค้นหา',
+    searchPlaceholder: 'ค้นหาด้วยคำสำคัญ...',
+    allTypes: 'ทุกประเภท',
+    spot: 'สถานที่ท่องเที่ยว',
+    food: 'อาหาร',
+    transport: 'การเดินทาง',
+    hotel: 'โรงแรม',
+    note: 'บันทึก',
+    allPrefectures: 'ทุกจังหวัด',
+    reset: 'รีเซ็ต',
+    noArticlesTitle: 'ยังไม่มีบทความ',
+    noArticlesSubtitle: 'กรุณาสร้างบทความแรกใน Sanity Studio',
   },
   vi: {
     readMore: 'Đọc thêm',
@@ -363,6 +371,8 @@ export const UI_LABELS = {
     note: 'Ghi chú',
     allPrefectures: 'Tất cả tỉnh',
     reset: 'Đặt lại',
+    noArticlesTitle: 'Chưa có bài viết nào',
+    noArticlesSubtitle: 'Vui lòng tạo bài viết đầu tiên trong Sanity Studio',
   },
 
   id: {
@@ -393,6 +403,8 @@ export const UI_LABELS = {
     note: 'Catatan',
     allPrefectures: 'Semua Prefektur',
     reset: 'Reset',
+    noArticlesTitle: 'Belum ada artikel',
+    noArticlesSubtitle: 'Silakan buat artikel pertama di Sanity Studio',
   },
 
   // 残りの言語（英語ベース）- 後で詳細翻訳を追加可能
@@ -424,6 +436,8 @@ export const UI_LABELS = {
     note: 'Nota',
     allPrefectures: 'Semua Wilayah',
     reset: 'Tetapkan semula',
+    noArticlesTitle: 'Belum ada artikel',
+    noArticlesSubtitle: 'Sila cipta artikel pertama di Sanity Studio',
   },
 
   tl: {
@@ -454,6 +468,8 @@ export const UI_LABELS = {
     note: 'Tala',
     allPrefectures: 'Lahat ng Prepektura',
     reset: 'I-reset',
+    noArticlesTitle: 'Wala pang mga artikulo',
+    noArticlesSubtitle: 'Mangyaring lumikha ng unang artikulo sa Sanity Studio',
   },
   fr: {
     readMore: 'Lire plus',
@@ -483,6 +499,8 @@ export const UI_LABELS = {
     note: 'Note',
     allPrefectures: 'Toutes les préfectures',
     reset: 'Réinitialiser',
+    noArticlesTitle: 'Aucun article encore',
+    noArticlesSubtitle: 'Veuillez créer le premier article dans Sanity Studio',
   },
   de: {
     readMore: 'Mehr lesen',
@@ -512,6 +530,8 @@ export const UI_LABELS = {
     note: 'Notiz',
     allPrefectures: 'Alle Präfekturen',
     reset: 'Zurücksetzen',
+    noArticlesTitle: 'Noch keine Artikel',
+    noArticlesSubtitle: 'Bitte erstellen Sie den ersten Artikel in Sanity Studio',
   },
   es: {
     readMore: 'Leer más',
@@ -541,6 +561,8 @@ export const UI_LABELS = {
     note: 'Nota',
     allPrefectures: 'Todas las prefecturas',
     reset: 'Restablecer',
+    noArticlesTitle: 'Aún no hay artículos',
+    noArticlesSubtitle: 'Por favor crea el primer artículo en Sanity Studio',
   },
   it: {
     readMore: 'Leggi di più',
@@ -570,6 +592,8 @@ export const UI_LABELS = {
     note: 'Nota',
     allPrefectures: 'Tutte le prefetture',
     reset: 'Reimposta',
+    noArticlesTitle: 'Nessun articolo ancora',
+    noArticlesSubtitle: 'Per favore crea il primo articolo in Sanity Studio',
   },
   pt: {
     readMore: 'Ler mais',
@@ -599,6 +623,8 @@ export const UI_LABELS = {
     note: 'Nota',
     allPrefectures: 'Todas as prefeituras',
     reset: 'Redefinir',
+    noArticlesTitle: 'Ainda não há artigos',
+    noArticlesSubtitle: 'Por favor crie o primeiro artigo no Sanity Studio',
   },
   ru: {
     readMore: 'Читать далее',
@@ -628,6 +654,8 @@ export const UI_LABELS = {
     note: 'Заметка',
     allPrefectures: 'Все префектуры',
     reset: 'Сброс',
+    noArticlesTitle: 'Пока нет статей',
+    noArticlesSubtitle: 'Пожалуйста, создайте первую статью в Sanity Studio',
   },
   ar: {
     readMore: 'اقرأ المزيد',
@@ -657,6 +685,8 @@ export const UI_LABELS = {
     note: 'ملاحظة',
     allPrefectures: 'جميع المحافظات',
     reset: 'إعادة تعيين',
+    noArticlesTitle: 'لا توجد مقالات بعد',
+    noArticlesSubtitle: 'يرجى إنشاء المقال الأول في Sanity Studio',
   },
   hi: {
     readMore: 'और पढ़ें',
@@ -686,6 +716,8 @@ export const UI_LABELS = {
     note: 'नोट',
     allPrefectures: 'सभी प्रान्त',
     reset: 'रीसेट',
+    noArticlesTitle: 'अभी तक कोई लेख नहीं',
+    noArticlesSubtitle: 'कृपया Sanity Studio में पहला लेख बनाएं',
   },
   tr: {
     readMore: 'Daha fazla oku',
@@ -715,6 +747,8 @@ export const UI_LABELS = {
     note: 'Not',
     allPrefectures: 'Tüm Eyaletler',
     reset: 'Sıfırla',
+    noArticlesTitle: 'Henüz makale yok',
+    noArticlesSubtitle: 'Lütfen Sanity Studio\'da ilk makaleyi oluşturun',
   },
   'pt-br': {
     readMore: 'Leia mais',
@@ -744,6 +778,8 @@ export const UI_LABELS = {
     note: 'Nota',
     allPrefectures: 'Todos os estados',
     reset: 'Redefinir',
+    noArticlesTitle: 'Ainda não há artigos',
+    noArticlesSubtitle: 'Por favor crie o primeiro artigo no Sanity Studio',
   },
 } as const
 

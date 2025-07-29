@@ -1,5 +1,6 @@
 ---
 import { getUILabel, DEFAULT_LANGUAGE } from '../lib/i18n'
+import { getPrefecturesForLanguage } from '../lib/prefectures'
 
 export interface Props {
   lang?: string
@@ -17,17 +18,11 @@ const articleTypes = [
   { value: 'note', label: getUILabel(lang, 'note') }
 ]
 
-// 都道府県の定義（簡略版・将来的に多言語対応）
+// 全47都道府県の定義（多言語対応）
+const allPrefectures = getPrefecturesForLanguage(lang)
 const prefectures = [
   { code: '', name: getUILabel(lang, 'allPrefectures') },
-  { code: 'tokyo', name: '東京都' },
-  { code: 'osaka', name: '大阪府' },
-  { code: 'kyoto', name: '京都府' },
-  { code: 'kanagawa', name: '神奈川県' },
-  { code: 'chiba', name: '千葉県' },
-  { code: 'saitama', name: '埼玉県' },
-  { code: 'aichi', name: '愛知県' },
-  // 必要に応じて追加
+  ...allPrefectures.map(p => ({ code: p.code, name: p.name }))
 ]
 ---
 
@@ -217,10 +212,58 @@ const prefectures = [
           noResultsEl = document.createElement('div')
           noResultsEl.id = 'no-results-message'
           noResultsEl.className = 'text-center py-16 bg-white rounded-2xl shadow-lg border border-gray-100'
+          const noResultsTitle = {
+            'ja': '検索結果が見つかりませんでした',
+            'en': 'No search results found',
+            'zh-cn': '未找到搜索结果',
+            'zh-tw': '未找到搜尋結果',
+            'ko': '검색 결과를 찾을 수 없습니다',
+            'th': 'ไม่พบผลการค้นหา',
+            'vi': 'Không tìm thấy kết quả tìm kiếm',
+            'id': 'Tidak ditemukan hasil pencarian',
+            'ms': 'Tiada hasil carian ditemui',
+            'tl': 'Walang nahanap na resulta',
+            'fr': 'Aucun résultat trouvé',
+            'de': 'Keine Suchergebnisse gefunden',
+            'es': 'No se encontraron resultados',
+            'it': 'Nessun risultato trovato',
+            'pt': 'Nenhum resultado encontrado',
+            'ru': 'Результаты не найдены',
+            'ar': 'لم يتم العثور على نتائج',
+            'hi': 'कोई खोज परिणाम नहीं मिला',
+            'tr': 'Arama sonucu bulunamadı',
+            'pt-br': 'Nenhum resultado encontrado'
+          }
+          
+          const noResultsSubtitle = {
+            'ja': '他のキーワードで検索してみてください',
+            'en': 'Try searching with different keywords',
+            'zh-cn': '请尝试使用其他关键词搜索',
+            'zh-tw': '請嘗試使用其他關鍵詞搜尋',
+            'ko': '다른 키워드로 검색해보세요',
+            'th': 'ลองค้นหาด้วยคำอื่น',
+            'vi': 'Thử tìm kiếm với từ khóa khác',
+            'id': 'Coba cari dengan kata kunci lain',
+            'ms': 'Cuba cari dengan kata kunci lain',
+            'tl': 'Subukan maghanap gamit ang ibang keyword',
+            'fr': 'Essayez avec d\'autres mots-clés',
+            'de': 'Versuchen Sie es mit anderen Suchbegriffen',
+            'es': 'Intenta buscar con otras palabras clave',
+            'it': 'Prova a cercare con altre parole chiave',
+            'pt': 'Tente procurar com outras palavras-chave',
+            'ru': 'Попробуйте поиск с другими ключевыми словами',
+            'ar': 'جرب البحث بكلمات مفتاحية أخرى',
+            'hi': 'अन्य कीवर्ड के साथ खोजने का प्रयास करें',
+            'tr': 'Başka anahtar kelimelerle arama yapmayı deneyin',
+            'pt-br': 'Tente buscar com outras palavras-chave'
+          }
+          
+          const currentLang = document.documentElement.lang || 'ja'
+          
           noResultsEl.innerHTML = `
             <div class="text-6xl mb-4">🔍</div>
-            <p class="text-gray-500 text-xl mb-2">検索結果が見つかりませんでした</p>
-            <p class="text-gray-400">他のキーワードで検索してみてください</p>
+            <p class="text-gray-500 text-xl mb-2">${noResultsTitle[currentLang] || noResultsTitle['ja']}</p>
+            <p class="text-gray-400">${noResultsSubtitle[currentLang] || noResultsSubtitle['ja']}</p>
           `
           
           const articlesContainer = document.querySelector('#articles .columns-1, #articles .columns-2, #articles .columns-3')

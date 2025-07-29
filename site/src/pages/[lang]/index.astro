@@ -46,20 +46,8 @@ try {
       {articles.length === 0 ? (
         <div class="text-center py-16 bg-white rounded-2xl shadow-lg border border-gray-100">
           <div class="text-6xl mb-4">📝</div>
-          <p class="text-gray-500 text-xl mb-2">
-            {lang === 'en' ? 'No articles yet' : 
-             lang === 'zh-cn' ? '暂无文章' :
-             lang === 'zh-tw' ? '暫無文章' :
-             lang === 'ko' ? '아직 기사가 없습니다' :
-             'No articles yet'}
-          </p>
-          <p class="text-gray-400">
-            {lang === 'en' ? 'Please create your first article in Sanity Studio' :
-             lang === 'zh-cn' ? '请在 Sanity Studio 中创建您的第一篇文章' :
-             lang === 'zh-tw' ? '請在 Sanity Studio 中創建您的第一篇文章' :
-             lang === 'ko' ? 'Sanity Studio에서 첫 번째 기사를 작성하세요' :
-             'Please create your first article in Sanity Studio'}
-          </p>
+          <p class="text-gray-500 text-xl mb-2">{getUILabel(lang, 'noArticlesTitle')}</p>
+          <p class="text-gray-400">{getUILabel(lang, 'noArticlesSubtitle')}</p>
         </div>
       ) : (
         <div class="columns-1 sm:columns-2 lg:columns-3 gap-6">
