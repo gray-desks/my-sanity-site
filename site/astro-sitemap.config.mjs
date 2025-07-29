@@ -3,7 +3,7 @@
  * 多言語サイトマップとhreflang自動生成設定
  */
 
-import { ENABLED_LANGUAGES, DEFAULT_LANGUAGE, getHreflangCode } from './src/lib/i18n.js'
+import { getLangIds, getHreflangCode } from './src/lib/getSupportedLangs.js'
 
 export default {
   // サイトURL
@@ -16,9 +16,9 @@ export default {
   
   // 多言語hreflang設定
   i18n: {
-    defaultLocale: DEFAULT_LANGUAGE,
-    locales: ENABLED_LANGUAGES.reduce((acc, lang) => {
-      acc[lang.id] = getHreflangCode(lang.id)
+    defaultLocale: 'ja',
+    locales: getLangIds().reduce((acc, langId) => {
+      acc[langId] = getHreflangCode(langId)
       return acc
     }, {}),
   },
@@ -30,11 +30,11 @@ export default {
       changefreq: 'daily',
       priority: 1.0,
       // 多言語版のURL
-      alternates: ENABLED_LANGUAGES
-        .filter(lang => lang.id !== DEFAULT_LANGUAGE)
-        .map(lang => ({
-          href: `/${lang.id}/`,
-          hreflang: getHreflangCode(lang.id)
+      alternates: getLangIds()
+        .filter(langId => langId !== 'ja')
+        .map(langId => ({
+          href: `/${langId}/`,
+          hreflang: getHreflangCode(langId)
         }))
     }
   ],

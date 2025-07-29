@@ -40,7 +40,8 @@
       "Bash(npm run deploy:studio:*)",
       "WebFetch(domain:travel-blog-jp.sanity.studio)",
       "Bash(node:*)",
-      "Bash(timeout 10s npm run dev)"
+      "Bash(timeout 10s npm run dev)",
+      "Bash(grep:*)"
     ],
     "deny": []
   }

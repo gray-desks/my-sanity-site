@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css'
 import Navbar from '../components/Navbar.astro'
+import HreflangLinks from '../components/HreflangLinks.astro'
 import { isRTL, getFontFamily, getUILabel, getLocalizedPath, DEFAULT_LANGUAGE } from '../lib/i18n'
 
 export interface Props {
@@ -17,6 +18,9 @@ const {
 
 const isRightToLeft = isRTL(lang)
 const fontFamily = getFontFamily(lang)
+
+// Get current path for hreflang links
+const currentPath = Astro.url.pathname
 ---
 
 <!doctype html>
@@ -27,6 +31,9 @@ const fontFamily = getFontFamily(lang)
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title}</title>
+    
+    <!-- Hreflang links for 20 languages + x-default -->
+    <HreflangLinks currentPath={currentPath} />
     
     <!-- SEO Meta Tags -->
     <meta property="og:title" content={title} />

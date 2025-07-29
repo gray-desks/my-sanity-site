@@ -1,0 +1,68 @@
+---
+import { getLangIds, getHreflangCode } from '../lib/getSupportedLangs';
+
+export interface Props {
+  currentPath: string;
+}
+
+const { currentPath } = Astro.props;
+
+// Get site URL from environment (with fallback)
+const siteUrl = import.meta.env.PUBLIC_SITE_URL || 'https://my-sanity-site.vercel.app';
+
+// Get all supported language IDs
+const langIds = getLangIds();
+
+// Default language (Japanese) - no prefix in URL
+const defaultLang = 'ja';
+
+// Generate hreflang URLs for all languages
+const hreflangLinks = langIds.map(langId => {
+  let href: string;
+  
+  // Extract the actual content path by removing language prefix if present
+  let contentPath = currentPath;
+  
+  // Remove language prefix from current path to get content path
+  for (const lang of langIds) {
+    if (lang !== defaultLang && currentPath.startsWith(`/${lang}/`)) {
+      contentPath = currentPath.slice(`/${lang}`.length);
+      break;
+    }
+  }
+  
+  // For default language (ja), no prefix is used
+  if (langId === defaultLang) {
+    href = `${siteUrl}${contentPath}`;
+  } else {
+    // For other languages, add lang prefix
+    href = contentPath === '/' 
+      ? `${siteUrl}/${langId}/`
+      : `${siteUrl}/${langId}${contentPath}`;
+  }
+  
+  return {
+    hreflang: getHreflangCode(langId),
+    href
+  };
+});
+
+// Add x-default pointing to Japanese (default) version
+// Use the same logic to extract content path for x-default
+let contentPath = currentPath;
+for (const lang of langIds) {
+  if (lang !== defaultLang && currentPath.startsWith(`/${lang}/`)) {
+    contentPath = currentPath.slice(`/${lang}`.length);
+    break;
+  }
+}
+const xDefaultHref = `${siteUrl}${contentPath}`;
+---
+
+<!-- Hreflang links for all supported languages -->
+{hreflangLinks.map(({ hreflang, href }) => (
+  <link rel="alternate" hreflang={hreflang} href={href} />
+))}
+
+<!-- x-default points to default language (Japanese) -->
+<link rel="alternate" hreflang="x-default" href={xDefaultHref} />
