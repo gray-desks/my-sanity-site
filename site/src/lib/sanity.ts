@@ -50,11 +50,12 @@ export interface MultiLanguageArticles {
 
 
 
-
 // ======= NEW ARTICLE FUNCTIONS (20言語対応) =======
 
-// 記事一覧取得（言語別）
+// 記事一覧取得（言語別・現在は全記事取得だが将来多言語対応）
 export async function getArticles(lang = DEFAULT_LANGUAGE): Promise<Article[]> {
+  // 現在はlangフィールドに関係なく全記事を取得
+  // 将来多言語展開時は lang == $lang 条件を追加
   const query = `
     *[_type == "article"] | order(publishedAt desc) {
       _id,
@@ -87,7 +88,7 @@ export async function getArticles(lang = DEFAULT_LANGUAGE): Promise<Article[]> {
   return await client.fetch(query)
 }
 
-// 全言語の記事を一括取得
+// 全言語の記事を一括取得（将来の多言語展開用）
 export async function getAllLanguageArticles(): Promise<MultiLanguageArticles> {
   const results: MultiLanguageArticles = {}
   
@@ -103,7 +104,7 @@ export async function getAllLanguageArticles(): Promise<MultiLanguageArticles> {
   return results
 }
 
-// 記事の翻訳版を取得
+// 記事の翻訳版を取得（将来の多言語展開用）
 export async function getArticleTranslations(articleId: string): Promise<Article[]> {
   const query = `
     *[_type == "article" && (__i18n_base._ref == $articleId || _id == $articleId || __i18n_refs[]._ref == $articleId)] {
@@ -201,8 +202,10 @@ export async function getArticleBySlug(slug: string, lang = DEFAULT_LANGUAGE): P
   return await client.fetch(query, { slug })
 }
 
-// タイプ別記事取得
+// タイプ別記事取得（将来の多言語展開用）
 export async function getArticlesByType(type: string, lang = DEFAULT_LANGUAGE): Promise<Article[]> {
+  // 現在はlangフィールドに関係なく全記事を取得
+  // 将来多言語展開時は lang == $lang 条件を追加
   const query = `
     *[_type == "article" && type == $type] | order(publishedAt desc) {
       _id,
@@ -235,6 +238,7 @@ export async function getArticlesByType(type: string, lang = DEFAULT_LANGUAGE): 
   return await client.fetch(query, { type })
 }
 
+// 将来の多言語展開用の関数を追加
 // 全記事のスラッグとタイプを取得（静的生成用・20言語対応）
 export async function getAllArticleSlugs(): Promise<{slug: string, type: string, lang: string}[]> {
   const query = `
@@ -255,7 +259,7 @@ export async function getEnabledLanguageArticleSlugs(): Promise<{slug: string, t
   return allSlugs.filter(item => enabledLangCodes.includes(item.lang))
 }
 
-// 記事の統計情報取得
+// 記事の統計情報取得（将来の多言語展開用）
 export async function getArticleStats(): Promise<{
   totalArticles: number
   articlesByLanguage: Record<string, number>
@@ -264,8 +268,8 @@ export async function getArticleStats(): Promise<{
   const query = `
     {
       "totalArticles": count(*[_type == "article"]),
-      "articlesByLanguage": *[_type == "article"] | group_by(lang) {
-        "lang": @[0].lang,
+      "articlesByLanguage": *[_type == "article"] | group_by(coalesce(lang, "ja")) {
+        "lang": @[0].lang || "ja",
         "count": length(@)
       },
       "articlesByType": *[_type == "article"] | group_by(type) {

@@ -1,7 +1,7 @@
 ---
 import '../styles/global.css'
 import Navbar from '../components/Navbar.astro'
-import { isRTL, getFontFamily, getUILabel, getLocalizedPath } from '../lib/i18n'
+import { isRTL, getFontFamily, getUILabel, getLocalizedPath, DEFAULT_LANGUAGE } from '../lib/i18n'
 
 export interface Props {
   title: string
@@ -12,7 +12,7 @@ export interface Props {
 const { 
   title, 
   description = '日本全国の旅ログを多言語で発信するブログ',
-  lang = 'ja'
+  lang = DEFAULT_LANGUAGE
 } = Astro.props
 
 const isRightToLeft = isRTL(lang)
@@ -137,9 +137,3 @@ const fontFamily = getFontFamily(lang)
 
   </body>
 </html>
-
-<style>
-  body {
-    font-family: 'Noto Sans JP', 'Inter', sans-serif;
-  }
-</style>

@@ -1,18 +1,31 @@
 ---
-import Layout from '../../layouts/Layout.astro'
-import Gallery from '../../components/Gallery.astro'
-import { getArticleById, client, type Article } from '../../lib/sanity'
+import Layout from '../../../layouts/Layout.astro'
+import Gallery from '../../../components/Gallery.astro'
+import { getArticleById, client, type Article } from '../../../lib/sanity'
+import { ENABLED_LANGUAGES, getLocalizedPath, getUILabel } from '../../../lib/i18n'
 
 export async function getStaticPaths() {
-  // 全記事のIDを取得して静的パスを生成
+  // 全記事のIDを取得
   const articles = await client.fetch(`*[_type == "article"]{ _id }`)
   
-  return articles.map((article: { _id: string }) => ({
-    params: { id: article._id }
-  }))
+  // 日本語以外の各言語ページを生成
+  const paths = []
+  
+  for (const lang of ENABLED_LANGUAGES.filter(l => l.id !== 'ja')) {
+    for (const article of articles) {
+      paths.push({
+        params: { 
+          lang: lang.id,
+          id: article._id 
+        }
+      })
+    }
+  }
+  
+  return paths
 }
 
-const { id } = Astro.params
+const { lang, id } = Astro.params
 const article: Article | null = await getArticleById(id!)
 
 if (!article) {
@@ -20,7 +33,14 @@ if (!article) {
 }
 
 const formatDate = (dateString: string) => {
-  return new Date(dateString).toLocaleDateString('ja-JP', {
+  const locale = lang === 'ja' ? 'ja-JP' :
+                 lang === 'en' ? 'en-US' :
+                 lang === 'zh-cn' ? 'zh-CN' :
+                 lang === 'zh-tw' ? 'zh-TW' :
+                 lang === 'ko' ? 'ko-KR' :
+                 'en-US'
+  
+  return new Date(dateString).toLocaleDateString(locale, {
     year: 'numeric',
     month: 'long', 
     day: 'numeric'
@@ -28,11 +48,11 @@ const formatDate = (dateString: string) => {
 }
 
 const typeConfig = {
-  spot: { emoji: '🗾', label: 'スポット' },
-  food: { emoji: '🍣', label: 'グルメ' },
-  transport: { emoji: '🚄', label: '交通' },
-  hotel: { emoji: '🛏️', label: '宿泊' },
-  note: { emoji: '📝', label: 'メモ' }
+  spot: { emoji: '🗾', label: getUILabel(lang, 'spot') },
+  food: { emoji: '🍣', label: getUILabel(lang, 'food') },
+  transport: { emoji: '🚄', label: getUILabel(lang, 'transport') },
+  hotel: { emoji: '🛏️', label: getUILabel(lang, 'hotel') },
+  note: { emoji: '📝', label: getUILabel(lang, 'note') }
 }
 
 const config = typeConfig[article.type as keyof typeof typeConfig] || typeConfig.note
@@ -41,6 +61,7 @@ const config = typeConfig[article.type as keyof typeof typeConfig] || typeConfig
 <Layout 
   title={article.title} 
   description={article.bodyText?.slice(0, 160) || `${article.title}の記事です。`}
+  lang={lang}
 >
   <div class="max-w-4xl mx-auto px-4 py-8">
     <!-- Header -->
@@ -86,7 +107,12 @@ const config = typeConfig[article.type as keyof typeof typeConfig] || typeConfig
       {article.body && (
         <div class="article-content">
           <p class="text-gray-700 leading-relaxed">
-            {article.bodyText || '記事の内容がありません。'}
+            {article.bodyText || 
+             (lang === 'en' ? 'No content available.' :
+              lang === 'zh-cn' ? '暂无内容。' :
+              lang === 'zh-tw' ? '暫無內容。' :
+              lang === 'ko' ? '콘텐츠가 없습니다.' :
+              '記事の内容がありません。')}
           </p>
         </div>
       )}
@@ -100,10 +126,10 @@ const config = typeConfig[article.type as keyof typeof typeConfig] || typeConfig
     <!-- Navigation -->
     <div class="mt-12 text-center">
       <a 
-        href="/" 
+        href={getLocalizedPath('/', lang)} 
         class="inline-flex items-center px-6 py-3 rounded-full bg-brand-600 text-white font-semibold hover:bg-brand-700 transition-colors"
       >
-        ← 記事一覧に戻る
+        ← {getUILabel(lang, 'backToHome')}
       </a>
     </div>
   </div>

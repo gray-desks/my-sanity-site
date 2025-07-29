@@ -1,27 +1,33 @@
 ---
-import { getUILabel } from '../lib/i18n'
-import { getPrefecturesForLanguage } from '../lib/prefectures'
+import { getUILabel, DEFAULT_LANGUAGE } from '../lib/i18n'
 
 export interface Props {
-  lang: string
+  lang?: string
 }
 
-const { lang } = Astro.props
+const { lang = DEFAULT_LANGUAGE } = Astro.props
 
 // 記事タイプの定義
 const articleTypes = [
-  { value: '', label: getUILabel(lang, 'allTypes') || 'すべて' },
-  { value: 'spot', label: getUILabel(lang, 'spot') || '観光地' },
-  { value: 'food', label: getUILabel(lang, 'food') || 'グルメ' },
-  { value: 'transport', label: getUILabel(lang, 'transport') || '交通' },
-  { value: 'hotel', label: getUILabel(lang, 'hotel') || '宿泊' },
-  { value: 'note', label: getUILabel(lang, 'note') || 'メモ' }
+  { value: '', label: getUILabel(lang, 'allTypes') },
+  { value: 'spot', label: getUILabel(lang, 'spot') },
+  { value: 'food', label: getUILabel(lang, 'food') },
+  { value: 'transport', label: getUILabel(lang, 'transport') },
+  { value: 'hotel', label: getUILabel(lang, 'hotel') },
+  { value: 'note', label: getUILabel(lang, 'note') }
 ]
 
-// 都道府県の定義
+// 都道府県の定義（簡略版・将来的に多言語対応）
 const prefectures = [
-  { code: '', name: getUILabel(lang, 'allPrefectures') || 'すべての都道府県' },
-  ...getPrefecturesForLanguage(lang)
+  { code: '', name: getUILabel(lang, 'allPrefectures') },
+  { code: 'tokyo', name: '東京都' },
+  { code: 'osaka', name: '大阪府' },
+  { code: 'kyoto', name: '京都府' },
+  { code: 'kanagawa', name: '神奈川県' },
+  { code: 'chiba', name: '千葉県' },
+  { code: 'saitama', name: '埼玉県' },
+  { code: 'aichi', name: '愛知県' },
+  // 必要に応じて追加
 ]
 ---
 
@@ -33,7 +39,7 @@ const prefectures = [
         <input
           type="text"
           id="search-input"
-          placeholder={getUILabel(lang, 'searchPlaceholder') || 'キーワードで検索...'}
+          placeholder={getUILabel(lang, 'searchPlaceholder')}
           class="w-full pl-12 pr-4 py-3 text-gray-700 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-all duration-200"
         />
         <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
@@ -74,7 +80,7 @@ const prefectures = [
         id="search-button"
         class="px-6 py-3 bg-gradient-to-r from-brand-500 to-brand-600 text-white font-medium rounded-xl hover:from-brand-600 hover:to-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 transition-all duration-200 transform hover:scale-105"
       >
-        <span class="hidden sm:inline">{getUILabel(lang, 'search') || '検索'}</span>
+        <span class="hidden sm:inline">{getUILabel(lang, 'search')}</span>
         <svg class="h-5 w-5 sm:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
         </svg>
@@ -84,9 +90,9 @@ const prefectures = [
       <button
         id="reset-button"
         class="px-4 py-3 bg-gray-500 hover:bg-gray-600 text-white font-medium rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-all duration-200 transform hover:scale-105"
-        title={getUILabel(lang, 'reset') || 'リセット'}
+        title={getUILabel(lang, 'reset')}
       >
-        <span class="hidden sm:inline">{getUILabel(lang, 'reset') || 'リセット'}</span>
+        <span class="hidden sm:inline">{getUILabel(lang, 'reset')}</span>
         <svg class="h-5 w-5 sm:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
         </svg>

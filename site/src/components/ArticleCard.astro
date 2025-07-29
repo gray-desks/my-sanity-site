@@ -1,12 +1,13 @@
 ---
 import type { Article } from '../lib/sanity'
+import { DEFAULT_LANGUAGE } from '../lib/i18n'
 
 interface Props {
   article: Article
-  lang: string
+  lang?: string
 }
 
-const { article, lang } = Astro.props
+const { article, lang = DEFAULT_LANGUAGE } = Astro.props
 
 const formatDate = (dateString: string) => {
   return new Date(dateString).toLocaleDateString(lang === 'ja' ? 'ja-JP' : 'en-US', {
@@ -47,6 +48,7 @@ const typeConfig = {
 const config = typeConfig[article.type as keyof typeof typeConfig] || typeConfig.note
 const typeLabel = config.label[lang as keyof typeof config.label] || config.label.ja
 
+// 将来多言語展開時のURL生成（現在はシンプルなID形式）
 const articleUrl = lang === 'en' 
   ? `/en/article/${article._id}` 
   : `/article/${article._id}`
