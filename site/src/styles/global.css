@@ -12,3 +12,68 @@
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
+
+/* RTL Layout Support */
+.rtl-layout {
+  direction: rtl;
+}
+
+.rtl-layout .navbar-logo {
+  order: 2;
+}
+
+.rtl-layout .navbar-links {
+  order: 1;
+}
+
+.rtl-layout .article-card {
+  text-align: right;
+}
+
+.rtl-layout .article-meta {
+  flex-direction: row-reverse;
+}
+
+.rtl-layout .language-switcher {
+  flex-direction: row-reverse;
+}
+
+/* Language-specific Typography */
+.lang-ar {
+  font-family: 'Noto Sans Arabic', ui-sans-serif, system-ui, sans-serif;
+}
+
+.lang-hi {
+  font-family: 'Noto Sans Devanagari', ui-sans-serif, system-ui, sans-serif;
+}
+
+.lang-th {
+  font-family: 'Noto Sans Thai', ui-sans-serif, system-ui, sans-serif;
+}
+
+.lang-vi {
+  font-family: 'Noto Sans Vietnamese', ui-sans-serif, system-ui, sans-serif;
+}
+
+.lang-ru {
+  font-family: 'Noto Sans', ui-sans-serif, system-ui, sans-serif;
+}
+
+.lang-ja, .lang-zh-cn, .lang-zh-tw, .lang-ko {
+  font-family: 'Noto Sans JP', 'Noto Sans SC', 'Noto Sans TC', 'Noto Sans KR', ui-sans-serif, system-ui, sans-serif;
+}
+
+/* CJK line height optimization */
+.lang-ja, .lang-zh-cn, .lang-zh-tw, .lang-ko {
+  line-height: 1.7;
+}
+
+/* Arabic text alignment */
+.lang-ar p, .lang-ar h1, .lang-ar h2, .lang-ar h3 {
+  text-align: right;
+}
+
+/* Better spacing for Thai text */
+.lang-th {
+  word-spacing: 0.1em;
+}

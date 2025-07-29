@@ -52,12 +52,11 @@ export interface MultiLanguageArticles {
 
 // ======= NEW ARTICLE FUNCTIONS (20言語対応) =======
 
-// 記事一覧取得（言語別・現在は全記事取得だが将来多言語対応）
+// 記事一覧取得（言語別）
 export async function getArticles(lang = DEFAULT_LANGUAGE): Promise<Article[]> {
-  // 現在はlangフィールドに関係なく全記事を取得
-  // 将来多言語展開時は lang == $lang 条件を追加
+  // 指定言語または言語が未設定（デフォルト日本語）の記事を取得
   const query = `
-    *[_type == "article"] | order(publishedAt desc) {
+    *[_type == "article" && (lang == $lang || (!defined(lang) && $lang == "ja"))] | order(publishedAt desc) {
       _id,
       title,
       slug,
@@ -85,7 +84,7 @@ export async function getArticles(lang = DEFAULT_LANGUAGE): Promise<Article[]> {
       __i18n_refs
     }
   `
-  return await client.fetch(query)
+  return await client.fetch(query, { lang })
 }
 
 // 全言語の記事を一括取得（将来の多言語展開用）
@@ -202,12 +201,11 @@ export async function getArticleBySlug(slug: string, lang = DEFAULT_LANGUAGE): P
   return await client.fetch(query, { slug })
 }
 
-// タイプ別記事取得（将来の多言語展開用）
+// タイプ別記事取得（言語別）
 export async function getArticlesByType(type: string, lang = DEFAULT_LANGUAGE): Promise<Article[]> {
-  // 現在はlangフィールドに関係なく全記事を取得
-  // 将来多言語展開時は lang == $lang 条件を追加
+  // 指定言語かつ指定タイプの記事を取得
   const query = `
-    *[_type == "article" && type == $type] | order(publishedAt desc) {
+    *[_type == "article" && type == $type && (lang == $lang || (!defined(lang) && $lang == "ja"))] | order(publishedAt desc) {
       _id,
       title,
       slug,
@@ -235,7 +233,7 @@ export async function getArticlesByType(type: string, lang = DEFAULT_LANGUAGE): 
       __i18n_refs
     }
   `
-  return await client.fetch(query, { type })
+  return await client.fetch(query, { type, lang })
 }
 
 // 将来の多言語展開用の関数を追加

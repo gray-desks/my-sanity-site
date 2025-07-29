@@ -10,7 +10,26 @@ interface Props {
 const { article, lang = DEFAULT_LANGUAGE } = Astro.props
 
 const formatDate = (dateString: string) => {
-  return new Date(dateString).toLocaleDateString(lang === 'ja' ? 'ja-JP' : 'en-US', {
+  const locale = lang === 'ja' ? 'ja-JP' :
+                 lang === 'en' ? 'en-US' :
+                 lang === 'zh-cn' ? 'zh-CN' :
+                 lang === 'zh-tw' ? 'zh-TW' :
+                 lang === 'ko' ? 'ko-KR' :
+                 lang === 'th' ? 'th-TH' :
+                 lang === 'vi' ? 'vi-VN' :
+                 lang === 'ar' ? 'ar-SA' :
+                 lang === 'hi' ? 'hi-IN' :
+                 lang === 'ru' ? 'ru-RU' :
+                 lang === 'fr' ? 'fr-FR' :
+                 lang === 'de' ? 'de-DE' :
+                 lang === 'es' ? 'es-ES' :
+                 lang === 'it' ? 'it-IT' :
+                 lang === 'pt' ? 'pt-PT' :
+                 lang === 'pt-br' ? 'pt-BR' :
+                 lang === 'tr' ? 'tr-TR' :
+                 'en-US'
+  
+  return new Date(dateString).toLocaleDateString(locale, {
     year: 'numeric',
     month: 'long',
     day: 'numeric'
@@ -48,15 +67,15 @@ const typeConfig = {
 const config = typeConfig[article.type as keyof typeof typeConfig] || typeConfig.note
 const typeLabel = config.label[lang as keyof typeof config.label] || config.label.ja
 
-// 将来多言語展開時のURL生成（現在はシンプルなID形式）
-const articleUrl = lang === 'en' 
-  ? `/en/article/${article._id}` 
-  : `/article/${article._id}`
+// 多言語対応URL生成
+const articleUrl = lang === 'ja' 
+  ? `/article/${article._id}` 
+  : `/${lang}/article/${article._id}`
 ---
 
 <a 
   href={articleUrl} 
-  class="block break-inside-avoid mb-6 bg-gradient-card backdrop-blur-md rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-200 overflow-hidden group border border-white/30 hover:border-brand-300/60 hover:-translate-y-3 hover:scale-[1.02] relative animate-fade-in"
+  class={`block break-inside-avoid mb-6 bg-gradient-card backdrop-blur-md rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-200 overflow-hidden group border border-white/30 hover:border-brand-300/60 hover:-translate-y-3 hover:scale-[1.02] relative animate-fade-in article-card lang-${lang}`}
   data-article
   data-title={article.title}
   data-type={article.type}
