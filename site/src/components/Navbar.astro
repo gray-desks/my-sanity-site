@@ -35,14 +35,14 @@ const languageFlags = {
 const availableLanguages = ENABLED_LANGUAGES
 ---
 
-<nav class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-100 shadow-sm">
+<nav class="sticky top-0 z-50 bg-base/80 backdrop-blur-md border-b border-border">
   <div class="max-w-7xl mx-auto px-4 py-3 sm:py-4 flex items-center justify-between">
     <!-- Logo -->
     <a href={lang === 'ja' ? '/' : `/${lang}/`} class="flex items-center gap-3 group">
-      <div class="w-10 h-10 bg-gradient-to-br from-brand-500 to-accent-500 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-110">
+      <div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
         <span class="text-white font-bold text-lg">旅</span>
       </div>
-      <span class="text-2xl font-bold bg-gradient-to-r from-brand-400 to-accent-400 bg-clip-text text-transparent">
+      <span class="text-2xl font-bold text-ink">
         {getUILabel(lang, 'siteTitle')}
       </span>
     </a>
@@ -52,16 +52,16 @@ const availableLanguages = ENABLED_LANGUAGES
       
       <!-- モバイル用言語メニュー -->
       <details class="sm:hidden relative">
-        <summary class="flex items-center gap-1 px-3 h-10 rounded-lg bg-gray-200 text-gray-800 focus:ring-2 focus:ring-brand-400 cursor-pointer">
+        <summary class="flex items-center gap-1 px-3 h-10 rounded-lg bg-ink/5 text-ink focus:ring-2 focus:ring-primary cursor-pointer">
           🌐
         </summary>
-        <div class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-50 max-h-80 overflow-y-auto">
+        <div class="absolute right-0 mt-2 w-48 bg-base rounded-lg shadow-lg border border-ink/10 z-50 max-h-80 overflow-y-auto">
           {availableLanguages.map((language) => (
             <a
               href={language.id === 'ja' ? '/' : `/${language.id}/`}
-              class={`block px-4 py-2 text-sm hover:bg-brand-50 transition-colors ${
-                language.id === lang ? 'font-semibold text-brand-600 bg-brand-50' : 'text-gray-700'
-              }`}
+              class={`block px-4 py-2 text-sm hover:bg-primary/10 transition-colors ${
+                language.id === lang ? 'font-semibold text-primary bg-primary/5' : 'text-secondary'
+              }`}}
               title={language.nativeName}
             >
               <span class="mr-2">{languageFlags[language.id as keyof typeof languageFlags] || '🌐'}</span>
@@ -94,10 +94,10 @@ const availableLanguages = ENABLED_LANGUAGES
                   href={cleanPath}
                   aria-label={`Switch to ${language.nativeName}`}
                   class={`
-                     inline-flex items-center justify-center w-14 h-8 rounded-lg transition-all duration-200 ease-out focus:ring-2 focus:ring-brand-400 focus:outline-none shrink-0
+                     inline-flex items-center justify-center w-14 h-8 rounded-lg transition-all duration-200 ease-out focus:ring-2 focus:ring-primary focus:outline-none shrink-0
                      ${isCurrentLang 
-                      ? 'bg-brand-600 text-white shadow-md' 
-                      : 'bg-gray-200 text-gray-800 hover:bg-brand-100 hover:text-brand-700'
+                      ? 'bg-primary text-white shadow-md' 
+                      : 'bg-ink/5 text-ink hover:bg-primary/10 hover:text-primary'
                     }
                   `}
                   title={language.nativeName}
@@ -141,10 +141,10 @@ const availableLanguages = ENABLED_LANGUAGES
                   href={cleanPath}
                   aria-label={`Switch to ${language.nativeName}`}
                   class={`
-                     inline-flex items-center justify-center w-14 h-8 rounded-lg transition-all duration-200 ease-out focus:ring-2 focus:ring-brand-400 focus:outline-none shrink-0
+                     inline-flex items-center justify-center w-14 h-8 rounded-lg transition-all duration-200 ease-out focus:ring-2 focus:ring-primary focus:outline-none shrink-0
                      ${isCurrentLang 
-                      ? 'bg-brand-600 text-white shadow-md' 
-                      : 'bg-gray-200 text-gray-800 hover:bg-brand-100 hover:text-brand-700'
+                      ? 'bg-primary text-white shadow-md' 
+                      : 'bg-ink/5 text-ink hover:bg-primary/10 hover:text-primary'
                     }
                   `}
                   title={language.nativeName}

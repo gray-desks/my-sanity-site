@@ -26,7 +26,7 @@ const prefectures = [
 ]
 ---
 
-<div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 mb-8">
+<div class="bg-base/80 backdrop-blur-sm rounded-xl shadow-sm border border-border p-6 mb-8">
   <div class="flex flex-col lg:flex-row gap-4">
     <!-- 検索フィールド -->
     <div class="flex-1">
@@ -35,7 +35,7 @@ const prefectures = [
           type="text"
           id="search-input"
           placeholder={getUILabel(lang, 'searchPlaceholder')}
-          class="w-full pl-12 pr-4 py-3 text-gray-700 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-all duration-200"
+          class="w-full pl-12 pr-4 py-3 text-ink bg-base border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200"
         />
         <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
           <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -50,7 +50,7 @@ const prefectures = [
       <!-- 記事タイプフィルター -->
       <select
         id="type-filter"
-        class="w-full sm:w-auto pl-4 pr-10 py-3 text-gray-700 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-all duration-200 appearance-none cursor-pointer"
+        class="w-full sm:w-auto pl-4 pr-10 py-3 text-ink bg-base border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200 appearance-none cursor-pointer"
       >
         {articleTypes.map(type => (
           <option value={type.value}>{type.label}</option>
@@ -60,7 +60,7 @@ const prefectures = [
       <!-- 都道府県フィルター -->
       <select
         id="prefecture-filter"
-        class="w-full sm:w-auto pl-4 pr-10 py-3 text-gray-700 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-all duration-200 appearance-none cursor-pointer"
+        class="w-full sm:w-auto pl-4 pr-10 py-3 text-ink bg-base border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200 appearance-none cursor-pointer"
       >
         {prefectures.map(prefecture => (
           <option value={prefecture.code}>{prefecture.name}</option>
@@ -73,7 +73,7 @@ const prefectures = [
       <!-- 検索ボタン -->
       <button
         id="search-button"
-        class="px-6 py-3 bg-gradient-to-r from-brand-500 to-brand-600 text-white font-medium rounded-xl hover:from-brand-600 hover:to-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 transition-all duration-200 transform hover:scale-105"
+        class="px-6 py-3 bg-primary text-white font-medium rounded-xl hover:bg-accent focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-all duration-200 transform hover:scale-105"
       >
         <span class="hidden sm:inline">{getUILabel(lang, 'search')}</span>
         <svg class="h-5 w-5 sm:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -84,7 +84,7 @@ const prefectures = [
       <!-- リセットボタン -->
       <button
         id="reset-button"
-        class="px-4 py-3 bg-gray-500 hover:bg-gray-600 text-white font-medium rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-all duration-200 transform hover:scale-105"
+        class="px-4 py-3 bg-secondary/20 text-secondary font-medium rounded-xl hover:bg-secondary/30 focus:outline-none focus:ring-2 focus:ring-secondary focus:ring-offset-2 transition-all duration-200 transform hover:scale-105"
         title={getUILabel(lang, 'reset')}
       >
         <span class="hidden sm:inline">{getUILabel(lang, 'reset')}</span>

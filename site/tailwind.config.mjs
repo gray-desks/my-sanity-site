@@ -4,63 +4,16 @@ export default {
   theme: {
     extend: {
       colors: {
-        brand: {
-          // Deep Ocean Blue - More sophisticated
-          50: '#f0f8ff',
-          100: '#e0f2fe', 
-          200: '#bae6fd',
-          300: '#7dd3fc',
-          400: '#38bdf8',
-          500: '#0ea5e9', // Main Brand Color - More vibrant
-          600: '#0284c7',
-          700: '#0369a1',
-          800: '#075985',
-          900: '#0c4a6e',
-        },
-        accent: {
-          // Emerald Green - More modern
-          50: '#ecfdf5',
-          100: '#d1fae5',
-          200: '#a7f3d0', 
-          300: '#6ee7b7',
-          400: '#34d399',
-          500: '#10b981', // Accent Green - More vibrant
-          600: '#059669',
-          700: '#047857',
-          800: '#065f46',
-          900: '#064e3b',
-        },
-        secondary: {
-          // Warm Coral - More elegant
-          50: '#fef7f0',
-          100: '#feecdc',
-          200: '#fcd9bd',
-          300: '#fdba8c', 
-          400: '#ff8a4c',
-          500: '#f97316', // Secondary Orange - More refined
-          600: '#ea580c',
-          700: '#c2410c',
-          800: '#9a3412',
-          900: '#7c2d12',
-        },
-        purple: {
-          // Add purple for variety
-          50: '#faf5ff',
-          100: '#f3e8ff',
-          200: '#e9d5ff',
-          300: '#d8b4fe',
-          400: '#c084fc',
-          500: '#a855f7',
-          600: '#9333ea',
-          700: '#7c3aed',
-          800: '#6b21a8',
-          900: '#581c87',
-        }
+        'base': '#FDFCFB',       // A warmer, more subtle off-white
+        'ink': '#2C2C2C',         // A softer charcoal black
+        'primary': '#A61E22',     // A deeper, more elegant red
+        'secondary': '#5A5A5A',   // A slightly lighter grey for balance
+        'accent': '#D94741',      // A refined, less saturated red for highlights
+        'border': '#EAE8E5',     // A soft border color
       },
       fontFamily: {
-        jp: ['Noto Sans JP', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-        en: ['Inter var', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-        sans: ['Inter var', 'Noto Sans JP', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        sans: ['Noto Sans JP', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        serif: ['Noto Serif JP', 'serif'],
       },
       letterSpacing: {
         tighter: '-0.05em',
