@@ -69,61 +69,112 @@ const currentPath = Astro.url.pathname
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
   </head>
   <body 
-    class={`min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 text-gray-700 font-sans relative overflow-x-hidden ${isRightToLeft ? 'rtl-layout' : 'ltr-layout'}`}
+    class={`min-h-screen bg-gradient-to-br from-slate-50 via-gray-50 to-blue-50 text-gray-800 font-sans relative overflow-x-hidden ${isRightToLeft ? 'rtl-layout' : 'ltr-layout'}`}
     style={`font-family: ${fontFamily}`}
   >
-    <!-- Decorative background elements -->
+    <!-- Professional background pattern -->
     <div class="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
-      <div class="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-brand-100/30 to-transparent rounded-full blur-3xl"></div>
-      <div class="absolute bottom-0 left-0 w-80 h-80 bg-gradient-to-tr from-accent-100/40 to-transparent rounded-full blur-3xl"></div>
-      <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-gradient-to-r from-secondary-100/30 to-purple-100/30 rounded-full blur-3xl animate-pulse-slow"></div>
+      <!-- Subtle travel pattern overlay -->
+      <div class="absolute inset-0 opacity-[0.015]" style="background-image: url(\"data:image/svg+xml,%3Csvg width='120' height='120' viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23334155' fill-opacity='1'%3E%3Cpath d='M60 0L66.33 22.44L90 30L66.33 37.56L60 60L53.67 37.56L30 30L53.67 22.44z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\");"></div>
+      <!-- Elegant gradient orbs -->
+      <div class="absolute top-20 right-20 w-80 h-80 bg-gradient-to-bl from-blue-500/5 via-teal-500/5 to-transparent rounded-full blur-3xl animate-pulse-slow"></div>
+      <div class="absolute bottom-40 left-20 w-96 h-96 bg-gradient-to-tr from-slate-500/5 via-blue-500/5 to-transparent rounded-full blur-3xl"></div>
+      <div class="absolute top-1/3 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-gradient-to-r from-teal-500/5 to-blue-500/5 rounded-full blur-3xl"></div>
     </div>
 
     <Navbar lang={lang} />
 
-    <div class="max-w-7xl mx-auto px-4 py-8 relative">
+    <div class="max-w-7xl mx-auto px-4 py-0 relative">
       <main class="w-full">
         <slot />
       </main>
     </div>
 
-    <footer class="relative mt-20 bg-gradient-to-r from-slate-900 via-gray-900 to-slate-900 text-white overflow-hidden">
-      <!-- Decorative elements -->
-      <div class="absolute inset-0 bg-mesh-gradient opacity-5 animate-mesh"></div>
-      <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-brand-400/50 to-transparent"></div>
+    <footer class="relative mt-24 bg-gradient-to-br from-slate-900 via-blue-900 to-teal-900 text-white overflow-hidden">
+      <!-- Travel-themed decorative elements -->
+      <div class="absolute inset-0 opacity-[0.03]" style="background-image: url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M30 0L33.66 11.22L45 15L33.66 18.78L30 30L26.34 18.78L15 15L26.34 11.22z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\");"></div>
+      <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-blue-400/30 to-transparent"></div>
       
-      <div class="relative max-w-6xl mx-auto px-4 py-12">
-        <div class="text-center">
-          <div class="inline-flex items-center gap-3 mb-6">
-            <div class="w-10 h-10 bg-gradient-brand rounded-xl flex items-center justify-center">
-              <span class="text-white font-bold text-lg">旅</span>
+      <!-- Compass decoration -->
+      <div class="absolute top-8 right-8 w-24 h-24 opacity-10 animate-spin-slow hidden lg:block">
+        <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="50" cy="50" r="40" stroke="currentColor" stroke-width="2" class="text-white"/>
+          <path d="M50 15 L53 25 L50 22 L47 25 Z" fill="currentColor" class="text-red-300"/>
+          <path d="M50 85 L53 75 L50 78 L47 75 Z" fill="currentColor" class="text-white"/>
+          <text x="50" y="20" text-anchor="middle" class="text-xs fill-white font-bold">N</text>
+        </svg>
+      </div>
+      
+      <div class="relative max-w-7xl mx-auto px-6 py-12">
+        <div class="mb-8">
+          <!-- Brand Section -->
+          <div class="max-w-md mx-auto text-center">
+            <div class="flex items-baseline justify-center gap-3 mb-6 flex-wrap">
+              <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-teal-500 rounded-lg flex items-center justify-center shadow-lg flex-shrink-0">
+                <span class="text-white font-bold text-lg">旅</span>
+              </div>
+              <span class="text-xl font-bold bg-gradient-to-r from-blue-200 to-teal-200 bg-clip-text text-transparent">
+                {getUILabel(lang, 'siteTitle')}
+              </span>
+              <p class="text-gray-300 text-sm leading-relaxed">- {getUILabel(lang, 'siteDescription')}</p>
             </div>
-            <span class="text-2xl font-bold bg-gradient-to-r from-brand-400 to-accent-400 bg-clip-text text-transparent">
-              {getUILabel(lang, 'siteTitle')}
-            </span>
+            
+            <!-- Travel stats -->
+            <div class="grid grid-cols-2 gap-4">
+              <div class="text-center p-4 bg-white/5 rounded-lg backdrop-blur-sm">
+                <div class="text-2xl font-bold text-blue-300">20+</div>
+                <div class="text-sm text-gray-400">Languages</div>
+              </div>
+              <div class="text-center p-4 bg-white/5 rounded-lg backdrop-blur-sm">
+                <div class="text-2xl font-bold text-teal-300">∞</div>
+                <div class="text-sm text-gray-400">Adventures</div>
+              </div>
+            </div>
           </div>
-          <p class="text-gray-300 mb-4">{getUILabel(lang, 'siteDescription')}</p>
-          <div class="flex justify-center space-x-6 mb-6">
-            <a 
-              href={getLocalizedPath('/', lang)} 
-              class="text-gray-400 hover:text-brand-400 transition-colors"
-            >
-              {getUILabel(lang, 'home')}
-            </a>
-            <a 
-              href="#" 
-              class="text-gray-400 hover:text-brand-400 transition-colors"
-            >
-              {getUILabel(lang, 'privacy')}
-            </a>
-          </div>
-          <div class="text-gray-500 text-sm border-t border-gray-800 pt-6">
-            <p>&copy; 2025 {getUILabel(lang, 'siteTitle')}. {getUILabel(lang, 'allRightsReserved')}</p>
+        </div>
+        
+        <!-- Bottom bar -->
+        <div class="border-t border-white/10 pt-8 text-center">
+          <div class="text-gray-400 text-sm">
+            <p>&copy; 2025 {getUILabel(lang, 'siteTitle')}</p>
           </div>
         </div>
       </div>
     </footer>
 
+    <!-- Professional animations and interactions -->
+    <style>
+      @keyframes pulse-slow {
+        0%, 100% { opacity: 0.8; transform: scale(1); }
+        50% { opacity: 0.6; transform: scale(1.05); }
+      }
+      
+      @keyframes spin-slow {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+      
+      .animate-pulse-slow {
+        animation: pulse-slow 8s ease-in-out infinite;
+      }
+      
+      .animate-spin-slow {
+        animation: spin-slow 60s linear infinite;
+      }
+      
+      /* Smooth scrolling */
+      html {
+        scroll-behavior: smooth;
+      }
+      
+      /* Professional typography */
+      body {
+        text-rendering: optimizeLegibility;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+    </style>
+    
     <!-- Vercel Analytics & Speed Insights -->
     <script>
       // Vercel Analytics

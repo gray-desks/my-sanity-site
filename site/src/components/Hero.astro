@@ -12,54 +12,115 @@ const subtitle = getUILabel(lang, 'heroSubtitle')
 const ctaText = getUILabel(lang, 'readStories')
 ---
 
-<section class="relative overflow-hidden bg-gradient-hero py-8 lg:py-10 min-h-[30vh] flex items-center">
-  <!-- Animated background elements -->
-  <div class="absolute inset-0">
-    <div class="absolute top-20 left-20 w-72 h-72 bg-gradient-to-br from-brand-400/30 to-accent-400/20 rounded-full blur-3xl animate-float"></div>
-    <div class="absolute bottom-20 right-20 w-80 h-80 bg-gradient-to-br from-secondary-400/25 to-purple-400/20 rounded-full blur-3xl animate-float-delayed-3"></div>
-    <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-br from-accent-300/20 to-brand-300/15 rounded-full blur-3xl animate-pulse-slow"></div>
-  </div>
-
-  <!-- Japan Map SVG Background -->
-  <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 opacity-5">
-    <svg class="w-80 h-60 animate-rotate-slow" viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M300 50c20 0 40 15 45 35l15 25c5 15-5 30-20 35l-25 15c-15 5-30 20-25 40l10 30c5 20-10 35-30 40l-40 10c-25 5-45-10-50-35l-5-25c-5-20-25-30-45-25l-30 10c-20 5-40-15-35-35l5-20c5-15-5-35-25-40l-20-10c-15-5-25-25-15-40l15-25c10-15 30-20 45-15l25 10c20 5 40-5 45-25l10-20c5-15 25-25 40-20l25 10c15 5 35 0 40-15l10-15c5-10 20-15 30-10z" 
-            fill="currentColor" 
-            class="text-white"/>
+<section class="relative overflow-hidden min-h-[65vh] flex items-center">
+  <!-- Professional travel-inspired gradient background -->
+  <div class="absolute inset-0 bg-gradient-to-br from-slate-900 via-blue-900 to-teal-800"></div>
+  
+  <!-- Subtle travel pattern overlay -->
+  <div class="absolute inset-0 opacity-[0.03]" style="background-image: url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M30 0L33.66 11.22L45 15L33.66 18.78L30 30L26.34 18.78L15 15L26.34 11.22z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\");"></div>
+  
+  <!-- Compass decoration -->
+  <div class="absolute top-20 right-20 w-32 h-32 opacity-10 animate-spin-slow">
+    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="50" cy="50" r="45" stroke="currentColor" stroke-width="2" class="text-white"/>
+      <path d="M50 10 L55 25 L50 20 L45 25 Z" fill="currentColor" class="text-red-300"/>
+      <path d="M50 90 L55 75 L50 80 L45 75 Z" fill="currentColor" class="text-white"/>
+      <path d="M10 50 L25 45 L20 50 L25 55 Z" fill="currentColor" class="text-white"/>
+      <path d="M90 50 L75 45 L80 50 L75 55 Z" fill="currentColor" class="text-white"/>
+      <text x="50" y="15" text-anchor="middle" class="text-xs fill-white font-bold">N</text>
     </svg>
   </div>
-
-  <!-- Floating decorative elements -->
+  
+  <!-- Route line decoration -->
   <div class="absolute inset-0 pointer-events-none">
-    <div class="absolute top-1/4 left-1/4 w-4 h-4 bg-white/20 rounded-full animate-bounce-slow"></div>
-    <div class="absolute top-3/4 right-1/4 w-3 h-3 bg-white/30 rounded-full animate-bounce-slow-delayed-1"></div>
-    <div class="absolute top-1/2 right-1/3 w-2 h-2 bg-white/25 rounded-full animate-bounce-slow-delayed-2"></div>
+    <svg class="w-full h-full opacity-20" viewBox="0 0 1200 600">
+      <path d="M100,300 Q300,100 500,300 T900,200 L1100,300" stroke="url(#routeGradient)" stroke-width="2" fill="none" stroke-dasharray="5,5" class="animate-dash"/>
+      <defs>
+        <linearGradient id="routeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#60a5fa" stop-opacity="0.8"/>
+          <stop offset="50%" stop-color="#34d399" stop-opacity="0.6"/>
+          <stop offset="100%" stop-color="#fbbf24" stop-opacity="0.4"/>
+        </linearGradient>
+      </defs>
+    </svg>
   </div>
   
+  <!-- Gradient overlay for depth -->
+  <div class="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-black/10 pointer-events-none"></div>
+  
   <!-- Content -->
-  <div class="relative max-w-6xl mx-auto px-4 text-center animate-fade-in">
-    <h1 class="text-2xl sm:text-3xl lg:text-4xl font-black leading-tight text-white mb-2 tracking-tight animate-slide-up">
-      <span class="bg-gradient-to-r from-white via-white to-white/80 bg-clip-text text-transparent drop-shadow-2xl">
-        {title}
-      </span>
-    </h1>
-    
-    <p class="text-sm md:text-base text-white/80 mb-4 max-w-xl mx-auto leading-relaxed font-medium animate-slide-up-delayed">
-      {subtitle}
-    </p>
-    
-    <div class="flex justify-center">
-      <a 
-        href="#articles"
-        class="group inline-flex items-center px-6 py-3 bg-white/90 backdrop-blur-sm text-brand-600 rounded-xl font-semibold text-sm hover:bg-white hover:shadow-xl transition-all duration-200 shadow-lg"
-        aria-label={getUILabel(lang, 'readMore')}
-      >
-        <span class="mr-2">{ctaText}</span>
-        <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
-        </svg>
-      </a>
+  <div class="relative max-w-7xl mx-auto px-6 flex items-center justify-center min-h-[65vh]">
+    <div class="text-center max-w-4xl">
+      
+      
+      <!-- Main heading with elegant typography -->
+      <h1 class="text-4xl sm:text-5xl lg:text-7xl font-light leading-[1.1] text-white mb-6 tracking-tight">
+        <span class="font-thin text-white/70">Discover</span>
+        <br>
+        <span class="font-bold bg-gradient-to-r from-blue-200 via-white to-teal-200 bg-clip-text text-transparent">
+          {title}
+        </span>
+      </h1>
+      
+      <!-- Subtitle with professional styling -->
+      <p class="text-lg md:text-xl text-white/80 mb-8 leading-relaxed font-light max-w-2xl mx-auto">
+        {subtitle}
+      </p>
+      
+      <!-- Professional CTA with travel icon -->
+      <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+        <a 
+          href="#articles"
+          class="group inline-flex items-center bg-gradient-to-r from-blue-600 to-teal-600 hover:from-blue-700 hover:to-teal-700 text-white px-8 py-4 rounded-full shadow-xl shadow-blue-500/25 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-blue-500/30 font-medium text-lg"
+          aria-label={`${ctaText} - ${getUILabel(lang, 'readMore')}`}
+        >
+          <svg class="w-5 h-5 mr-3 group-hover:rotate-12 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+          </svg>
+          {ctaText}
+          <svg class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+          </svg>
+        </a>
+        
+        
+      </div>
     </div>
-
   </div>
+
+  
 </section>
+
+<style>
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation: none !important;
+    }
+  }
+  
+  @keyframes spin-slow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  
+  @keyframes dash {
+    0% { stroke-dashoffset: 0; }
+    100% { stroke-dashoffset: 20; }
+  }
+  
+  .animate-spin-slow {
+    animation: spin-slow 60s linear infinite;
+  }
+  
+  .animate-dash {
+    animation: dash 3s linear infinite;
+  }
+  
+  /* Professional typography enhancements */
+  h1 {
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+</style>
