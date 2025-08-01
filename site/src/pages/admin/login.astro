@@ -1,0 +1,113 @@
+---
+export const prerender = false;
+
+if (Astro.request.method === 'POST') {
+  const formData = await Astro.request.formData();
+  const username = formData.get('username') as string;
+  const password = formData.get('password') as string;
+  
+  if (username === import.meta.env.ADMIN_USER && password === import.meta.env.ADMIN_PASS) {
+    // Set session cookie
+    const response = new Response('', {
+      status: 302,
+      headers: {
+        'Location': '/admin',
+        'Set-Cookie': 'admin-session=authenticated; HttpOnly; Secure; SameSite=Strict; Max-Age=86400; Path=/'
+      }
+    });
+    return response;
+  }
+  
+  var loginError = 'ユーザー名またはパスワードが間違っています';
+}
+---
+
+<!doctype html>
+<html lang="ja" class="h-full bg-gray-50">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ログイン - 管理画面</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <meta name="robots" content="noindex, nofollow">
+    <style>
+      body { font-family: 'Inter', sans-serif; }
+    </style>
+  </head>
+  
+  <body class="h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md w-full space-y-8">
+      <div>
+        <div class="mx-auto h-12 w-12 bg-red-600 rounded-lg flex items-center justify-center">
+          <span class="text-white font-bold text-lg">旅</span>
+        </div>
+        <h2 class="mt-6 text-center text-3xl font-bold text-gray-900">
+          管理画面ログイン
+        </h2>
+        <p class="mt-2 text-center text-sm text-gray-600">
+          旅ログ運営システム
+        </p>
+      </div>
+      
+      <form class="mt-8 space-y-6" method="POST">
+        {loginError && (
+          <div class="bg-red-50 border border-red-200 rounded-md p-4">
+            <div class="flex">
+              <svg class="h-5 w-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+              </svg>
+              <p class="ml-3 text-sm text-red-800">{loginError}</p>
+            </div>
+          </div>
+        )}
+        
+        <div class="space-y-4">
+          <div>
+            <label for="username" class="block text-sm font-medium text-gray-700">
+              ユーザー名
+            </label>
+            <input
+              id="username"
+              name="username"
+              type="text"
+              required
+              class="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-red-500 focus:border-red-500 focus:z-10 sm:text-sm"
+              placeholder="ユーザー名を入力"
+            />
+          </div>
+          
+          <div>
+            <label for="password" class="block text-sm font-medium text-gray-700">
+              パスワード
+            </label>
+            <input
+              id="password"
+              name="password"
+              type="password"
+              required
+              class="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-red-500 focus:border-red-500 focus:z-10 sm:text-sm"
+              placeholder="パスワードを入力"
+            />
+          </div>
+        </div>
+
+        <div>
+          <button
+            type="submit"
+            class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors"
+          >
+            ログイン
+          </button>
+        </div>
+      </form>
+      
+      <div class="text-center">
+        <p class="text-xs text-gray-500">
+          管理者のみアクセス可能
+        </p>
+      </div>
+    </div>
+  </body>
+</html>
