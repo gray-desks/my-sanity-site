@@ -3,7 +3,7 @@
  * 多言語サイトマップとhreflang自動生成設定
  */
 
-import { getLangIds, getHreflangCode } from './src/lib/getSupportedLangs.js'
+import { getLangIds, getHreflangCode } from './src/lib/getSupportedLangs.ts'
 
 export default {
   // サイトURL

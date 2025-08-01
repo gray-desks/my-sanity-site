@@ -1,0 +1,249 @@
+---
+export const prerender = false;
+import AdminLayout from '../../layouts/AdminLayout.astro';
+---
+
+<AdminLayout title="ダッシュボード">
+  <!-- Page header -->
+  <div class="mb-8">
+    <h1 class="text-2xl font-bold text-gray-900">ダッシュボード</h1>
+    <p class="mt-1 text-sm text-gray-500">旅ログ管理システムへようこそ</p>
+  </div>
+
+  <!-- Stats cards -->
+  <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 mb-8">
+    <!-- Total Articles -->
+    <div class="bg-white overflow-hidden shadow-sm rounded-lg border border-gray-200">
+      <div class="p-5">
+        <div class="flex items-center">
+          <div class="flex-shrink-0">
+            <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+              <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+              </svg>
+            </div>
+          </div>
+          <div class="ml-5 w-0 flex-1">
+            <dl>
+              <dt class="text-sm font-medium text-gray-500 truncate">記事数</dt>
+              <dd class="text-lg font-semibold text-gray-900">24</dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Photos -->
+    <div class="bg-white overflow-hidden shadow-sm rounded-lg border border-gray-200">
+      <div class="p-5">
+        <div class="flex items-center">
+          <div class="flex-shrink-0">
+            <div class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
+              <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+              </svg>
+            </div>
+          </div>
+          <div class="ml-5 w-0 flex-1">
+            <dl>
+              <dt class="text-sm font-medium text-gray-500 truncate">写真数</dt>
+              <dd class="text-lg font-semibold text-gray-900">156</dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Languages -->
+    <div class="bg-white overflow-hidden shadow-sm rounded-lg border border-gray-200">
+      <div class="p-5">
+        <div class="flex items-center">
+          <div class="flex-shrink-0">
+            <div class="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
+              <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path>
+              </svg>
+            </div>
+          </div>
+          <div class="ml-5 w-0 flex-1">
+            <dl>
+              <dt class="text-sm font-medium text-gray-500 truncate">対応言語</dt>
+              <dd class="text-lg font-semibold text-gray-900">20</dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Monthly Views -->
+    <div class="bg-white overflow-hidden shadow-sm rounded-lg border border-gray-200">
+      <div class="p-5">
+        <div class="flex items-center">
+          <div class="flex-shrink-0">
+            <div class="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center">
+              <svg class="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+              </svg>
+            </div>
+          </div>
+          <div class="ml-5 w-0 flex-1">
+            <dl>
+              <dt class="text-sm font-medium text-gray-500 truncate">月間PV</dt>
+              <dd class="text-lg font-semibold text-gray-900">12.4K</dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Action cards -->
+  <div class="grid grid-cols-1 gap-6 lg:grid-cols-2 mb-8">
+    <!-- Photo Management -->
+    <div class="bg-white shadow-sm rounded-lg border border-gray-200">
+      <div class="p-6">
+        <div class="flex items-center mb-4">
+          <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+            <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"></path>
+            </svg>
+          </div>
+          <div class="ml-4">
+            <h3 class="text-lg font-semibold text-gray-900">写真管理</h3>
+            <p class="text-sm text-gray-500">Google Drive から新しい写真をダウンロード</p>
+          </div>
+        </div>
+        
+        <div class="space-y-3">
+          <button id="dl-btn" 
+                  class="w-full flex justify-center items-center px-4 py-3 border border-transparent text-sm font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"></path>
+            </svg>
+            Download New Photos
+          </button>
+          
+          <div class="text-xs text-gray-500 flex items-center">
+            <svg class="w-4 h-4 mr-1 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+            </svg>
+            API未実装 - 開発中
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Content Management -->
+    <div class="bg-white shadow-sm rounded-lg border border-gray-200">
+      <div class="p-6">
+        <div class="flex items-center mb-4">
+          <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+            <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+            </svg>
+          </div>
+          <div class="ml-4">
+            <h3 class="text-lg font-semibold text-gray-900">コンテンツ管理</h3>
+            <p class="text-sm text-gray-500">記事の作成・編集・翻訳管理</p>
+          </div>
+        </div>
+        
+        <div class="space-y-3">
+          <a href="https://travel-blog-jp.sanity.studio" 
+             target="_blank"
+             class="w-full flex justify-center items-center px-4 py-3 border border-gray-300 text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+            </svg>
+            Sanity Studio を開く
+          </a>
+          
+          <div class="text-xs text-gray-500 flex items-center">
+            <div class="w-2 h-2 bg-green-400 rounded-full mr-2"></div>
+            本番環境で利用可能
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Activity -->
+  <div class="bg-white shadow-sm rounded-lg border border-gray-200">
+    <div class="px-6 py-4 border-b border-gray-200">
+      <h3 class="text-lg font-semibold text-gray-900">最近のアクティビティ</h3>
+    </div>
+    <div class="p-6">
+      <div class="space-y-4">
+        <div class="flex items-center space-x-3">
+          <div class="w-2 h-2 bg-blue-400 rounded-full"></div>
+          <div class="flex-1">
+            <p class="text-sm text-gray-900">新しい記事「浅草寺の朝の風景」が公開されました</p>
+            <p class="text-xs text-gray-500">2時間前</p>
+          </div>
+        </div>
+        <div class="flex items-center space-x-3">
+          <div class="w-2 h-2 bg-green-400 rounded-full"></div>
+          <div class="flex-1">
+            <p class="text-sm text-gray-900">英語・中国語翻訳が完了しました</p>
+            <p class="text-xs text-gray-500">5時間前</p>
+          </div>
+        </div>
+        <div class="flex items-center space-x-3">
+          <div class="w-2 h-2 bg-yellow-400 rounded-full"></div>
+          <div class="flex-1">
+            <p class="text-sm text-gray-900">15枚の新しい写真がアップロードされました</p>
+            <p class="text-xs text-gray-500">1日前</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" is:inline>
+    document.getElementById('dl-btn')?.addEventListener('click', () => {
+      // Show a more professional notification
+      const btn = document.getElementById('dl-btn');
+      const originalText = btn.innerHTML;
+      
+      btn.disabled = true;
+      btn.innerHTML = `
+        <svg class="animate-spin w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="m4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        処理中...
+      `;
+      
+      setTimeout(() => {
+        btn.disabled = false;
+        btn.innerHTML = originalText;
+        
+        // Show professional alert
+        const notification = document.createElement('div');
+        notification.className = 'fixed top-4 right-4 bg-blue-50 border border-blue-200 rounded-lg p-4 shadow-lg z-50 max-w-sm';
+        notification.innerHTML = `
+          <div class="flex">
+            <div class="flex-shrink-0">
+              <svg class="h-5 w-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+              </svg>
+            </div>
+            <div class="ml-3">
+              <p class="text-sm text-blue-800">
+                <strong>開発中の機能です</strong><br>
+                Google Drive API との連携は次のフェーズで実装予定です
+              </p>
+            </div>
+          </div>
+        `;
+        
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+          notification.remove();
+        }, 4000);
+      }, 1500);
+    });
+  </script>
+</AdminLayout>

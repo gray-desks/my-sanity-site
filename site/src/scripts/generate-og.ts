@@ -8,7 +8,7 @@ import { writeFileSync, mkdirSync, existsSync } from 'fs';
 import { join } from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
-import { getLangIds } from '../lib/getSupportedLangs.js';
+import { getLangIds } from '../lib/getSupportedLangs.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
