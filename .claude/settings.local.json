@@ -1,4 +1,5 @@
 {
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "permissions": {
     "allow": [
       "Bash(mkdir:*)",
@@ -41,7 +42,11 @@
       "WebFetch(domain:travel-blog-jp.sanity.studio)",
       "Bash(node:*)",
       "Bash(timeout 10s npm run dev)",
-      "Bash(grep:*)"
+      "Bash(grep:*)",
+      "WebFetch(domain:vercel.link)",
+      "WebFetch(domain:vercel.com)",
+      "Bash(npx astro:*)",
+      "Bash(npm audit:*)"
     ],
     "deny": []
   }

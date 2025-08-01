@@ -14,6 +14,7 @@ export const onRequest = defineMiddleware(async (ctx, next) => {
 
   const [, encoded] = auth.split(' ');
   const [user, pass] = atob(encoded).split(':');
+  
   if (
     user === import.meta.env.ADMIN_USER &&
     pass === import.meta.env.ADMIN_PASS
