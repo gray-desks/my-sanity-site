@@ -36,6 +36,12 @@ site/.env
 site/.env.*
 !site/.env.example
 
+# Google Service Account Keys (NEVER commit these)
+site/service-account-key.json
+**/service-account-key.json
+**/*service-account*.json
+**/*credentials*.json
+
 # Vercel
 .vercel/
 

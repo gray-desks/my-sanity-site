@@ -99,7 +99,7 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
   </div>
 
   <!-- Action cards -->
-  <div class="grid grid-cols-1 gap-6 lg:grid-cols-2 mb-8">
+  <div class="grid grid-cols-1 gap-6 lg:grid-cols-3 mb-8">
     <!-- Photo Management -->
     <div class="bg-white shadow-sm rounded-lg border border-gray-200">
       <div class="p-6">
@@ -111,24 +111,195 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
           </div>
           <div class="ml-4">
             <h3 class="text-lg font-semibold text-gray-900">写真管理</h3>
-            <p class="text-sm text-gray-500">Google Drive から新しい写真をダウンロード</p>
+            <p class="text-sm text-gray-500">指定アルバムから新しい写真をダウンロード</p>
           </div>
         </div>
         
         <div class="space-y-3">
           <button id="dl-btn" 
-                  class="w-full flex justify-center items-center px-4 py-3 border border-transparent text-sm font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+                  class="w-full flex justify-center items-center px-4 py-3 border border-transparent text-sm font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors mb-2">
             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"></path>
             </svg>
-            Download New Photos
+            指定アルバムから写真をダウンロード
+          </button>
+
+          <button id="show-images-btn" 
+                  class="w-full flex justify-center items-center px-4 py-3 border border-gray-300 text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+            </svg>
+            ダウンロード済み画像を表示
+          </button>
+          
+          <div id="status-info" class="text-xs text-green-600 flex items-center">
+            <div class="w-2 h-2 bg-green-400 rounded-full mr-2"></div>
+            サービスアカウント認証済み
+          </div>
+        </div>
+
+        <!-- Album Selection Modal -->
+        <div id="album-modal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+          <div class="relative top-20 mx-auto p-5 border w-11/12 md:w-3/4 lg:w-1/2 shadow-lg rounded-md bg-white">
+            <div class="mt-3">
+              <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-semibold text-gray-900">アルバムを選択</h3>
+                <button id="close-modal" class="text-gray-400 hover:text-gray-600">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                  </svg>
+                </button>
+              </div>
+              <div id="albums-list" class="max-h-96 overflow-y-auto">
+                <!-- Albums will be loaded here -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- New Article Modal -->
+        <div id="article-modal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+          <div class="relative top-10 mx-auto p-5 border w-11/12 md:w-3/4 lg:w-2/3 shadow-lg rounded-md bg-white">
+            <div class="mt-3">
+              <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-semibold text-gray-900">新しい記事を作成</h3>
+                <button id="close-article-modal" class="text-gray-400 hover:text-gray-600">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                  </svg>
+                </button>
+              </div>
+              
+              <form id="article-form" class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label for="article-title" class="block text-sm font-medium text-gray-700 mb-1">記事タイトル</label>
+                    <input type="text" id="article-title" required
+                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500">
+                  </div>
+                  <div>
+                    <label for="article-type" class="block text-sm font-medium text-gray-700 mb-1">記事タイプ</label>
+                    <select id="article-type" 
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500">
+                      <option value="spot">🗾 スポット</option>
+                      <option value="food">🍣 グルメ</option>
+                      <option value="transport">🚄 交通</option>
+                      <option value="hotel">🛏️ 宿泊</option>
+                      <option value="note">📝 メモ</option>
+                    </select>
+                  </div>
+                </div>
+                
+                <div>
+                  <label for="article-body" class="block text-sm font-medium text-gray-700 mb-1">記事本文</label>
+                  <textarea id="article-body" rows="12" required
+                            placeholder="Markdown形式で記事を書いてください..."
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"></textarea>
+                </div>
+                
+                <div class="flex justify-end space-x-3">
+                  <button type="button" id="cancel-article-btn"
+                          class="px-4 py-2 border border-gray-300 text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50">
+                    キャンセル
+                  </button>
+                  <button type="submit" id="save-article-btn"
+                          class="px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-purple-600 hover:bg-purple-700">
+                    下書きを保存
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- Articles List Modal -->
+        <div id="articles-list-modal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+          <div class="relative top-10 mx-auto p-5 border w-11/12 md:w-4/5 lg:w-3/4 shadow-lg rounded-md bg-white">
+            <div class="mt-3">
+              <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-semibold text-gray-900">記事一覧</h3>
+                <button id="close-articles-list-modal" class="text-gray-400 hover:text-gray-600">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                  </svg>
+                </button>
+              </div>
+              
+              <div class="flex space-x-4 mb-4">
+                <button id="filter-drafts" class="px-3 py-1 text-sm rounded-full bg-purple-100 text-purple-800">下書き</button>
+                <button id="filter-published" class="px-3 py-1 text-sm rounded-full bg-gray-100 text-gray-600">公開済み</button>
+              </div>
+              
+              <div id="articles-list" class="max-h-96 overflow-y-auto">
+                <!-- Articles will be loaded here -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Images Gallery Modal -->
+        <div id="images-modal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+          <div class="relative top-10 mx-auto p-5 border w-11/12 md:w-4/5 lg:w-3/4 shadow-lg rounded-md bg-white">
+            <div class="mt-3">
+              <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-semibold text-gray-900">ダウンロード済み画像</h3>
+                <button id="close-images-modal" class="text-gray-400 hover:text-gray-600">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                  </svg>
+                </button>
+              </div>
+              
+              <div class="flex space-x-4 mb-4">
+                <button id="filter-thumbnails" class="px-3 py-1 text-sm rounded-full bg-blue-100 text-blue-800">サムネイル</button>
+                <button id="filter-optimized" class="px-3 py-1 text-sm rounded-full bg-gray-100 text-gray-600">最適化済み</button>
+                <button id="filter-raw" class="px-3 py-1 text-sm rounded-full bg-gray-100 text-gray-600">オリジナル</button>
+              </div>
+              
+              <div id="images-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-h-96 overflow-y-auto">
+                <!-- Images will be loaded here -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Article Management -->
+    <div class="bg-white shadow-sm rounded-lg border border-gray-200">
+      <div class="p-6">
+        <div class="flex items-center mb-4">
+          <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
+            <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+            </svg>
+          </div>
+          <div class="ml-4">
+            <h3 class="text-lg font-semibold text-gray-900">記事管理</h3>
+            <p class="text-sm text-gray-500">ローカル記事の作成・編集・管理</p>
+          </div>
+        </div>
+        
+        <div class="space-y-3">
+          <button id="new-article-btn" 
+                  class="w-full flex justify-center items-center px-4 py-3 border border-transparent text-sm font-medium rounded-lg text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition-colors">
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+            </svg>
+            新しい記事を作成
+          </button>
+          
+          <button id="manage-articles-btn" 
+                  class="w-full flex justify-center items-center px-4 py-3 border border-gray-300 text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition-colors">
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+            </svg>
+            記事一覧を表示
           </button>
           
           <div class="text-xs text-gray-500 flex items-center">
-            <svg class="w-4 h-4 mr-1 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-            </svg>
-            API未実装 - 開発中
+            <div class="w-2 h-2 bg-purple-400 rounded-full mr-2"></div>
+            ローカルファイル管理
           </div>
         </div>
       </div>
@@ -201,9 +372,8 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
   </div>
 
   <script type="module" is:inline>
-    // Download photos button functionality
-    document.getElementById('dl-btn')?.addEventListener('click', () => {
-      // Show a more professional notification
+    // Download photos button - direct download from specified album
+    document.getElementById('dl-btn')?.addEventListener('click', async () => {
       const btn = document.getElementById('dl-btn');
       const originalText = btn.innerHTML;
       
@@ -213,38 +383,353 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
           <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
           <path class="opacity-75" fill="currentColor" d="m4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
         </svg>
-        処理中...
+        指定アルバムからダウンロード中...
       `;
-      
-      setTimeout(() => {
+
+      try {
+        const response = await fetch('/api/photos/download', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ maxPhotos: 20 })
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+          throw new Error(result.error || 'ダウンロードに失敗しました');
+        }
+
+        showNotification(`${result.downloaded} 枚の写真をダウンロードしました`, 'success');
+      } catch (error) {
+        showNotification(error.message, 'error');
+      } finally {
         btn.disabled = false;
         btn.innerHTML = originalText;
-        
-        // Show professional alert
-        const notification = document.createElement('div');
-        notification.className = 'fixed top-4 right-4 bg-blue-50 border border-blue-200 rounded-lg p-4 shadow-lg z-50 max-w-sm';
-        notification.innerHTML = `
-          <div class="flex">
-            <div class="flex-shrink-0">
-              <svg class="h-5 w-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
-              </svg>
-            </div>
-            <div class="ml-3">
-              <p class="text-sm text-blue-800">
-                <strong>開発中の機能です</strong><br>
-                Google Drive API との連携は次のフェーズで実装予定です
-              </p>
-            </div>
+      }
+    });
+
+    // Modal functionality
+    document.getElementById('close-modal')?.addEventListener('click', () => {
+      document.getElementById('album-modal').classList.add('hidden');
+    });
+
+    // Article management
+    document.getElementById('new-article-btn')?.addEventListener('click', () => {
+      document.getElementById('article-modal').classList.remove('hidden');
+    });
+
+    document.getElementById('manage-articles-btn')?.addEventListener('click', () => {
+      loadArticles('drafts');
+      document.getElementById('articles-list-modal').classList.remove('hidden');
+    });
+
+    document.getElementById('close-article-modal')?.addEventListener('click', () => {
+      document.getElementById('article-modal').classList.add('hidden');
+      clearArticleForm();
+    });
+
+    document.getElementById('close-articles-list-modal')?.addEventListener('click', () => {
+      document.getElementById('articles-list-modal').classList.add('hidden');
+    });
+
+    document.getElementById('cancel-article-btn')?.addEventListener('click', () => {
+      document.getElementById('article-modal').classList.add('hidden');
+      clearArticleForm();
+    });
+
+    // Article form submission
+    document.getElementById('article-form')?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      await saveArticle();
+    });
+
+    // Article filter buttons
+    document.getElementById('filter-drafts')?.addEventListener('click', () => {
+      loadArticles('drafts');
+      updateFilterButtons('drafts');
+    });
+
+    document.getElementById('filter-published')?.addEventListener('click', () => {
+      loadArticles('published');
+      updateFilterButtons('published');
+    });
+
+    // Image management
+    document.getElementById('show-images-btn')?.addEventListener('click', () => {
+      loadImages('thumbnails');
+      document.getElementById('images-modal').classList.remove('hidden');
+    });
+
+    document.getElementById('close-images-modal')?.addEventListener('click', () => {
+      document.getElementById('images-modal').classList.add('hidden');
+    });
+
+    // Image filter buttons
+    document.getElementById('filter-thumbnails')?.addEventListener('click', () => {
+      loadImages('thumbnails');
+      updateImageFilterButtons('thumbnails');
+    });
+
+    document.getElementById('filter-optimized')?.addEventListener('click', () => {
+      loadImages('optimized');
+      updateImageFilterButtons('optimized');
+    });
+
+    document.getElementById('filter-raw')?.addEventListener('click', () => {
+      loadImages('raw');
+      updateImageFilterButtons('raw');
+    });
+
+
+    // Show notification
+    function showNotification(message, type = 'info') {
+      const colors = {
+        success: 'bg-green-50 border-green-200 text-green-800',
+        error: 'bg-red-50 border-red-200 text-red-800',
+        warning: 'bg-yellow-50 border-yellow-200 text-yellow-800',
+        info: 'bg-blue-50 border-blue-200 text-blue-800'
+      };
+
+      const icons = {
+        success: `<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>`,
+        error: `<path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>`,
+        warning: `<path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>`,
+        info: `<path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>`
+      };
+
+      const notification = document.createElement('div');
+      notification.className = `fixed top-4 right-4 ${colors[type]} border rounded-lg p-4 shadow-lg z-50 max-w-sm`;
+      notification.innerHTML = `
+        <div class="flex">
+          <div class="flex-shrink-0">
+            <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+              ${icons[type]}
+            </svg>
+          </div>
+          <div class="ml-3">
+            <p class="text-sm">${message}</p>
+          </div>
+        </div>
+      `;
+      
+      document.body.appendChild(notification);
+      
+      setTimeout(() => {
+        notification.remove();
+      }, 4000);
+    }
+
+    // Article management functions
+    async function saveArticle() {
+      const title = document.getElementById('article-title').value;
+      const type = document.getElementById('article-type').value;
+      const body = document.getElementById('article-body').value;
+      
+      if (!title || !body) {
+        showNotification('タイトルと本文は必須です', 'warning');
+        return;
+      }
+
+      const saveBtn = document.getElementById('save-article-btn');
+      const originalText = saveBtn.textContent;
+      
+      saveBtn.disabled = true;
+      saveBtn.textContent = '保存中...';
+
+      try {
+        const response = await fetch('/api/content/articles', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ title, type, body })
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+          throw new Error(result.error || '記事の保存に失敗しました');
+        }
+
+        showNotification('記事を下書きとして保存しました', 'success');
+        document.getElementById('article-modal').classList.add('hidden');
+        clearArticleForm();
+      } catch (error) {
+        showNotification(error.message, 'error');
+      } finally {
+        saveBtn.disabled = false;
+        saveBtn.textContent = originalText;
+      }
+    }
+
+    function clearArticleForm() {
+      document.getElementById('article-title').value = '';
+      document.getElementById('article-type').value = 'spot';
+      document.getElementById('article-body').value = '';
+    }
+
+    async function loadArticles(type = 'drafts') {
+      try {
+        const response = await fetch(`/api/content/articles?type=${type}`);
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || '記事の読み込みに失敗しました');
+        }
+
+        displayArticles(data.articles, type);
+      } catch (error) {
+        showNotification(error.message, 'error');
+      }
+    }
+
+    function displayArticles(articles, type) {
+      const articlesList = document.getElementById('articles-list');
+      
+      if (articles.length === 0) {
+        articlesList.innerHTML = `
+          <div class="text-center py-8">
+            <div class="text-4xl mb-2">📝</div>
+            <p class="text-gray-500">${type === 'drafts' ? '下書きがありません' : '公開済み記事がありません'}</p>
           </div>
         `;
-        
-        document.body.appendChild(notification);
-        
-        setTimeout(() => {
-          notification.remove();
-        }, 4000);
-      }, 1500);
-    });
+        return;
+      }
+
+      articlesList.innerHTML = articles.map(article => `
+        <div class="border border-gray-200 rounded-lg p-4 mb-3 hover:bg-gray-50">
+          <div class="flex items-start justify-between">
+            <div class="flex-1">
+              <h4 class="text-sm font-semibold text-gray-900 mb-1">${article.title}</h4>
+              <div class="flex items-center space-x-3 text-xs text-gray-500 mb-2">
+                <span class="inline-flex items-center px-2 py-1 rounded-full bg-gray-100">
+                  ${getTypeEmoji(article.type)} ${getTypeLabel(article.type)}
+                </span>
+                <span>${new Date(article.created).toLocaleDateString('ja-JP')}</span>
+                <span class="px-2 py-1 rounded-full ${article.lang === 'ja' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800'}">
+                  ${article.lang.toUpperCase()}
+                </span>
+              </div>
+              <p class="text-xs text-gray-600 line-clamp-2">${article.bodyPreview}</p>
+            </div>
+            <div class="ml-4 flex space-x-2">
+              <button class="text-blue-600 hover:text-blue-800 text-xs">編集</button>
+              <button class="text-red-600 hover:text-red-800 text-xs">削除</button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function updateFilterButtons(activeType) {
+      const draftsBtn = document.getElementById('filter-drafts');
+      const publishedBtn = document.getElementById('filter-published');
+      
+      if (activeType === 'drafts') {
+        draftsBtn.className = 'px-3 py-1 text-sm rounded-full bg-purple-100 text-purple-800';
+        publishedBtn.className = 'px-3 py-1 text-sm rounded-full bg-gray-100 text-gray-600';
+      } else {
+        draftsBtn.className = 'px-3 py-1 text-sm rounded-full bg-gray-100 text-gray-600';
+        publishedBtn.className = 'px-3 py-1 text-sm rounded-full bg-green-100 text-green-800';
+      }
+    }
+
+    function getTypeEmoji(type) {
+      const types = {
+        spot: '🗾',
+        food: '🍣',
+        transport: '🚄',
+        hotel: '🛏️',
+        note: '📝'
+      };
+      return types[type] || '📝';
+    }
+
+    function getTypeLabel(type) {
+      const types = {
+        spot: 'スポット',
+        food: 'グルメ',
+        transport: '交通',
+        hotel: '宿泊',
+        note: 'メモ'
+      };
+      return types[type] || 'メモ';
+    }
+
+    // Image management functions
+    async function loadImages(type = 'thumbnails') {
+      try {
+        const response = await fetch(`/api/content/images?type=${type}`);
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || '画像の読み込みに失敗しました');
+        }
+
+        displayImages(data.images, type);
+      } catch (error) {
+        showNotification(error.message, 'error');
+      }
+    }
+
+    function displayImages(images, type) {
+      const imagesGrid = document.getElementById('images-grid');
+      
+      if (images.length === 0) {
+        imagesGrid.innerHTML = `
+          <div class="col-span-full text-center py-8">
+            <div class="text-4xl mb-2">📷</div>
+            <p class="text-gray-500">ダウンロードされた画像がありません</p>
+          </div>
+        `;
+        return;
+      }
+
+      imagesGrid.innerHTML = images.map(image => `
+        <div class="relative group cursor-pointer">
+          <div class="aspect-square bg-gray-200 rounded-lg overflow-hidden">
+            <div class="w-full h-full bg-gray-300 flex items-center justify-center">
+              <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+              </svg>
+            </div>
+          </div>
+          <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-opacity rounded-lg flex items-center justify-center opacity-0 group-hover:opacity-100">
+            <div class="text-white text-center">
+              <p class="text-xs font-medium">${image.filename}</p>
+              <p class="text-xs">${formatFileSize(image.size)}</p>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function updateImageFilterButtons(activeType) {
+      const buttons = {
+        thumbnails: document.getElementById('filter-thumbnails'),
+        optimized: document.getElementById('filter-optimized'),
+        raw: document.getElementById('filter-raw')
+      };
+      
+      Object.keys(buttons).forEach(type => {
+        const btn = buttons[type];
+        if (type === activeType) {
+          btn.className = 'px-3 py-1 text-sm rounded-full bg-blue-100 text-blue-800';
+        } else {
+          btn.className = 'px-3 py-1 text-sm rounded-full bg-gray-100 text-gray-600';
+        }
+      });
+    }
+
+    function formatFileSize(bytes) {
+      if (bytes === 0) return '0 B';
+      const k = 1024;
+      const sizes = ['B', 'KB', 'MB', 'GB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+    }
+
   </script>
 </AdminLayout>

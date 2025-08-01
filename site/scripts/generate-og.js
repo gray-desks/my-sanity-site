@@ -79,14 +79,18 @@ async function generateOgImages() {
         <svg width="${OG_WIDTH}" height="${OG_HEIGHT}" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" style="stop-color:#0f172a"/>
-              <stop offset="50%" style="stop-color:#1e293b"/>
-              <stop offset="100%" style="stop-color:#334155"/>
+              <stop offset="0%" style="stop-color:#FDFCFB"/>
+              <stop offset="50%" style="stop-color:#EAE8E5"/>
+              <stop offset="100%" style="stop-color:#FDFCFB"/>
             </linearGradient>
             <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:0.3"/>
-              <stop offset="50%" style="stop-color:#8b5cf6;stop-opacity:0.2"/>
-              <stop offset="100%" style="stop-color:#ef4444;stop-opacity:0.3"/>
+              <stop offset="0%" style="stop-color:#A61E22;stop-opacity:0.1"/>
+              <stop offset="50%" style="stop-color:#D94741;stop-opacity:0.08"/>
+              <stop offset="100%" style="stop-color:#A61E22;stop-opacity:0.1"/>
+            </linearGradient>
+            <linearGradient id="logo-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#A61E22"/>
+              <stop offset="100%" style="stop-color:#D94741"/>
             </linearGradient>
           </defs>
           
@@ -94,14 +98,23 @@ async function generateOgImages() {
           <rect width="100%" height="100%" fill="url(#bg)"/>
           <rect width="100%" height="100%" fill="url(#accent)"/>
           
+          <!-- Decorative elements -->
+          <circle cx="150" cy="150" r="80" fill="#A61E22" opacity="0.08"/>
+          <circle cx="1050" cy="480" r="60" fill="#D94741" opacity="0.08"/>
+          <rect x="900" y="100" width="2" height="400" fill="#EAE8E5"/>
+          <rect x="300" y="100" width="2" height="400" fill="#EAE8E5"/>
+          
           <!-- Logo -->
-          <text x="600" y="200" text-anchor="middle" fill="#3b82f6" font-size="48" font-weight="bold" font-family="system-ui">旅</text>
+          <text x="600" y="200" text-anchor="middle" fill="url(#logo-gradient)" font-size="64" font-weight="bold" font-family="Noto Sans JP, system-ui">旅</text>
           
           <!-- Title -->
-          <text x="600" y="320" text-anchor="middle" fill="white" font-size="48" font-weight="bold" font-family="system-ui">${title}</text>
+          <text x="600" y="320" text-anchor="middle" fill="#2C2C2C" font-size="42" font-weight="bold" font-family="Noto Sans JP, system-ui">${title}</text>
           
           <!-- Subtitle -->
-          <text x="600" y="420" text-anchor="middle" fill="#cbd5e1" font-size="24" font-family="system-ui">Discover Japan Through Local Eyes</text>
+          <text x="600" y="420" text-anchor="middle" fill="#5A5A5A" font-size="22" font-family="system-ui">Discover Japan Through Local Eyes</text>
+          
+          <!-- Bottom accent line -->
+          <rect x="400" y="500" width="400" height="3" fill="url(#logo-gradient)" rx="2"/>
         </svg>
       `;
 
