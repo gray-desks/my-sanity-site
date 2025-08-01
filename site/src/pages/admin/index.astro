@@ -6,62 +6,8 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
 <AdminLayout title="ダッシュボード">
   <!-- Page header -->
   <div class="mb-8">
-    <div class="flex items-center justify-between">
-      <div>
-        <h1 class="text-2xl font-bold text-gray-900">ダッシュボード</h1>
-        <p class="mt-1 text-sm text-gray-500">旅ログ管理システムへようこそ</p>
-      </div>
-      
-      <!-- Quick Actions -->
-      <div class="flex items-center space-x-3">
-        <!-- Blog Preview Button -->
-        <a href="/" 
-           target="_blank" 
-           rel="noopener noreferrer"
-           class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 shadow-sm transition-all duration-200">
-          <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-          </svg>
-          ブログをプレビュー
-        </a>
-        
-        <!-- Language Selector Dropdown -->
-        <div class="relative inline-block text-left">
-          <div>
-            <button type="button" 
-                    id="language-menu-button"
-                    class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors"
-                    aria-expanded="false" 
-                    aria-haspopup="true">
-              <svg class="w-4 h-4 mr-2 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path>
-              </svg>
-              多言語版
-              <svg class="w-4 h-4 ml-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-              </svg>
-            </button>
-          </div>
-
-          <!-- Dropdown menu -->
-          <div id="language-menu" 
-               class="hidden origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10" 
-               role="menu" 
-               aria-orientation="vertical" 
-               aria-labelledby="language-menu-button">
-            <div class="py-1" role="none">
-              <a href="/" target="_blank" class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100" role="menuitem">🇯🇵 Japanese (日本語)</a>
-              <a href="/en/" target="_blank" class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100" role="menuitem">🇺🇸 English</a>
-              <a href="/zh-cn/" target="_blank" class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100" role="menuitem">🇨🇳 Chinese (简体)</a>
-              <a href="/ko/" target="_blank" class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100" role="menuitem">🇰🇷 Korean (한국어)</a>
-              <div class="border-t border-gray-100"></div>
-              <div class="px-4 py-2 text-xs text-gray-500">他16言語も利用可能</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <h1 class="text-2xl font-bold text-gray-900">ダッシュボード</h1>
+    <p class="mt-1 text-sm text-gray-500">旅ログ管理システムへようこそ</p>
   </div>
 
   <!-- Stats cards -->
@@ -255,30 +201,6 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
   </div>
 
   <script type="module" is:inline>
-    // Language dropdown functionality
-    const languageMenuButton = document.getElementById('language-menu-button');
-    const languageMenu = document.getElementById('language-menu');
-    
-    languageMenuButton?.addEventListener('click', () => {
-      const isHidden = languageMenu.classList.contains('hidden');
-      
-      if (isHidden) {
-        languageMenu.classList.remove('hidden');
-        languageMenuButton.setAttribute('aria-expanded', 'true');
-      } else {
-        languageMenu.classList.add('hidden');
-        languageMenuButton.setAttribute('aria-expanded', 'false');
-      }
-    });
-    
-    // Close dropdown when clicking outside
-    document.addEventListener('click', (event) => {
-      if (!languageMenuButton?.contains(event.target) && !languageMenu?.contains(event.target)) {
-        languageMenu?.classList.add('hidden');
-        languageMenuButton?.setAttribute('aria-expanded', 'false');
-      }
-    });
-    
     // Download photos button functionality
     document.getElementById('dl-btn')?.addEventListener('click', () => {
       // Show a more professional notification
