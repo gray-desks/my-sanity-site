@@ -1,0 +1,21 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+<Layout title="Admin">
+  <h1 class="text-xl font-bold mb-6">Admin Console (MVP)</h1>
+
+  <button id="dl-btn"
+          class="px-4 py-2 rounded bg-indigo-600 text-white hover:bg-indigo-700 disabled:opacity-50">
+    Download New Photos
+  </button>
+
+  <p id="info" class="mt-4 text-sm text-gray-600">
+    ※ ボタンはまだ機能しません（API 未実装）
+  </p>
+
+  <script type="module">
+    document
+      .getElementById('dl-btn')
+      .addEventListener('click', () => alert('API 未実装です'));
+  </script>
+</Layout>
