@@ -1,8 +1,9 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
+import vercel from '@astrojs/vercel';
 import tailwind from '@astrojs/tailwind';
 import sitemap from '@astrojs/sitemap';
-import { getLangIds, getHreflangCode } from './src/lib/getSupportedLangs.js';
+import { getLangIds, getHreflangCode } from './src/lib/getSupportedLangs.ts';
 import { exec } from 'child_process';
 import { promisify } from 'util';
 
@@ -10,6 +11,7 @@ const execAsync = promisify(exec);
 
 // https://astro.build/config
 export default defineConfig({
+  adapter: vercel(),
   integrations: [
     tailwind(),
     sitemap({
