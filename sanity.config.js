@@ -18,17 +18,5 @@ export default defineConfig({
 
   schema: {
     types: schemaTypes,
-    templates: (prev) => [
-      ...prev,
-      {
-        id: 'article-with-lang',
-        title: 'Article with Language',
-        schemaType: 'article',
-        parameters: [{name: 'lang', type: 'string'}],
-        value: (params) => ({
-          lang: params.lang
-        })
-      }
-    ]
   },
 })

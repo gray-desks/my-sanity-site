@@ -36,7 +36,7 @@ export default defineType({
         list: supportedLanguages.map(({id, title}) => ({title, value: id}))
       },
       validation: Rule => Rule.required(),
-      readOnly: true,  // Make language field read-only since it's set by template
+      initialValue: 'ja', // Default to Japanese
     }),
     defineField({
       name: 'type',
