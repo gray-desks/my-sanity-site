@@ -18,6 +18,7 @@ export default defineConfig({
       i18n: {
         defaultLocale: 'ja',
         locales: getLangIds().reduce((acc, langId) => {
+          // @ts-ignore - dynamic locale mapping
           acc[langId] = getHreflangCode(langId);
           return acc;
         }, {}),
@@ -41,17 +42,17 @@ export default defineConfig({
   // ビルド設定
   output: 'static',
 
-  // Build hooks
-  hooks: {
-    'astro:build:before': async () => {
-      console.log('🚀 Starting OG image generation...');
-      try {
-        await execAsync('node scripts/generate-og.js');
-      } catch (error) {
-        console.error('Failed to generate OG images:', error);
-      }
-    }
-  },
+  // Build hooks (deprecated in Astro 5)
+  // hooks: {
+  //   'astro:build:before': async () => {
+  //     console.log('🚀 Starting OG image generation...');
+  //     try {
+  //       await execAsync('node scripts/generate-og.js');
+  //     } catch (error) {
+  //       console.error('Failed to generate OG images:', error);
+  //     }
+  //   }
+  // },
   
   // CSS最適化
   vite: {
