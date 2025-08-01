@@ -59,86 +59,84 @@ export async function generateOgImages(): Promise<void> {
     const outputPath = join(ogDir, `default-${langId}.webp`);
 
     try {
-      // Create a gradient background
+      // Create a clean, washi-paper-like background
       const background = await sharp({
         create: {
           width: OG_WIDTH,
           height: OG_HEIGHT,
           channels: 3,
-          background: { r: 15, g: 23, b: 42 } // slate-900 equivalent
+          background: { r: 253, g: 252, b: 251 } // base: '#FDFCFB'
         }
       })
       .png()
       .toBuffer();
 
-      // Create overlay with gradient effect
-      const gradient = await sharp({
-        create: {
-          width: OG_WIDTH,
-          height: OG_HEIGHT,
-          channels: 4,
-          background: { r: 0, g: 0, b: 0, alpha: 0 }
-        }
-      })
-      .composite([
-        {
-          input: Buffer.from(`
-            <svg width="${OG_WIDTH}" height="${OG_HEIGHT}">
-              <defs>
-                <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" style="stop-color:#1e40af;stop-opacity:0.3" />
-                  <stop offset="50%" style="stop-color:#7c3aed;stop-opacity:0.2" />
-                  <stop offset="100%" style="stop-color:#dc2626;stop-opacity:0.3" />
-                </linearGradient>
-              </defs>
-              <rect width="100%" height="100%" fill="url(#grad1)" />
-            </svg>
-          `),
-          top: 0,
-          left: 0
-        }
-      ])
-      .png()
-      .toBuffer();
+      // Add a large, subtle red circle (Hinomaru motif)
+      const hinomaru = Buffer.from(`
+        <svg width="${OG_WIDTH}" height="${OG_HEIGHT}">
+          <circle cx="${OG_WIDTH / 2}" cy="${OG_HEIGHT / 2}" r="${OG_HEIGHT * 0.6}" fill="#A61E22" opacity="0.05" />
+        </svg>
+      `);
 
-      // Create text overlay
+      // Create text overlay with the new design
       const textSvg = `
         <svg width="${OG_WIDTH}" height="${OG_HEIGHT}">
           <style>
             .title {
-              font-family: 'Noto Sans CJK JP', 'Inter', sans-serif;
-              font-size: 64px;
+              font-family: 'Noto Serif JP', serif;
+              font-size: 72px;
               font-weight: bold;
-              fill: white;
+              fill: #2C2C2C; /* ink */
               text-anchor: middle;
               dominant-baseline: middle;
             }
-            .subtitle {
-              font-family: 'Inter', sans-serif;
-              font-size: 28px;
-              fill: #cbd5e1;
+            .logo-text {
+              font-family: 'Noto Sans JP', sans-serif;
+              font-size: 36px;
+              font-weight: bold;
+              fill: #2C2C2C; /* ink */
               text-anchor: middle;
               dominant-baseline: middle;
             }
-            .logo {
-              font-family: 'Noto Sans CJK JP', sans-serif;
+            .logo-box {
+              fill: #A61E22; /* primary */
+            }
+            .logo-char {
+              font-family: 'Noto Sans JP', sans-serif;
               font-size: 48px;
               font-weight: bold;
-              fill: #3b82f6;
+              fill: #FDFCFB; /* base */
               text-anchor: middle;
               dominant-baseline: middle;
             }
+            .domain {
+                font-family: 'Noto Sans JP', sans-serif;
+                font-size: 24px;
+                fill: #5A5A5A; /* secondary */
+                text-anchor: middle;
+                dominant-baseline: middle;
+            }
           </style>
-          <text x="${OG_WIDTH / 2}" y="200" class="logo">旅</text>
-          <text x="${OG_WIDTH / 2}" y="320" class="title">${title}</text>
-          <text x="${OG_WIDTH / 2}" y="420" class="subtitle">Discover Japan Through Local Eyes</text>
+          
+          <!-- Logo -->
+          <g transform="translate(${OG_WIDTH / 2 - 100}, 150)">
+            <rect x="-40" y="-40" width="80" height="80" rx="12" class="logo-box" />
+            <text x="0" y="5" class="logo-char">旅</text>
+          </g>
+          <text x="${OG_WIDTH / 2 + 40}" y="150" class="logo-text">旅ログ</text>
+
+          <!-- Main Title -->
+          <text x="${OG_WIDTH / 2}" y="340" class="title">${title}</text>
+
+          <!-- Domain -->
+          <text x="${OG_WIDTH / 2}" y="550" class="domain">your-domain.com</text>
         </svg>
       `;
 
       // Composite all layers
       const finalImage = await sharp(background)
         .composite([
-          { input: gradient, top: 0, left: 0 },
+          { input: hinomaru, top: 0, left: 0 },
           { input: Buffer.from(textSvg), top: 0, left: 0 }
         ])
         .webp({ quality: 85 })
