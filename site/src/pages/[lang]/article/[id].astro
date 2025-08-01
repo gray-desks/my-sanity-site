@@ -3,6 +3,7 @@ import Layout from '../../../layouts/Layout.astro'
 import Gallery from '../../../components/Gallery.astro'
 import { getArticleById, client, type Article } from '../../../lib/sanity'
 import { ENABLED_LANGUAGES, getLocalizedPath, getUILabel } from '../../../lib/i18n'
+import { PortableText } from 'astro-portabletext'
 
 export async function getStaticPaths() {
   const paths = []
@@ -118,16 +119,18 @@ const config = typeConfig[article.type as keyof typeof typeConfig] || typeConfig
     <article class="mb-8">
       <div class="bg-white p-8">
         <div class="prose prose-lg max-w-none">
-          {article.body && (
+          {article.body && article.body.length > 0 ? (
             <div class="article-content">
-              <div class="text-gray-800 leading-relaxed text-lg">
-                {article.bodyText || 
-                 (lang === 'en' ? 'No content available.' :
-                  lang === 'zh-cn' ? '暂无内容。' :
-                  lang === 'zh-tw' ? '暫無內容。' :
-                  lang === 'ko' ? '콘텐츠가 없습니다.' :
-                  '記事の内容がありません。')}
-              </div>
+              <PortableText value={article.body} />
+            </div>
+          ) : (
+            <div class="text-gray-800 leading-relaxed text-lg">
+              {article.bodyText || 
+               (lang === 'en' ? 'No content available.' :
+                lang === 'zh-cn' ? '暂无内容。' :
+                lang === 'zh-tw' ? '暫無內容。' :
+                lang === 'ko' ? '콘텐츠가 없습니다.' :
+                '記事の内容がありません。')}
             </div>
           )}
         </div>
