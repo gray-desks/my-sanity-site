@@ -46,7 +46,8 @@
       "WebFetch(domain:vercel.link)",
       "WebFetch(domain:vercel.com)",
       "Bash(npx astro:*)",
-      "Bash(npm audit:*)"
+      "Bash(npm audit:*)",
+      "Bash(git branch:*)"
     ],
     "deny": []
   }
