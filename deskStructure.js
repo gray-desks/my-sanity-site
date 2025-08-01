@@ -13,6 +13,9 @@ export default function deskStructure(S) {
               .title('Articles')
               .filter('_type == "article" && lang == $lang')
               .params({ lang: id })
+              .initialValueTemplates([
+                S.initialValueTemplateItem('article-with-lang', { lang: id })
+              ])
           )
       )
     )

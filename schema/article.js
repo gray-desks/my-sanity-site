@@ -36,6 +36,7 @@ export default defineType({
         list: supportedLanguages.map(({id, title}) => ({title, value: id}))
       },
       validation: Rule => Rule.required(),
+      readOnly: true,  // Make language field read-only since it's set by template
     }),
     defineField({
       name: 'type',
@@ -56,7 +57,16 @@ export default defineType({
       name: 'placeName',
       title: 'Place Name',
       type: 'string',
-      description: '場所名（オプション）'
+      description: ({ document }) => {
+        const lang = document?.lang;
+        switch (lang) {
+          case 'ja': return '場所名（オプション）';
+          case 'en': return 'Location name (optional)';
+          case 'zh-cn': return '地点名（可选）';
+          case 'ko': return '장소명 (선택)';
+          default: return 'Place name (optional)';
+        }
+      }
     }),
     defineField({
       name: 'prefecture',
@@ -113,7 +123,16 @@ export default defineType({
           { title: '沖縄県', value: 'okinawa' }
         ]
       },
-      description: '都道府県を選択してください'
+      description: ({ document }) => {
+        const lang = document?.lang;
+        switch (lang) {
+          case 'ja': return '都道府県を選択してください';
+          case 'en': return 'Select prefecture';
+          case 'zh-cn': return '选择都道府县';
+          case 'ko': return '도도부현을 선택하세요';
+          default: return 'Select prefecture';
+        }
+      }
     }),
     defineField({
       name: 'publishedAt',
@@ -140,7 +159,16 @@ export default defineType({
         }
       }],
       validation: Rule => Rule.max(12),
-      description: '最大12枚まで'
+      description: ({ document }) => {
+        const lang = document?.lang;
+        switch (lang) {
+          case 'ja': return '最大12枚まで';
+          case 'en': return 'Maximum 12 images';
+          case 'zh-cn': return '最多12张图片';
+          case 'ko': return '최대 12장';
+          default: return 'Maximum 12 images';
+        }
+      }
     }),
     defineField({
       name: 'body',
