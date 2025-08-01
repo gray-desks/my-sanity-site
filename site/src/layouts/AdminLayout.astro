@@ -62,10 +62,39 @@ const {
             
             <!-- Right side -->
             <div class="flex items-center space-x-4">
+              <!-- Blog Access Button -->
+              <div class="hidden sm:block">
+                <a href="/" 
+                   target="_blank" 
+                   rel="noopener noreferrer"
+                   class="inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-all duration-200">
+                  <svg class="w-4 h-4 mr-1.5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                  </svg>
+                  ブログを開く
+                </a>
+              </div>
+              
+              <!-- Mobile blog access -->
+              <div class="sm:hidden">
+                <a href="/" 
+                   target="_blank" 
+                   rel="noopener noreferrer"
+                   class="inline-flex items-center justify-center w-8 h-8 rounded-md text-gray-500 hover:text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-red-500 transition-colors"
+                   title="ブログを開く">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                  </svg>
+                </a>
+              </div>
+
+              <!-- Divider -->
+              <div class="hidden sm:block w-px h-6 bg-gray-300" aria-hidden="true"></div>
+              
               <!-- Status indicator -->
               <div class="flex items-center space-x-2">
                 <div class="w-2 h-2 bg-green-400 rounded-full"></div>
-                <span class="text-sm text-gray-500">システム正常</span>
+                <span class="text-sm text-gray-500 hidden md:inline">システム正常</span>
               </div>
               
               <!-- User menu -->
@@ -73,7 +102,7 @@ const {
                 <div class="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
                   <span class="text-xs font-medium text-gray-700">管</span>
                 </div>
-                <span class="text-sm text-gray-700">管理者</span>
+                <span class="text-sm text-gray-700 hidden sm:inline">管理者</span>
               </div>
             </div>
           </div>
