@@ -1,7 +1,7 @@
 import type { APIRoute } from 'astro'
-import { getSpecificAlbum, getAlbumMediaItems } from '../../../lib/google-photos'
+import { fetchAlbum, fetchAlbumMediaItems } from '../../../lib/google-photos-rest'
 
-export const GET: APIRoute = async ({ url }) => {
+export const GET: APIRoute = async ({ url, cookies }) => {
   try {
     const albumId = url.searchParams.get('albumId') || import.meta.env.GOOGLE_PHOTOS_ALBUM_ID
 
@@ -14,9 +14,16 @@ export const GET: APIRoute = async ({ url }) => {
       })
     }
 
-    // Test album access
-    const album = await getSpecificAlbum(albumId)
-    const mediaItems = await getAlbumMediaItems(albumId, 5) // Get first 5 items for testing
+    const tokensCookie = cookies.get('google_tokens')?.value
+    if (!tokensCookie) {
+      return new Response(JSON.stringify({ error: 'Not authenticated' }), { status: 401, headers: { 'Content-Type': 'application/json' } })
+    }
+    let tokenObj
+    try { tokenObj = JSON.parse(decodeURIComponent(tokensCookie)) } catch { return new Response(JSON.stringify({ error: 'Invalid tokens' }), { status: 401, headers: { 'Content-Type': 'application/json' } }) }
+
+    // Use REST client functions
+    const album = await fetchAlbum(albumId, tokenObj)
+    const mediaItems = await fetchAlbumMediaItems(albumId, 5, tokenObj)
 
     return new Response(JSON.stringify({
       album: {
@@ -40,7 +47,7 @@ export const GET: APIRoute = async ({ url }) => {
       headers: { 'Content-Type': 'application/json' }
     })
 
-  } catch (error) {
+  } catch (error: any) {
     console.error('Album test error:', error)
     return new Response(JSON.stringify({ 
       error: error.message,
