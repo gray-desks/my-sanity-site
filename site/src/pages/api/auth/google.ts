@@ -5,11 +5,27 @@ export const prerender = false
 
 export const GET: APIRoute = async ({ redirect }) => {
   try {
-    const oauth2Client = new google.auth.OAuth2(
-      import.meta.env.GOOGLE_CLIENT_ID,
-      import.meta.env.GOOGLE_CLIENT_SECRET,
-      import.meta.env.GOOGLE_REDIRECT_URI
-    )
+    // Check required environment variables
+    const clientId = import.meta.env.GOOGLE_CLIENT_ID
+    const clientSecret = import.meta.env.GOOGLE_CLIENT_SECRET
+    const redirectUri = import.meta.env.GOOGLE_REDIRECT_URI
+
+    if (!clientId || !clientSecret || !redirectUri) {
+      console.error('Missing OAuth environment variables:', {
+        hasClientId: !!clientId,
+        hasClientSecret: !!clientSecret,
+        hasRedirectUri: !!redirectUri
+      })
+      return new Response(JSON.stringify({ 
+        error: 'OAuth configuration missing',
+        details: 'Server configuration error. Please contact administrator.'
+      }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' }
+      })
+    }
+
+    const oauth2Client = new google.auth.OAuth2(clientId, clientSecret, redirectUri)
 
     const scopes = [
       'https://www.googleapis.com/auth/photoslibrary.readonly'

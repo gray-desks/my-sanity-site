@@ -11,11 +11,17 @@ export const GET: APIRoute = async ({ url, redirect, cookies }) => {
       return redirect('/admin?error=no_code')
     }
 
-    const oauth2Client = new google.auth.OAuth2(
-      import.meta.env.GOOGLE_CLIENT_ID,
-      import.meta.env.GOOGLE_CLIENT_SECRET,
-      import.meta.env.GOOGLE_REDIRECT_URI
-    )
+    // Check required environment variables
+    const clientId = import.meta.env.GOOGLE_CLIENT_ID
+    const clientSecret = import.meta.env.GOOGLE_CLIENT_SECRET
+    const redirectUri = import.meta.env.GOOGLE_REDIRECT_URI
+
+    if (!clientId || !clientSecret || !redirectUri) {
+      console.error('Missing OAuth environment variables in callback')
+      return redirect('/admin?error=server_config')
+    }
+
+    const oauth2Client = new google.auth.OAuth2(clientId, clientSecret, redirectUri)
 
     const { tokens } = await oauth2Client.getToken(code)
     oauth2Client.setCredentials(tokens)

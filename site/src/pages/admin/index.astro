@@ -405,6 +405,8 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
           showNotification('Google認証に失敗しました', 'error');
         } else if (error === 'no_code') {
           showNotification('認証コードが見つかりません', 'error');
+        } else if (error === 'server_config') {
+          showNotification('サーバー設定エラーです。管理者にお問い合わせください。', 'error');
         }
         
         // Remove error parameter from URL
