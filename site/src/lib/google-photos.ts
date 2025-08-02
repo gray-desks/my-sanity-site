@@ -1,22 +1,21 @@
-import { google } from 'googleapis';
+import axios from 'axios'
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import { validateEnvVars, createSafeErrorMessage, sanitizeAlbumId, secureLog } from './security';
 
-let photosClient: any = null;
+// --- OAuth2 helper ---
+let oauth2Client: any = null;
 
-export function getPhotosClient(tokens?: any) {
-  if (photosClient) {
-    return photosClient;
+function getOAuthClient(tokens?: any) {
+  if (!oauth2Client) {
+    oauth2Client = new google.auth.OAuth2(
+      import.meta.env.GOOGLE_CLIENT_ID,
+      import.meta.env.GOOGLE_CLIENT_SECRET,
+      import.meta.env.GOOGLE_REDIRECT_URI
+    );
   }
-
-  try {
-    // Validate environment variables
-    const envValidation = validateEnvVars();
-    if (!envValidation.valid) {
-      throw new Error(`Missing required environment variables: ${envValidation.missing.join(', ')}`);
-    }
-
+  if (tokens) {
+    oauth2Client.setCredentials(tokens);
     // Try service account authentication first (recommended for production)
     if (import.meta.env.GOOGLE_SERVICE_ACCOUNT_KEY_PATH) {
       const keyPath = join(process.cwd(), import.meta.env.GOOGLE_SERVICE_ACCOUNT_KEY_PATH);
