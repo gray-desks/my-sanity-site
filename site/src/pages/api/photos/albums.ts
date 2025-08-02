@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro'
-import { google } from 'googleapis'
+import { listAlbums } from '../../../lib/google-photos-rest'
 
 export const GET: APIRoute = async ({ cookies }) => {
   try {
@@ -12,32 +12,18 @@ export const GET: APIRoute = async ({ cookies }) => {
       })
     }
 
-    const oauth2Client = new google.auth.OAuth2(
-      import.meta.env.GOOGLE_CLIENT_ID,
-      import.meta.env.GOOGLE_CLIENT_SECRET,
-      import.meta.env.GOOGLE_REDIRECT_URI
-    )
+    // Decode URI-encoded cookie value
+    let tokenObj
+    try {
+      tokenObj = JSON.parse(decodeURIComponent(tokens))
+    } catch (e) {
+      return new Response(JSON.stringify({ error: 'Invalid authentication tokens' }), { status: 401, headers: { 'Content-Type': 'application/json' } })
+    }
 
-    oauth2Client.setCredentials(JSON.parse(tokens))
-
-    // Google Photos Library APIを使用
-    const photosLibrary = google.photoslibrary({ version: 'v1', auth: oauth2Client })
+    // Use REST helper to list albums
+    const albums = await listAlbums(tokenObj)
     
-    const response = await photosLibrary.albums.list({
-      pageSize: 50
-    })
-
-    const albums = response.data.albums || []
-    
-    return new Response(JSON.stringify({ 
-      albums: albums.map(album => ({
-        id: album.id,
-        title: album.title,
-        productUrl: album.productUrl,
-        mediaItemsCount: album.mediaItemsCount,
-        coverPhotoBaseUrl: album.coverPhotoBaseUrl
-      }))
-    }), {
+    return new Response(JSON.stringify({ albums }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' }
     })

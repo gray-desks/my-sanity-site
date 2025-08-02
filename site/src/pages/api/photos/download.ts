@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro'
-import { downloadPhotosFromAlbum } from '../../../lib/google-photos'
+import { prepareDownloadUrls } from '../../../lib/google-photos-rest'
 import axios from 'axios'
 import sharp from 'sharp'
 import { writeFileSync, existsSync, mkdirSync } from 'fs'
@@ -23,7 +23,8 @@ export const POST: APIRoute = async ({ request, cookies }) => {
 
     let tokens
     try {
-      tokens = JSON.parse(tokensCookie)
+      const decoded = decodeURIComponent(tokensCookie)
+      tokens = JSON.parse(decoded)
     } catch (parseError) {
       return new Response(JSON.stringify({ 
         error: 'Invalid authentication tokens. Please login again.',
@@ -48,24 +49,18 @@ export const POST: APIRoute = async ({ request, cookies }) => {
       })
     }
 
-    // Get photos from specific album with OAuth2 tokens
-    const photoUrls = await downloadPhotosFromAlbum({
-      albumId: targetAlbumId,
-      maxPhotos,
-      imageSize: 'large',
-      tokens
-    })
+    // Prepare download URLs using REST helper
+    const photoUrls = await prepareDownloadUrls(targetAlbumId, maxPhotos, 'large', tokens)
 
     const downloadResults = []
 
     // コンテンツディレクトリを確認・作成
     const contentDir = join(process.cwd(), '..', 'content')
     const imagesDir = join(contentDir, 'images')
-    const rawDir = join(imagesDir, 'raw')
     const optimizedDir = join(imagesDir, 'optimized')
     const thumbnailsDir = join(imagesDir, 'thumbnails')
 
-    for (const dir of [contentDir, imagesDir, rawDir, optimizedDir, thumbnailsDir]) {
+    for (const dir of [contentDir, imagesDir, optimizedDir, thumbnailsDir]) {
       if (!existsSync(dir)) {
         mkdirSync(dir, { recursive: true })
       }
@@ -79,7 +74,7 @@ export const POST: APIRoute = async ({ request, cookies }) => {
         const filename = photo.filename || `${timestamp}_photo_${index + 1}.jpg`
         
         // オリジナル画像を保存
-        const rawPath = join(rawDir, filename)
+        const rawPath = join(imagesDir, filename)
         writeFileSync(rawPath, response.data)
         
         // 最適化された画像を生成
@@ -107,7 +102,7 @@ export const POST: APIRoute = async ({ request, cookies }) => {
         downloadResults.push({
           index,
           success: false,
-          error: error.message
+          error: (error as any)?.message || 'Unknown error'
         })
       }
     }
