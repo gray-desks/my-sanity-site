@@ -1,6 +1,8 @@
 import type { APIRoute } from 'astro'
 import { google } from 'googleapis'
 
+export const prerender = false
+
 export const GET: APIRoute = async ({ redirect }) => {
   try {
     const oauth2Client = new google.auth.OAuth2(

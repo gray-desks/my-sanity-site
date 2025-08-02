@@ -1,6 +1,8 @@
 import type { APIRoute } from 'astro'
 import { google } from 'googleapis'
 
+export const prerender = false
+
 export const GET: APIRoute = async ({ url, redirect, cookies }) => {
   try {
     const code = url.searchParams.get('code')

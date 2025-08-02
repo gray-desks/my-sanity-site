@@ -5,6 +5,8 @@ import sharp from 'sharp'
 import { writeFileSync, existsSync, mkdirSync } from 'fs'
 import { join } from 'path'
 
+export const prerender = false
+
 export const POST: APIRoute = async ({ request, cookies }) => {
   try {
     // Check for OAuth2 tokens in cookies
@@ -121,7 +123,15 @@ export const POST: APIRoute = async ({ request, cookies }) => {
 
   } catch (error) {
     console.error('Error downloading photos:', error)
-    return new Response(JSON.stringify({ error: 'Failed to download photos' }), {
+    
+    // Provide more detailed error information
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred'
+    
+    return new Response(JSON.stringify({ 
+      error: 'Failed to download photos',
+      details: errorMessage,
+      success: false
+    }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' }
     })

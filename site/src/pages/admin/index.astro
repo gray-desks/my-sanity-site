@@ -441,7 +441,13 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
           body: JSON.stringify({ maxPhotos: 20 })
         });
 
-        const result = await response.json();
+        let result;
+        try {
+          result = await response.json();
+        } catch (jsonError) {
+          console.error('Failed to parse JSON response:', jsonError);
+          throw new Error(`サーバーエラー (${response.status}): レスポンスの解析に失敗しました`);
+        }
 
         if (!response.ok) {
           // Handle authentication errors specifically
