@@ -5,8 +5,33 @@ import sharp from 'sharp'
 import { writeFileSync, existsSync, mkdirSync } from 'fs'
 import { join } from 'path'
 
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request, cookies }) => {
   try {
+    // Check for OAuth2 tokens in cookies
+    const tokensCookie = cookies.get('google_tokens')?.value
+    if (!tokensCookie) {
+      return new Response(JSON.stringify({ 
+        error: 'Authentication required. Please login with Google first.',
+        code: 'AUTHENTICATION_REQUIRED'
+      }), {
+        status: 401,
+        headers: { 'Content-Type': 'application/json' }
+      })
+    }
+
+    let tokens
+    try {
+      tokens = JSON.parse(tokensCookie)
+    } catch (parseError) {
+      return new Response(JSON.stringify({ 
+        error: 'Invalid authentication tokens. Please login again.',
+        code: 'INVALID_TOKENS'
+      }), {
+        status: 401,
+        headers: { 'Content-Type': 'application/json' }
+      })
+    }
+
     const { maxPhotos = 20, albumId } = await request.json()
 
     // Use specific album ID from env or provided albumId
@@ -21,11 +46,12 @@ export const POST: APIRoute = async ({ request }) => {
       })
     }
 
-    // Get photos from specific album
+    // Get photos from specific album with OAuth2 tokens
     const photoUrls = await downloadPhotosFromAlbum({
       albumId: targetAlbumId,
       maxPhotos,
-      imageSize: 'large'
+      imageSize: 'large',
+      tokens
     })
 
     const downloadResults = []

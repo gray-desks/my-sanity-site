@@ -21,7 +21,7 @@ export const GET: APIRoute = async ({ url, redirect, cookies }) => {
     // Store tokens in secure httpOnly cookie
     cookies.set('google_tokens', JSON.stringify(tokens), {
       httpOnly: true,
-      secure: true,
+      secure: import.meta.env.PROD, // Only secure in production
       sameSite: 'lax',
       maxAge: 60 * 60 * 24 * 30, // 30 days
       path: '/'

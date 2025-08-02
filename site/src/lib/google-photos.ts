@@ -5,7 +5,7 @@ import { validateEnvVars, createSafeErrorMessage, sanitizeAlbumId, secureLog } f
 
 let photosClient: any = null;
 
-export function getPhotosClient() {
+export function getPhotosClient(tokens?: any) {
   if (photosClient) {
     return photosClient;
   }
@@ -37,7 +37,7 @@ export function getPhotosClient() {
       }
     }
 
-    // Fallback to OAuth2 client (for development)
+    // OAuth2 client with optional tokens
     if (import.meta.env.GOOGLE_CLIENT_ID && import.meta.env.GOOGLE_CLIENT_SECRET) {
       const oauth2Client = new google.auth.OAuth2(
         import.meta.env.GOOGLE_CLIENT_ID,
@@ -45,8 +45,15 @@ export function getPhotosClient() {
         import.meta.env.GOOGLE_REDIRECT_URI
       );
 
+      // Set credentials if tokens are provided
+      if (tokens) {
+        oauth2Client.setCredentials(tokens);
+        secureLog('Google Photos client initialized', { method: 'oauth2_with_tokens' });
+      } else {
+        secureLog('Google Photos client initialized', { method: 'oauth2_no_tokens' });
+      }
+
       photosClient = google.photoslibrary({ version: 'v1', auth: oauth2Client });
-      secureLog('Google Photos client initialized', { method: 'oauth2' });
       return photosClient;
     }
 
@@ -57,8 +64,8 @@ export function getPhotosClient() {
   }
 }
 
-export async function getSpecificAlbum(albumId?: string) {
-  const client = getPhotosClient();
+export async function getSpecificAlbum(albumId?: string, tokens?: any) {
+  const client = getPhotosClient(tokens);
   const targetAlbumId = albumId || import.meta.env.GOOGLE_PHOTOS_ALBUM_ID;
   
   if (!targetAlbumId) {
@@ -84,8 +91,8 @@ export async function getSpecificAlbum(albumId?: string) {
   }
 }
 
-export async function getAlbumMediaItems(albumId?: string, maxItems: number = 20) {
-  const client = getPhotosClient();
+export async function getAlbumMediaItems(albumId?: string, maxItems: number = 20, tokens?: any) {
+  const client = getPhotosClient(tokens);
   const targetAlbumId = albumId || import.meta.env.GOOGLE_PHOTOS_ALBUM_ID;
   
   if (!targetAlbumId) {
@@ -125,10 +132,11 @@ export interface PhotoDownloadOptions {
   albumId?: string;
   maxPhotos?: number;
   imageSize?: 'original' | 'large' | 'medium';
+  tokens?: any;
 }
 
 export async function downloadPhotosFromAlbum(options: PhotoDownloadOptions = {}) {
-  const { albumId, maxPhotos = 20, imageSize = 'large' } = options;
+  const { albumId, maxPhotos = 20, imageSize = 'large', tokens } = options;
   
   try {
     secureLog('Preparing photo downloads', { 
@@ -137,7 +145,7 @@ export async function downloadPhotosFromAlbum(options: PhotoDownloadOptions = {}
       imageSize
     });
 
-    const mediaItems = await getAlbumMediaItems(albumId, maxPhotos);
+    const mediaItems = await getAlbumMediaItems(albumId, maxPhotos, tokens);
     const downloadUrls = [];
 
     for (const item of mediaItems) {
