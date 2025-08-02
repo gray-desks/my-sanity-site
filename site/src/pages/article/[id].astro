@@ -113,6 +113,7 @@ const config = typeConfig[article.type as keyof typeof typeConfig] || typeConfig
     <div class="mt-12 text-center">
       <a 
         href="/" 
+        onclick="event.preventDefault(); if (history.length > 1) { history.back(); } else { location.href='/' }" 
         class="inline-flex items-center px-6 py-3 rounded-full bg-brand-600 text-white font-semibold hover:bg-brand-700 transition-colors"
       >
         ← 記事一覧に戻る

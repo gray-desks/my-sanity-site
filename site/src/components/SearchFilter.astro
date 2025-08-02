@@ -108,6 +108,7 @@ const prefectures = [
 </style>
 
 <script>
+  const FILTER_STORAGE_KEY = 'blogFilterState';
   class SearchFilter {
     constructor() {
       this.searchInput = document.getElementById('search-input') as HTMLInputElement
@@ -118,6 +119,10 @@ const prefectures = [
       this.articles = Array.from(document.querySelectorAll('[data-article]'))
       
       this.bindEvents()
+      // セッションストレージから状態を復元
+      this.loadState()
+      // 復元した状態でフィルタリングを実行
+      this.filterArticles()
     }
 
     bindEvents() {
@@ -176,6 +181,8 @@ const prefectures = [
       
       // 結果が0件の場合のメッセージ表示
       this.updateNoResultsMessage(visibleCount)
+      // 状態を保存
+      this.saveState()
     }
 
     resetFilters() {
@@ -201,6 +208,28 @@ const prefectures = [
       const noResultsEl = document.getElementById('no-results-message')
       if (noResultsEl) {
         noResultsEl.style.display = 'none'
+      }
+      // 状態を保存
+      this.saveState()
+    }
+
+    saveState() {
+      const payload = {
+        searchTerm: this.searchInput?.value || '',
+        selectedType: this.typeFilter?.value || '',
+        selectedPrefecture: this.prefectureFilter?.value || ''
+      }
+      sessionStorage.setItem(FILTER_STORAGE_KEY, JSON.stringify(payload))
+    }
+
+    loadState() {
+      try {
+        const saved = JSON.parse(sessionStorage.getItem(FILTER_STORAGE_KEY) || '{}')
+        if (this.searchInput && saved.searchTerm !== undefined) this.searchInput.value = saved.searchTerm
+        if (this.typeFilter && saved.selectedType !== undefined) this.typeFilter.value = saved.selectedType
+        if (this.prefectureFilter && saved.selectedPrefecture !== undefined) this.prefectureFilter.value = saved.selectedPrefecture
+      } catch (e) {
+        console.error('Failed to load filter state', e)
       }
     }
 
