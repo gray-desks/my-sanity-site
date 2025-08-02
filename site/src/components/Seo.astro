@@ -44,9 +44,13 @@ const canonicalURL = lang === 'ja'
   : new URL(`/${lang}${cleanPathname || '/'}`, SITE_URL).toString();
 
 // OG Image handling
-const ogImageUrl = seoImage 
+// To prevent social platforms from caching outdated images, we append a simple
+// cache-busting query parameter (version). Update `OG_IMAGE_VERSION` in your
+// environment variables whenever the default OG images are replaced.
+const DEFAULT_OG_VERSION = import.meta.env.OG_IMAGE_VERSION ?? 'v2';
+const ogImageUrl = seoImage
   ? (seoImage.startsWith('http') ? seoImage : new URL(seoImage, SITE_URL).toString())
-  : new URL(`/og/default-${lang}.webp`, SITE_URL).toString();
+  : new URL(`/og/default-${lang}.webp?${DEFAULT_OG_VERSION}`, SITE_URL).toString();
 
 // Locale mapping for og:locale
 const getOgLocale = (langCode: string): string => {
