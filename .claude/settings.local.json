@@ -48,7 +48,9 @@
       "Bash(npx astro:*)",
       "Bash(npm audit:*)",
       "Bash(git branch:*)",
-      "Bash(vercel env:*)"
+      "Bash(vercel env:*)",
+      "Bash(git pull:*)",
+      "Bash(git stash:*)"
     ],
     "deny": []
   }

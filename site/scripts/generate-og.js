@@ -99,22 +99,24 @@ async function generateOgImages() {
           <rect width="100%" height="100%" fill="url(#accent)"/>
           
           <!-- Decorative elements -->
-          <circle cx="150" cy="150" r="80" fill="#A61E22" opacity="0.08"/>
-          <circle cx="1050" cy="480" r="60" fill="#D94741" opacity="0.08"/>
-          <rect x="900" y="100" width="2" height="400" fill="#EAE8E5"/>
-          <rect x="300" y="100" width="2" height="400" fill="#EAE8E5"/>
-          
-          <!-- Logo -->
-          <text x="600" y="200" text-anchor="middle" fill="url(#logo-gradient)" font-size="64" font-weight="bold" font-family="Noto Sans JP, system-ui">旅</text>
-          
+          <g opacity="0.06">
+            <circle cx="150" cy="130" r="100" fill="#A61E22"/>
+            <circle cx="1050" cy="500" r="80" fill="#A61E22"/>
+          </g>
+
+          <g>
+            <line x1="200" y1="100" x2="200" y2="530" stroke="#e0e0e0" stroke-width="1"/>
+            <line x1="1000" y1="100" x2="1000" y2="530" stroke="#e0e0e0" stroke-width="1"/>
+          </g>
+
+          <!-- Main Kanji -->
+          <text x="600" y="240" text-anchor="middle" fill="#A61E22" font-size="92" font-weight="700" font-family="Hiragino Mincho ProN, YuMincho, Noto Serif JP, serif">旅</text>
           <!-- Title -->
-          <text x="600" y="320" text-anchor="middle" fill="#2C2C2C" font-size="42" font-weight="bold" font-family="Noto Sans JP, system-ui">${title}</text>
-          
+          <text x="600" y="340" text-anchor="middle" fill="#2C2C2C" font-size="44" font-weight="700" font-family="Hiragino Mincho ProN, YuMincho, Noto Serif JP, serif">${title}</text>
           <!-- Subtitle -->
-          <text x="600" y="420" text-anchor="middle" fill="#5A5A5A" font-size="22" font-family="system-ui">Discover Japan Through Local Eyes</text>
-          
+          <text x="600" y="420" text-anchor="middle" fill="#5A5A5A" font-size="24" font-family="Hiragino Mincho ProN, YuMincho, Noto Serif JP, serif">Discover Japan Through Local Eyes</text>
           <!-- Bottom accent line -->
-          <rect x="400" y="500" width="400" height="3" fill="url(#logo-gradient)" rx="2"/>
+          <rect x="450" y="480" width="300" height="4" fill="url(#logo-gradient)" rx="2"/>
         </svg>
       `;
 
