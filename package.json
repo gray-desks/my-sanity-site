@@ -10,21 +10,42 @@
     "build": "cd site && npm ci && npm run build && cp -r dist ../dist",
     "deploy": "sanity deploy",
     "deploy:studio": "sanity deploy",
-    "deploy-graphql": "sanity graphql deploy"
+    "deploy-graphql": "sanity graphql deploy",
+    "post": "npx tsx scripts/post.ts",
+    "lint": "eslint scripts/**/*.ts --fix",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest",
+    "test:coverage": "vitest --coverage"
   },
   "keywords": [
     "sanity"
   ],
   "dependencies": {
+    "@sanity/block-content-to-html": "^2.0.0",
+    "@sanity/client": "^7.8.2",
     "@sanity/document-internationalization": "^3.3.3",
     "@sanity/vision": "^4.1.1",
+    "dotenv": "^17.2.1",
+    "gray-matter": "^4.0.3",
     "react": "^19.1",
     "react-dom": "^19.1",
+    "rehype-stringify": "^10.0.1",
+    "remark": "^15.0.1",
+    "remark-parse": "^11.0.0",
+    "remark-rehype": "^11.1.2",
     "sanity": "^4.1.1",
     "styled-components": "^6.1.18"
   },
   "devDependencies": {
+    "@types/node": "^20.14.0",
     "@types/react": "^19.1",
-    "typescript": "^5.8"
+    "@typescript-eslint/eslint-plugin": "^8.39.0",
+    "@typescript-eslint/parser": "^8.39.0",
+    "eslint": "^8.57.0",
+    "prettier": "^3.3.0",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.20.3",
+    "typescript": "^5.8",
+    "vitest": "^2.1.1"
   }
 }
