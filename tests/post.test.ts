@@ -213,6 +213,56 @@ Content here.`)
     }).not.toThrow()
   })
 
+  it('creates article with correct lang field from front matter', async () => {
+    // Mock English article front matter
+    vi.mocked(fs.readFileSync).mockReturnValue(`---
+title: "English Article"
+slug: "english-article"
+publishedAt: "2024-01-15T10:00:00.000Z"
+lang: en
+type: spot
+---
+
+# English Content
+
+This is English content.`)
+
+    // Mock no existing post
+    mockClient.fetch.mockResolvedValue(null)
+    mockClient.create.mockResolvedValue({
+      _id: 'english-post-id',
+      slug: { current: 'english-article' }
+    })
+
+    const { processMarkdownFile } = await import('../scripts/post-testable.ts')
+    
+    const options = {
+      filePath: 'english-test.md',
+      forceNew: false,
+      dataset: 'production',
+      json: false,
+      type: 'article'
+    }
+    
+    const config = {
+      projectId: 'test-project',
+      dataset: 'production',
+      apiToken: 'test-token'
+    }
+
+    await processMarkdownFile(options, config)
+
+    expect(mockClient.create).toHaveBeenCalledWith({
+      _type: 'article',
+      title: 'English Article',
+      slug: { current: 'english-article' },
+      publishedAt: '2024-01-15T10:00:00.000Z',
+      body: expect.any(Array),
+      lang: 'en', // Should use front matter lang
+      type: 'spot' // Should use front matter type
+    })
+  })
+
   it('handles file not found error', async () => {
     vi.mocked(fs.existsSync).mockReturnValue(false)
     

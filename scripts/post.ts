@@ -28,6 +28,8 @@ interface FrontMatter {
   title: string
   slug: string
   publishedAt: string
+  lang?: string
+  type?: string
   excerpt?: string
   tags?: string[]
   ogImage?: string
@@ -146,8 +148,8 @@ async function processMarkdownFile(options: CLIOptions, config: Config): Promise
     // Add schema-specific fields
     if (options.type === 'article') {
       // Article schema requires lang and type fields
-      docData.lang = 'ja' // Default to Japanese
-      docData.type = 'note' // Default to note type for blog posts
+      docData.lang = frontMatter.lang || 'ja' // Use Front-Matter lang or default to Japanese
+      docData.type = frontMatter.type || 'note' // Use Front-Matter type or default to note
     } else if (options.type === 'post') {
       // Post schema supports these optional fields
       if (frontMatter.excerpt) docData.excerpt = frontMatter.excerpt
