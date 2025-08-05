@@ -1,35 +1,13 @@
 ---
 import { getUILabel, getLocalizedPath, ENABLED_LANGUAGES, ALL_LANGUAGES, DEFAULT_LANGUAGE } from '../lib/i18n'
+import { langToCountry, type SupportedLanguage } from '../lib/langToCountry'
+import FlagIcon from './FlagIcon.astro'
 
 export interface Props {
   lang?: string
 }
 
 const { lang = DEFAULT_LANGUAGE } = Astro.props
-
-// 将来の多言語展開用の言語別フラグエモジ
-const languageFlags = {
-  ja: '🇯🇵',
-  en: '🇺🇸',
-  'zh-cn': '🇨🇳',
-  'zh-tw': '🇹🇼',
-  ko: '🇰🇷',
-  th: '🇹🇭',
-  vi: '🇻🇳',
-  id: '🇮🇩',
-  ms: '🇲🇾',
-  tl: '🇵🇭',
-  fr: '🇫🇷',
-  de: '🇩🇪',
-  es: '🇪🇸',
-  it: '🇮🇹',
-  pt: '🇵🇹',
-  ru: '🇷🇺',
-  ar: '🇸🇦',
-  hi: '🇮🇳',
-  tr: '🇹🇷',
-  'pt-br': '🇧🇷'
-} as const
 
 // 全有効言語を表示（20言語）
 const availableLanguages = ENABLED_LANGUAGES
@@ -64,7 +42,7 @@ const availableLanguages = ENABLED_LANGUAGES
               }`}}
               title={language.nativeName}
             >
-              <span class="mr-2">{languageFlags[language.id as keyof typeof languageFlags] || '🌐'}</span>
+              <FlagIcon code={langToCountry(language.id as SupportedLanguage)} size="xs" class="mr-2" />
               {language.nativeName}
             </a>
           ))}
@@ -105,9 +83,7 @@ const availableLanguages = ENABLED_LANGUAGES
                   
                   <div class="flex items-center gap-1">
                     <!-- Flag Icon -->
-                    <span class="text-xs">
-                      {languageFlags[language.id as keyof typeof languageFlags] || '🌐'}
-                    </span>
+                    <FlagIcon code={langToCountry(language.id as SupportedLanguage)} size="xs" />
                     
                     <!-- Language Text -->
                     <span class="text-xs font-medium">
@@ -152,9 +128,7 @@ const availableLanguages = ENABLED_LANGUAGES
                   
                   <div class="flex items-center gap-1">
                     <!-- Flag Icon -->
-                    <span class="text-xs">
-                      {languageFlags[language.id as keyof typeof languageFlags] || '🌐'}
-                    </span>
+                    <FlagIcon code={langToCountry(language.id as SupportedLanguage)} size="xs" />
                     
                     <!-- Language Text -->
                     <span class="text-xs font-medium">

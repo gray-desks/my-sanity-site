@@ -1,0 +1,28 @@
+---
+import type { CountryCode } from '../lib/langToCountry'
+import * as flags from 'country-flag-icons/string/3x2'
+
+export interface Props {
+  code: CountryCode
+  size?: 'xs' | 'sm' | 'md' | 'lg'
+  class?: string
+}
+
+const { code, size = 'xs', class: className = '' } = Astro.props
+
+// Size mappings for consistent flag display
+const sizeClasses = {
+  xs: 'w-4 h-3',
+  sm: 'w-5 h-4', 
+  md: 'w-6 h-5',
+  lg: 'w-8 h-6'
+}
+
+// Get SVG flag from country-flag-icons string exports
+const flagSvg = (flags as any)[code] || `<svg viewBox="0 0 3 2" xmlns="http://www.w3.org/2000/svg">
+  <rect width="3" height="2" fill="#f0f0f0" stroke="#ddd" stroke-width="0.05"/>
+  <text x="1.5" y="1.2" font-family="Arial" font-size="0.6" text-anchor="middle" fill="#666">?</text>
+</svg>`
+---
+
+<div class={`inline-block ${sizeClasses[size]} ${className}`} set:html={flagSvg} />
