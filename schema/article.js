@@ -39,6 +39,15 @@ export default defineType({
       initialValue: 'ja', // Default to Japanese
     }),
     defineField({
+      name: 'translationOf',
+      title: 'Translation of',
+      type: 'reference',
+      to: [{type: 'article'}],
+      weak: true,
+      hidden: ({document}) => document?.lang === 'ja',
+      description: 'Reference to the master article this is a translation of'
+    }),
+    defineField({
       name: 'type',
       title: 'Type',
       type: 'string',

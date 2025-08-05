@@ -58,7 +58,8 @@
       "Bash(npm run post:*)",
       "Bash(npm uninstall:*)",
       "Bash(npm run:*)",
-      "Bash(npx tsc:*)"
+      "Bash(npx tsc:*)",
+      "Bash(chmod:*)"
     ],
     "deny": []
   }

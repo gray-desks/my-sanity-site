@@ -1,0 +1,45 @@
+// GROQ fragment for fetching article with translation information
+// Usage: *[_type=='article' && _id==$id][0]{ ...articleTranslation }
+
+articleTranslation {
+  _id,
+  _type,
+  title,
+  slug,
+  lang,
+  type,
+  placeName,
+  prefecture,
+  publishedAt,
+  coverImage,
+  gallery,
+  body,
+  translationOf,
+  
+  // Get all translations of this article (if this is a master)
+  "translations": *[_type=='article' && translationOf._ref==^._id]{
+    _id,
+    lang,
+    slug,
+    title
+  },
+  
+  // Get all translations of the master article (if this is a translation)
+  "allTranslations": select(
+    defined(translationOf._ref) => *[_type=='article' && (_id==^.translationOf._ref || translationOf._ref==^.translationOf._ref)]{
+      _id,
+      lang,
+      slug,
+      title,
+      "isMaster": !defined(translationOf._ref)
+    },
+    // If this is a master article, get all its translations
+    *[_type=='article' && translationOf._ref==^._id]{
+      _id,
+      lang,
+      slug,
+      title,
+      "isMaster": false
+    }
+  )
+}
