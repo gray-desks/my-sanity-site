@@ -1,6 +1,6 @@
 # CLAUDE.md
 > Guidance for Claude Code when working with **旅ログ – Japan Travel Journal** repository  
-> Last update : 2025-07-27 (v0.1.0 requirements freeze)
+> Last update : 2025-08-05 (v0.3.0 auto-post CLI)
 
 ---
 
@@ -82,8 +82,13 @@ bash
 コピーする
 編集する
 # === Sanity Studio ===
-npm run dev          # localhost:3333
+npm run dev                # localhost:3333
 npm run deploy:studio
+
+# === Article Auto-Post CLI ===
+npm run post content/drafts/my-article.md   # 単一ファイル
+npm run post content/drafts/**/*.md         # バッチ投稿
+# オプション: --type <schema> --json --dry-run
 
 # === Astro Frontend ===
 cd site && npm run dev      # localhost:4321
@@ -91,6 +96,16 @@ cd site && npm run build
 
 # === 全ビルドテスト ===
 npm run build && cd site && npm run build
+
+---
+
+### 4-1 コンテンツ保管場所
+
+| 状態 | パス例 | 備考 |
+|------|--------|------|
+| 下書き | `content/drafts/{slug}.md` | PR ベースで管理 |
+| 公開済 | `content/published/{YYYY}/{MM}-{slug}.md` | 自動／手動で移動 |
+| 画像 | `content/images/{slug}/...` | CLI 画像アップロード機能で参照 |
 5. 開発ガイドライン
 5-1 Schema 変更手順
 /schemas/article.js を編集。
