@@ -26,9 +26,14 @@ export interface FrontMatter {
   title: string
   slug: string
   publishedAt: string
-  excerpt?: string
+  lang?: string
+  type?: string
+  prefecture?: string
+  placeName?: string
   tags?: string[]
   ogImage?: string
+  // Legacy fields for backward compatibility
+  excerpt?: string
   author?: string
 }
 
@@ -114,19 +119,26 @@ export async function processMarkdownFile(options: CLIOptions, config: Config): 
     title: frontMatter.title,
     slug: { current: frontMatter.slug },
     publishedAt: frontMatter.publishedAt,
-    body: portableTextBody,
+    content: portableTextBody, // Changed from 'body' to 'content'
   }
 
   // Add schema-specific fields
   if (options.type === 'article') {
-    // Article schema requires lang and type fields
-    docData.lang = 'ja' // Default to Japanese
-    docData.type = 'note' // Default to note type for blog posts
+    // Article schema requires lang, type, and prefecture fields
+    docData.lang = frontMatter.lang || 'ja' // Use front matter or default to Japanese
+    docData.type = frontMatter.type || 'note' // Use front matter or default to note type
+    docData.prefecture = frontMatter.prefecture || 'tokyo' // Use front matter or default to tokyo
+    
+    // Optional article fields
+    if (frontMatter.placeName) docData.placeName = frontMatter.placeName
+    if (frontMatter.tags) docData.tags = frontMatter.tags
   } else if (options.type === 'post') {
-    // Post schema supports these optional fields
+    // Post schema supports these optional fields (legacy)
     if (frontMatter.excerpt) docData.excerpt = frontMatter.excerpt
     if (frontMatter.tags) docData.tags = frontMatter.tags
     if (frontMatter.author) docData.author = frontMatter.author
+    docData.body = portableTextBody // Post still uses 'body'
+    delete docData.content // Remove 'content' for post type
   }
 
   // Common optional fields

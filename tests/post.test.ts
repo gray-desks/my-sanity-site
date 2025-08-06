@@ -51,9 +51,11 @@ describe('Post CLI Integration Tests', () => {
 title: "Test Post"
 slug: "test-post"
 publishedAt: "2024-01-15T10:00:00.000Z"
-excerpt: "Test excerpt"
+lang: "ja"
+type: "note"
+prefecture: "tokyo"
 tags: ["test"]
-author: "Test Author"
+placeName: "Test Place"
 ---
 
 # Test Content
@@ -97,11 +99,12 @@ This is test content.`)
       title: 'Test Post',
       slug: { current: 'test-post' },
       publishedAt: '2024-01-15T10:00:00.000Z',
-      excerpt: 'Test excerpt',
+      lang: 'ja',
+      type: 'note',
+      prefecture: 'tokyo',
       tags: ['test'],
-      body: expect.any(Array),
-      ogImage: undefined,
-      author: 'Test Author'
+      placeName: 'Test Place',
+      content: expect.any(Array)
     })
   })
 
@@ -221,18 +224,39 @@ slug: "english-article"
 publishedAt: "2024-01-15T10:00:00.000Z"
 lang: en
 type: spot
+prefecture: tokyo
 ---
 
 # English Content
 
 This is English content.`)
 
-    // Mock no existing post
+    // Reset and setup mock client properly
+    vi.mocked(createClient).mockReturnValue(mockClient as any)
     mockClient.fetch.mockResolvedValue(null)
     mockClient.create.mockResolvedValue({
       _id: 'english-post-id',
       slug: { current: 'english-article' }
     })
+
+    // Re-import the markdown module to ensure mock is applied
+    const { mdToPortableText } = await import('../scripts/markdown.ts')
+    vi.mocked(mdToPortableText).mockResolvedValue([
+      {
+        _type: 'block',
+        _key: 'test123',
+        style: 'normal',
+        children: [
+          {
+            _type: 'span',
+            _key: 'span123',
+            text: 'English content',
+            marks: []
+          }
+        ],
+        markDefs: []
+      }
+    ])
 
     const { processMarkdownFile } = await import('../scripts/post-testable.ts')
     
@@ -257,9 +281,10 @@ This is English content.`)
       title: 'English Article',
       slug: { current: 'english-article' },
       publishedAt: '2024-01-15T10:00:00.000Z',
-      body: expect.any(Array),
+      content: expect.any(Array),
       lang: 'en', // Should use front matter lang
-      type: 'spot' // Should use front matter type
+      type: 'spot', // Should use front matter type
+      prefecture: 'tokyo'
     })
   })
 
