@@ -20,7 +20,7 @@ const galleryId = `gallery-${Math.random().toString(36).substr(2, 9)}`
     <div class="gallery-main aspect-video bg-gray-100 rounded-lg overflow-hidden">
       <img 
         id={`${galleryId}-main`}
-        src={`${images[0]?.asset?.url}?w=800&h=450&fit=crop&auto=format`}
+        src={`${images[0]?.asset?.url}?auto=format`}
         alt=""
         class="w-full h-full object-cover transition-opacity duration-300"
         loading="lazy"
@@ -102,9 +102,9 @@ const galleryId = `gallery-${Math.random().toString(36).substr(2, 9)}`
     getImageUrls() {
       const thumbs = this.container.querySelectorAll('.gallery-thumb img')
       return Array.from(thumbs).map(img => {
-        // Extract the base URL before query parameters and generate high-quality URL
+        // Extract the base URL before query parameters and use original quality
         const baseUrl = img.src.split('?')[0]
-        return `${baseUrl}?w=800&h=450&fit=crop&auto=format`
+        return `${baseUrl}?auto=format`
       })
     }
     
