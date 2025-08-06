@@ -25,8 +25,7 @@ export default defineType({
           .replace(/\s+/g, '-')
           .slice(0, 96)
       },
-      hidden: true,
-      readOnly: true,
+      validation: Rule => Rule.required()
     }),
     defineField({
       name: 'lang',
@@ -132,6 +131,7 @@ export default defineType({
           { title: '沖縄県', value: 'okinawa' }
         ]
       },
+      validation: Rule => Rule.required(),
       description: ({ document }) => {
         const lang = document?.lang;
         switch (lang) {
@@ -147,7 +147,8 @@ export default defineType({
       name: 'publishedAt',
       title: 'Published At',
       type: 'datetime',
-      initialValue: () => new Date().toISOString()
+      initialValue: () => new Date().toISOString(),
+      validation: Rule => Rule.required()
     }),
     defineField({
       name: 'coverImage',
@@ -180,8 +181,8 @@ export default defineType({
       }
     }),
     defineField({
-      name: 'body',
-      title: 'Body',
+      name: 'content',
+      title: 'Content',
       type: 'array',
       of: [
         {
@@ -196,7 +197,27 @@ export default defineType({
         {
           type: 'affiliate'
         }
-      ]
+      ],
+      validation: Rule => Rule.required()
+    }),
+    defineField({
+      name: 'tags',
+      title: 'Tags',
+      type: 'array',
+      of: [{ type: 'string' }],
+      options: {
+        layout: 'tags'
+      },
+      description: ({ document }) => {
+        const lang = document?.lang;
+        switch (lang) {
+          case 'ja': return 'タグ（任意）';
+          case 'en': return 'Tags (optional)';
+          case 'zh-cn': return '标签（可選）';
+          case 'ko': return '태그 (선택)';
+          default: return 'Tags (optional)';
+        }
+      }
     })
   ],
   preview: {
