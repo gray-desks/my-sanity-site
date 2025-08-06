@@ -101,7 +101,11 @@ const galleryId = `gallery-${Math.random().toString(36).substr(2, 9)}`
     
     getImageUrls() {
       const thumbs = this.container.querySelectorAll('.gallery-thumb img')
-      return Array.from(thumbs).map(img => img.src)
+      return Array.from(thumbs).map(img => {
+        // Extract the base URL before query parameters and generate high-quality URL
+        const baseUrl = img.src.split('?')[0]
+        return `${baseUrl}?w=800&h=450&fit=crop&auto=format`
+      })
     }
     
     bindEvents() {
