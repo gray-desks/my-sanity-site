@@ -50,7 +50,9 @@ const config = typeConfig[article.type as keyof typeof typeConfig] || typeConfig
         <img 
           src={`${article.coverImage.asset.url}?w=1200&h=600&fit=crop&auto=format`}
           alt={article.title}
-          class="w-full h-96 object-cover"
+          class="w-full h-96 object-cover cursor-pointer"
+          id="cover-image"
+          data-lightbox-url={`${article.coverImage.asset.url}?auto=format`}
         />
       </div>
     )}
@@ -120,4 +122,106 @@ const config = typeConfig[article.type as keyof typeof typeConfig] || typeConfig
       </a>
     </div>
   </div>
+  
+  <!-- Cover Image Lightbox Modal -->
+  {article.coverImage?.asset?.url && (
+    <div id="cover-lightbox" class="lightbox-overlay hidden fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center p-4">
+      <div class="relative max-w-7xl max-h-full flex items-center justify-center">
+        <!-- Close button -->
+        <button id="cover-lightbox-close" class="absolute top-4 right-4 text-white text-2xl hover:text-gray-300 transition-colors z-10 bg-black bg-opacity-50 rounded-full w-10 h-10 flex items-center justify-center">
+          ×
+        </button>
+        
+        <!-- Lightbox main image -->
+        <img 
+          id="cover-lightbox-image"
+          src={`${article.coverImage.asset.url}?auto=format`}
+          alt={article.title}
+          class="max-w-full max-h-full object-contain cursor-pointer"
+        />
+      </div>
+    </div>
+  )}
 </Layout>
+
+<script>
+  // Cover Image Lightbox functionality
+  document.addEventListener('DOMContentLoaded', () => {
+    const coverImage = document.getElementById('cover-image')
+    const lightbox = document.getElementById('cover-lightbox')
+    const lightboxImage = document.getElementById('cover-lightbox-image')
+    const closeBtn = document.getElementById('cover-lightbox-close')
+    
+    if (coverImage && lightbox) {
+      // Open lightbox when cover image is clicked
+      coverImage.addEventListener('click', () => {
+        const lightboxUrl = coverImage.dataset.lightboxUrl
+        if (lightboxUrl && lightboxImage) {
+          lightboxImage.src = lightboxUrl
+        }
+        lightbox.classList.remove('hidden')
+        document.body.style.overflow = 'hidden'
+      })
+      
+      // Close lightbox
+      const closeLightbox = () => {
+        lightbox.classList.add('hidden')
+        document.body.style.overflow = ''
+      }
+      
+      closeBtn?.addEventListener('click', closeLightbox)
+      lightboxImage?.addEventListener('click', closeLightbox)
+      
+      // Close on background click
+      lightbox.addEventListener('click', (e) => {
+        if (e.target === lightbox) {
+          closeLightbox()
+        }
+      })
+      
+      // Close on Escape key
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !lightbox.classList.contains('hidden')) {
+          closeLightbox()
+        }
+      })
+    }
+  })
+</script>
+
+<style>
+  /* Lightbox styles */
+  .lightbox-overlay {
+    backdrop-filter: blur(4px);
+    animation: fadeIn 0.2s ease-out;
+  }
+  
+  .lightbox-overlay.hidden {
+    display: none !important;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  .lightbox-overlay img {
+    max-height: 90vh;
+    max-width: 90vw;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  }
+  
+  .lightbox-overlay button {
+    user-select: none;
+    outline: none;
+  }
+  
+  .lightbox-overlay button:focus {
+    outline: 2px solid white;
+    outline-offset: 2px;
+  }
+</style>
