@@ -294,8 +294,7 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
       notification.className = `fixed top-4 right-4 ${colors[type]} border rounded-lg p-4 shadow-lg z-50 max-w-md`;
       
       // Handle multiline messages
-      const messageLines = message.split('
-');
+      const messageLines = message.split('\n');
       let messageHtml = messageLines.map((line, index) => {
         if (index === 0) {
           return `<p class="text-sm font-medium">${line}</p>`;
