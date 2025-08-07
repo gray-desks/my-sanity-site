@@ -1,6 +1,6 @@
 # CLAUDE.md
 > Guidance for Claude Code when working with **旅ログ – Japan Travel Journal** repository  
-> Last update : 2025-08-05 (v0.3.0 auto-post CLI)
+> Last update : 2025-08-06 (v0.2.2 Schema Synchronization)
 
 ---
 
@@ -244,3 +244,47 @@ Secret: [REVALIDATE_SECRET と同じ値]
 cd site && npm run e2e
 ```
 **チェック項目**: Homepage(JA/EN), Article routes, 404 handling, ISR endpoint, CORS headers, Redirects
+
+### v0.2.2 Schema Synchronization for Translation Pipeline (2025-08-06)
+**実装**: 翻訳自動化パイプラインとのスキーマ同期完了
+
+#### ✅ 完了項目
+- **Article Schema 更新**: 翻訳パイプライン必須フィールド対応
+- **必須フィールド追加**: `lang`, `type`, `prefecture`, `content` (validation 付き)
+- **オプションフィールド**: `tags`, `placeName`, `translationOf` 対応
+- **多言語サポート**: 20言語対応 (ja, en, zh-cn, zh-tw, ko, th, vi, id, ms, tl, fr, de, es, it, pt, ru, ar, hi, tr, pt-br)
+- **フィールド名変更**: `body` → `content` (Article スキーマ用)
+- **テスト修正**: 新スキーマ対応で全20テスト成功
+
+#### 🔧 Schema 変更詳細
+**Required Fields** (validation: Rule.required()):
+- `title` - String
+- `lang` - String (supportedLanguages から選択) 
+- `slug` - Slug (自動生成、必須検証追加)
+- `content` - Portable Text array (旧 body から変更)
+- `publishedAt` - DateTime (必須検証追加)
+- `type` - Enum (spot/food/transport/hotel/note、必須検証追加)
+- `prefecture` - 都道府県選択 (47都道府県、必須検証追加)
+
+**Optional Fields**:
+- `tags` - String array (layout: tags)
+- `placeName` - String (多言語説明付き)  
+- `translationOf` - Reference to article (weak reference)
+
+**Image Fields** (維持):
+- `coverImage` - Image with hotspot
+- `gallery` - Image array (max 12, hotspot)
+
+#### 📊 翻訳パイプライン対応
+**Document ID Pattern**: `article-{timestamp}-ja-{language}`  
+**Translation Linking**: `translationOf` フィールドでマスター記事との関連付け  
+**Webhook Ready**: article 作成/更新/削除時の翻訳トリガー対応  
+**Field Validation**: 翻訳時の "Unknown fields" エラー解消
+
+#### 🧪 Test Updates
+**修正ファイル**:
+- `tests/post.test.ts` - 新スキーマ対応テストケース更新
+- `scripts/post-testable.ts` - FrontMatter インターフェース & ロジック更新
+
+**テスト結果**: 20/20 tests passed ✅  
+**検証項目**: 必須フィールド処理、多言語サポート、backward compatibility
