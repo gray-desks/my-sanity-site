@@ -78,6 +78,27 @@ export const POST: APIRoute = async ({ request }) => {
     // Generate slug
     const slug = generateSlug(title);
 
+    // Build content: if already Portable Text blocks array, use as-is; otherwise wrap string
+    let contentBlocks: any;
+    if (Array.isArray(content)) {
+      contentBlocks = content;
+    } else {
+      contentBlocks = [
+        {
+          _type: 'block',
+          style: 'normal',
+          markDefs: [],
+          children: [
+            {
+              _type: 'span',
+              text: content,
+              marks: []
+            }
+          ]
+        }
+      ];
+    }
+
     // Create Sanity document
     const sanityDoc: any = {
       slug: {
@@ -89,22 +110,7 @@ export const POST: APIRoute = async ({ request }) => {
       type,
       prefecture,
       lang,
-      content: [
-        {
-          _type: 'block',
-          _key: 'content',
-          style: 'normal',
-          markDefs: [],
-          children: [
-            {
-              _type: 'span',
-              _key: 'span',
-              text: content,
-              marks: []
-            }
-          ]
-        }
-      ],
+      content: contentBlocks,
       publishedAt: articleData.publishedAt || new Date().toISOString(),
     };
     
