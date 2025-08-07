@@ -588,13 +588,15 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
           continue;
         }
 
-        // Simple markdown table row | col1 | col2 |
+        // Markdown table row  | col1 | col2 |
         if (line.startsWith('|') && line.endsWith('|')) {
           const cells = line
             .slice(1, -1)
             .split('|')
             .map((c) => c.trim());
-          const rowText = cells.join(' ｜ ');
+          // Skip separator row | --- |
+          if (cells.every((c) => /^-+$/.test(c))) continue;
+          const rowText = `${cells[0]}: ${cells.slice(1).join(' / ')}`;
           blocks.push({
             _type: 'block',
             _key: genKey(),
