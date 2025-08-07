@@ -66,7 +66,7 @@ export const POST: APIRoute = async ({ request }) => {
     const slug = generateSlug(title);
 
     // Create Sanity document
-    const sanityDoc: Record<string, any> = {
+    const sanityDoc: any = {
       slug: {
         _type: 'slug',
         current: slug
@@ -115,7 +115,7 @@ export const POST: APIRoute = async ({ request }) => {
     console.log('Creating Sanity document:', sanityDoc);
     
     // Create document in Sanity
-    const result = await sanityClient.create(sanityDoc);
+    const result = await sanityClient.create(sanityDoc as any);
     
     console.log('Sanity creation result:', result);
     
