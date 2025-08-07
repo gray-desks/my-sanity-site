@@ -368,7 +368,7 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
           body: JSON.stringify(articleData)
         });
 
-        let result: any = null;
+        let result = null;
         const isJson = response.headers.get('content-type')?.includes('application/json');
         
         try {
