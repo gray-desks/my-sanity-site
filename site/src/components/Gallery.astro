@@ -12,9 +12,12 @@ interface Props {
 
 const { images } = Astro.props
 const galleryId = `gallery-${Math.random().toString(36).substr(2, 9)}`
+
+// Prepare image URLs for JavaScript
+const imageUrls = images.map(img => `${img.asset?.url}?auto=format`)
 ---
 
-<div class="gallery-container" data-gallery-id={galleryId}>
+<div class="gallery-container" data-gallery-id={galleryId} data-image-urls={JSON.stringify(imageUrls)}>
   <div class="relative">
     <!-- Main image display -->
     <div class="gallery-main aspect-video bg-gray-100 rounded-lg overflow-hidden">
@@ -22,7 +25,7 @@ const galleryId = `gallery-${Math.random().toString(36).substr(2, 9)}`
         id={`${galleryId}-main`}
         src={`${images[0]?.asset?.url}?auto=format`}
         alt=""
-        class="w-full h-full object-cover transition-opacity duration-300 cursor-pointer"
+        class="w-full h-full object-contain transition-opacity duration-300 cursor-pointer bg-gray-50"
         loading="lazy"
         decoding="async"
         data-gallery-lightbox={galleryId}
@@ -144,12 +147,9 @@ const galleryId = `gallery-${Math.random().toString(36).substr(2, 9)}`
     }
     
     getImageUrls() {
-      const thumbs = this.container.querySelectorAll('.gallery-thumb img')
-      return Array.from(thumbs).map(img => {
-        // Extract the base URL before query parameters and use original quality
-        const baseUrl = img.src.split('?')[0]
-        return `${baseUrl}?auto=format`
-      })
+      // Get image URLs from data attribute set by Astro
+      const imageUrls = this.container.dataset.imageUrls
+      return imageUrls ? JSON.parse(imageUrls) : []
     }
     
     bindEvents() {
@@ -318,6 +318,8 @@ const galleryId = `gallery-${Math.random().toString(36).substr(2, 9)}`
   
   .gallery-main img {
     transition: opacity 0.3s ease;
+    object-fit: contain;
+    background-color: #f8fafc;
   }
   
   .gallery-thumb {
@@ -380,6 +382,7 @@ const galleryId = `gallery-${Math.random().toString(36).substr(2, 9)}`
   .lightbox-overlay img {
     max-height: 90vh;
     max-width: 90vw;
+    object-fit: contain;
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
   }
   
