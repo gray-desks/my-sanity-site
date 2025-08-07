@@ -427,7 +427,7 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
 
     // Parse the content text and extract article fields
     function parseArticleContent(contentText) {
-      const lines = contentText.split('
+      const lines = contentText.split('\n');
 ');
       const articleData = {
         lang: 'ja' // Default to Japanese
@@ -471,7 +471,7 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
       }
       
       if (contentLines.length > 0) {
-        articleData.content = contentLines.join('
+        articleData.content = contentLines.join('\n');
 ');
       }
 
