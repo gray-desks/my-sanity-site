@@ -40,7 +40,8 @@ export default defineConfig({
   site: 'https://my-sanity-site.vercel.app',
   
   // ビルド設定
-  output: 'static',
+  // API ルートを含むサーバーレス関数を有効にするため、"static" ではなく "server" モードに変更
+  output: 'server',
 
   // Build hooks (deprecated in Astro 5)
   // hooks: {
