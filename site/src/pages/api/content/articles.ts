@@ -20,6 +20,19 @@ export const GET: APIRoute = async ({ url }) => {
 }
 
 export const POST: APIRoute = async ({ request }) => {
+  // Helper to slugify Japanese/Unicode titles into URL-friendly strings
+  const generateSlug = (str: string): string => {
+    const slug = str
+      .trim()
+      .toLowerCase()
+      .replace(/\s+/g, '-') // spaces to dash
+      // remove all chars except letters, numbers and dashes (unicode aware)
+      .replace(/[^\p{Letter}\p{Number}-]+/gu, '')
+      .replace(/--+/g, '-') // collapse multiple dashes
+      .replace(/^-+|-+$/g, ''); // trim leading/trailing dashes
+    return slug || `article-${Date.now()}`;
+  };
+
   console.log('POST request received');
   
   try {
@@ -49,8 +62,15 @@ export const POST: APIRoute = async ({ request }) => {
       });
     }
     
+    // Generate slug
+    const slug = generateSlug(title);
+
     // Create Sanity document
-    const sanityDoc = {
+    const sanityDoc: Record<string, any> = {
+      slug: {
+        _type: 'slug',
+        current: slug
+      },
       _type: 'article',
       title,
       type,

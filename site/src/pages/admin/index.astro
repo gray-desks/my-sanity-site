@@ -163,39 +163,12 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
             <label for="article-content" class="block text-sm font-medium text-gray-700 mb-2">
               ChatGPTで生成した記事をそのままコピー&ペーストしてください
             </label>
-            <div class="mb-2">
-              <div class="text-xs text-gray-500 bg-blue-50 p-3 rounded-lg">
-                <p class="font-medium text-blue-700 mb-1">📝 必須フィールド例:</p>
-                <p>title: 記事タイトル</p>
-                <p>type: spot|food|transport|hotel|note</p>
-                <p>prefecture: 都道府県名</p>
-                <p>content: 記事本文 (Markdown)</p>
-                <p class="mt-1 text-blue-600">その他のフィールド（tags, placeName等）も自動認識します</p>
-              </div>
-            </div>
+
             <textarea 
               id="article-content" 
               rows="20" 
               required
-              placeholder="例:
-title: 浅草寺の朝の風景
-type: spot
-prefecture: 東京都
-tags: [寺院, 朝活, 観光]
-placeName: 浅草寺
-content: |
-  # 浅草寺の朝の風景
-
-  早朝の浅草寺は観光客も少なく、静寂に包まれた神聖な雰囲気を味わうことができます。
-  
-  ## アクセス
-  - 最寄り駅: 浅草駅
-  - 徒歩5分
-  
-  ## 見どころ
-  - 雷門
-  - 仲見世通り
-  - 本堂"
+              placeholder="例:&#10;title: 浅草寺の朝の風景&#10;type: spot&#10;prefecture: 東京都&#10;tags: [寺院, 朝活, 観光]&#10;placeName: 浅草寺&#10;content: |&#10;  # 浅草寺の朝の風景&#10;&#10;  早朝の浅草寺は観光客も少なく、静寂に包まれた神聖な雰囲気を味わうことができます。&#10;&#10;  ## アクセス&#10;  - 最寄り駅: 浅草駅&#10;  - 徒歩5分&#10;&#10;  ## 見どころ&#10;  - 雷門&#10;  - 仲見世通り&#10;  - 本堂"
               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 font-mono text-sm">
             </textarea>
           </div>
