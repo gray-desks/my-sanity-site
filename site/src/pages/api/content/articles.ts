@@ -123,8 +123,7 @@ export const POST: APIRoute = async ({ request }) => {
     
     frontmatterLines.push('---', '', '')
     
-    const frontmatter = frontmatterLines.join('
-')
+    const frontmatter = frontmatterLines.join('\n')
     const fullContent = frontmatter + content
     
     writeFileSync(filePath, fullContent, 'utf-8')
