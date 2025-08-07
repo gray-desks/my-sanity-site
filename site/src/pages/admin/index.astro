@@ -344,9 +344,22 @@ content: |
     });
 
     // Article management
-    document.getElementById('new-article-btn')?.addEventListener('click', () => {
-      document.getElementById('article-modal').classList.remove('hidden');
-    });
+    console.log('Setting up new-article-btn listener');
+    const newArticleBtn = document.getElementById('new-article-btn');
+    const articleModal = document.getElementById('article-modal');
+    
+    console.log('New article button:', newArticleBtn);
+    console.log('Article modal:', articleModal);
+    
+    if (newArticleBtn && articleModal) {
+      newArticleBtn.addEventListener('click', () => {
+        console.log('New article button clicked');
+        articleModal.classList.remove('hidden');
+        console.log('Modal should now be visible');
+      });
+    } else {
+      console.error('Missing elements:', { newArticleBtn, articleModal });
+    }
 
 
 
