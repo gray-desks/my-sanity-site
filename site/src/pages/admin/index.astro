@@ -221,8 +221,63 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
   </div>
 
   <script type="module" is:inline>
+    console.log('Script loading...');
+    
+    // Function to initialize event listeners
+    function initializeEventListeners() {
+      console.log('Initializing event listeners...');
+      
+      // Article management setup
+      const newArticleBtn = document.getElementById('new-article-btn');
+      const articleModal = document.getElementById('article-modal');
+      
+      console.log('Found elements:', { newArticleBtn, articleModal });
+      
+      if (newArticleBtn && articleModal) {
+        console.log('Setting up click handler...');
+        newArticleBtn.onclick = function() {
+          console.log('Button clicked!');
+          articleModal.classList.remove('hidden');
+          console.log('Modal should be visible now');
+        };
+        console.log('Click handler attached');
+      } else {
+        console.error('Missing required elements for modal');
+      }
+      
+      // Close modal handlers
+      const closeModalBtn = document.getElementById('close-article-modal');
+      const cancelBtn = document.getElementById('cancel-article-btn');
+      
+      if (closeModalBtn) {
+        closeModalBtn.onclick = function() {
+          articleModal?.classList.add('hidden');
+          clearArticleForm();
+        };
+      }
+      
+      if (cancelBtn) {
+        cancelBtn.onclick = function() {
+          articleModal?.classList.add('hidden');
+          clearArticleForm();
+        };
+      }
+      
+      // Form submission
+      const articleForm = document.getElementById('article-form');
+      if (articleForm) {
+        articleForm.onsubmit = async function(e) {
+          e.preventDefault();
+          await saveArticle();
+        };
+      }
+    }
+    
     // Check authentication status on page load
     document.addEventListener('DOMContentLoaded', () => {
+      // Initialize event listeners after DOM is ready
+      initializeEventListeners();
+      
       const urlParams = new URLSearchParams(window.location.search);
       const statusInfo = document.getElementById('status-info');
       
@@ -252,6 +307,15 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
         window.history.replaceState({}, document.title, newUrl);
       }
     });
+    
+    // Also try to initialize immediately in case DOMContentLoaded already fired
+    if (document.readyState === 'loading') {
+      // DOM still loading, wait for DOMContentLoaded
+    } else {
+      // DOM already loaded
+      console.log('DOM already loaded, initializing immediately');
+      initializeEventListeners();
+    }
 
     // Google login button
     document.getElementById('google-login-btn')?.addEventListener('click', () => {
@@ -315,49 +379,6 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
     document.getElementById('close-modal')?.addEventListener('click', () => {
       document.getElementById('album-modal').classList.add('hidden');
     });
-
-    // Article management
-    console.log('Setting up new-article-btn listener');
-    const newArticleBtn = document.getElementById('new-article-btn');
-    const articleModal = document.getElementById('article-modal');
-    
-    console.log('New article button:', newArticleBtn);
-    console.log('Article modal:', articleModal);
-    
-    if (newArticleBtn && articleModal) {
-      newArticleBtn.addEventListener('click', () => {
-        console.log('New article button clicked');
-        articleModal.classList.remove('hidden');
-        console.log('Modal should now be visible');
-      });
-    } else {
-      console.error('Missing elements:', { newArticleBtn, articleModal });
-    }
-
-
-
-    document.getElementById('close-article-modal')?.addEventListener('click', () => {
-      document.getElementById('article-modal').classList.add('hidden');
-      clearArticleForm();
-    });
-
-
-
-    document.getElementById('cancel-article-btn')?.addEventListener('click', () => {
-      document.getElementById('article-modal').classList.add('hidden');
-      clearArticleForm();
-    });
-
-    // Article form submission
-    document.getElementById('article-form')?.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      await saveArticle();
-    });
-
-
-
-
-
 
     // Show notification
     function showNotification(message, type = 'info') {
