@@ -65,43 +65,91 @@ export const GET: APIRoute = async ({ url }) => {
 
 export const POST: APIRoute = async ({ request }) => {
   try {
-    const { title, type, body, lang = 'ja' } = await request.json()
+    const articleData = await request.json()
     
-    if (!title || !body) {
-      return new Response(JSON.stringify({ error: 'Title and body are required' }), {
+    // Validate required fields
+    const { title, type, prefecture, content, lang = 'ja' } = articleData
+    
+    if (!title || !type || !prefecture || !content) {
+      return new Response(JSON.stringify({ 
+        error: 'Required fields missing: title, type, prefecture, content' 
+      }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' }
+      })
+    }
+    
+    // Validate type enum
+    const validTypes = ['spot', 'food', 'transport', 'hotel', 'note']
+    if (!validTypes.includes(type)) {
+      return new Response(JSON.stringify({ 
+        error: `Invalid type. Must be one of: ${validTypes.join(', ')}` 
+      }), {
         status: 400,
         headers: { 'Content-Type': 'application/json' }
       })
     }
     
     const timestamp = new Date().toISOString().split('T')[0]
-    const filename = `${timestamp}_${title.toLowerCase().replace(/[^a-z0-9]/g, '-')}.md`
+    const sanitizedTitle = title.toLowerCase().replace(/[^a-z0-9]/g, '-')
+    const filename = `${timestamp}_${sanitizedTitle}.md`
     const filePath = join(DRAFTS_DIR, filename)
     
-    const frontmatter = `---
-title: ${title}
-type: ${type || 'note'}
-lang: ${lang}
-created: ${new Date().toISOString()}
----
-
-`
+    // Build frontmatter with all fields
+    let frontmatterLines = [
+      '---',
+      `title: ${title}`,
+      `type: ${type}`,
+      `prefecture: ${prefecture}`,
+      `lang: ${lang}`,
+      `publishedAt: ${articleData.publishedAt || new Date().toISOString()}`,
+      `created: ${new Date().toISOString()}`
+    ]
     
-    const content = frontmatter + body
+    // Add optional fields if they exist
+    if (articleData.tags && Array.isArray(articleData.tags) && articleData.tags.length > 0) {
+      frontmatterLines.push(`tags: [${articleData.tags.map(tag => `"${tag}"`).join(', ')}]`)
+    }
     
-    writeFileSync(filePath, content, 'utf-8')
+    if (articleData.placeName) {
+      frontmatterLines.push(`placeName: ${articleData.placeName}`)
+    }
+    
+    if (articleData.location && articleData.location.lat && articleData.location.lng) {
+      frontmatterLines.push(`location:`)
+      frontmatterLines.push(`  lat: ${articleData.location.lat}`)
+      frontmatterLines.push(`  lng: ${articleData.location.lng}`)
+    }
+    
+    frontmatterLines.push('---', '', '')
+    
+    const frontmatter = frontmatterLines.join('
+')
+    const fullContent = frontmatter + content
+    
+    writeFileSync(filePath, fullContent, 'utf-8')
     
     return new Response(JSON.stringify({ 
       success: true, 
       filename,
-      message: 'Article created successfully' 
+      message: 'Article created successfully',
+      data: {
+        title,
+        type,
+        prefecture,
+        lang,
+        filename
+      }
     }), {
       status: 201,
       headers: { 'Content-Type': 'application/json' }
     })
   } catch (error) {
     console.error('Error creating article:', error)
-    return new Response(JSON.stringify({ error: 'Failed to create article' }), {
+    return new Response(JSON.stringify({ 
+      error: 'Failed to create article',
+      details: error.message 
+    }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' }
     })
