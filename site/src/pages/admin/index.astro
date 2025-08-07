@@ -360,6 +360,11 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
           throw new Error('必須フィールド（title, type, prefecture, content）が不足しています');
         }
 
+        // Convert Markdown in articleData.content to Portable Text blocks
+        if (articleData.content && typeof articleData.content === 'string') {
+          articleData.content = markdownToPortableText(articleData.content);
+        }
+
         const response = await fetch('/api/content/articles', {
           method: 'POST',
           headers: {
@@ -534,6 +539,32 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
       }
 
       return articleData;
+    }
+
+    // Minimal Markdown → Sanity Portable Text converter (headings & paragraphs)
+    function markdownToPortableText(md) {
+      const lines = md.split(/\r?\n/);
+      const blocks = [];
+      for (const rawLine of lines) {
+        const line = rawLine.trim();
+        if (!line) continue;
+        let style = 'normal';
+        if (line.startsWith('### ')) {
+          style = 'h3';
+        } else if (line.startsWith('## ')) {
+          style = 'h2';
+        } else if (line.startsWith('# ')) {
+          style = 'h1';
+        }
+        const text = line.replace(/^#+\s*/, '');
+        blocks.push({
+          _type: 'block',
+          style,
+          markDefs: [],
+          children: [{ _type: 'span', text, marks: [] }]
+        });
+      }
+      return blocks;
     }
 
     function clearArticleForm() {
