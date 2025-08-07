@@ -103,15 +103,7 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
             新しい記事を作成
           </button>
           
-          <button id="manage-articles-btn" 
-                  class="w-full flex justify-center items-center px-4 py-3 border border-gray-300 text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition-colors">
-            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-            </svg>
-            記事一覧を表示
-          </button>
-          
-          <div class="text-xs text-gray-500 flex items-center">
+<div class="text-xs text-gray-500 flex items-center">
             <div class="w-2 h-2 bg-purple-400 rounded-full mr-2"></div>
             ローカルファイル管理
           </div>
@@ -286,19 +278,14 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
       document.getElementById('article-modal').classList.remove('hidden');
     });
 
-    document.getElementById('manage-articles-btn')?.addEventListener('click', () => {
-      loadArticles('drafts');
-      document.getElementById('articles-list-modal').classList.remove('hidden');
-    });
+
 
     document.getElementById('close-article-modal')?.addEventListener('click', () => {
       document.getElementById('article-modal').classList.add('hidden');
       clearArticleForm();
     });
 
-    document.getElementById('close-articles-list-modal')?.addEventListener('click', () => {
-      document.getElementById('articles-list-modal').classList.add('hidden');
-    });
+
 
     document.getElementById('cancel-article-btn')?.addEventListener('click', () => {
       document.getElementById('article-modal').classList.add('hidden');
@@ -311,16 +298,7 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
       await saveArticle();
     });
 
-    // Article filter buttons
-    document.getElementById('filter-drafts')?.addEventListener('click', () => {
-      loadArticles('drafts');
-      updateFilterButtons('drafts');
-    });
 
-    document.getElementById('filter-published')?.addEventListener('click', () => {
-      loadArticles('published');
-      updateFilterButtons('published');
-    });
 
 
 
@@ -412,71 +390,7 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
       document.getElementById('article-body').value = '';
     }
 
-    async function loadArticles(type = 'drafts') {
-      try {
-        const response = await fetch(`/api/content/articles?type=${type}`);
-        const data = await response.json();
 
-        if (!response.ok) {
-          throw new Error(data.error || '記事の読み込みに失敗しました');
-        }
-
-        displayArticles(data.articles, type);
-      } catch (error) {
-        showNotification(error.message, 'error');
-      }
-    }
-
-    function displayArticles(articles, type) {
-      const articlesList = document.getElementById('articles-list');
-      
-      if (articles.length === 0) {
-        articlesList.innerHTML = `
-          <div class="text-center py-8">
-            <div class="text-4xl mb-2">📝</div>
-            <p class="text-gray-500">${type === 'drafts' ? '下書きがありません' : '公開済み記事がありません'}</p>
-          </div>
-        `;
-        return;
-      }
-
-      articlesList.innerHTML = articles.map(article => `
-        <div class="border border-gray-200 rounded-lg p-4 mb-3 hover:bg-gray-50">
-          <div class="flex items-start justify-between">
-            <div class="flex-1">
-              <h4 class="text-sm font-semibold text-gray-900 mb-1">${article.title}</h4>
-              <div class="flex items-center space-x-3 text-xs text-gray-500 mb-2">
-                <span class="inline-flex items-center px-2 py-1 rounded-full bg-gray-100">
-                  ${getTypeEmoji(article.type)} ${getTypeLabel(article.type)}
-                </span>
-                <span>${new Date(article.created).toLocaleDateString('ja-JP')}</span>
-                <span class="px-2 py-1 rounded-full ${article.lang === 'ja' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800'}">
-                  ${article.lang.toUpperCase()}
-                </span>
-              </div>
-              <p class="text-xs text-gray-600 line-clamp-2">${article.bodyPreview}</p>
-            </div>
-            <div class="ml-4 flex space-x-2">
-              <button class="text-blue-600 hover:text-blue-800 text-xs">編集</button>
-              <button class="text-red-600 hover:text-red-800 text-xs">削除</button>
-            </div>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    function updateFilterButtons(activeType) {
-      const draftsBtn = document.getElementById('filter-drafts');
-      const publishedBtn = document.getElementById('filter-published');
-      
-      if (activeType === 'drafts') {
-        draftsBtn.className = 'px-3 py-1 text-sm rounded-full bg-purple-100 text-purple-800';
-        publishedBtn.className = 'px-3 py-1 text-sm rounded-full bg-gray-100 text-gray-600';
-      } else {
-        draftsBtn.className = 'px-3 py-1 text-sm rounded-full bg-gray-100 text-gray-600';
-        publishedBtn.className = 'px-3 py-1 text-sm rounded-full bg-green-100 text-green-800';
-      }
-    }
 
     function getTypeEmoji(type) {
       const types = {
