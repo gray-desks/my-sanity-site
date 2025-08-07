@@ -24,6 +24,7 @@
 ### ✅ 実装済み機能
 - [x] 多言語対応（日本語・英語）
 - [x] 記事管理（Sanity CMS）
+- [x] **🆕 ChatGPT記事一括貼り付け機能**
 - [x] 経費記録（交通費・宿泊費）
 - [x] レスポンシブデザイン
 - [x] 静的サイト生成（SSG）
@@ -124,6 +125,23 @@ npm run dev
 ## 📊 運用
 
 ### 記事投稿フロー
+
+#### 🚀 ChatGPT一括貼り付け（推奨）
+1. **Sanity Studio** で新規Article作成
+2. **📝 記事テキスト一括入力** フィールドに ChatGPT生成記事をペースト
+3. **🚀 記事データを自動生成** ボタンをクリック
+4. 自動入力されたフィールドを確認・微調整
+5. 公開 → Webhook経由で自動サイト更新
+
+**対応する自動抽出機能:**
+- ✅ タイトル抽出（Markdownヘッダーまたは最初の行）
+- ✅ 記事タイプ推定（spot/food/transport/hotel/note）
+- ✅ 都道府県特定（47都道府県 + 有名観光地逆引き）
+- ✅ 場所名抽出（市区町村レベル）
+- ✅ 関連タグ生成（最大5個）
+- ✅ Portable Text変換（見出し・段落の構造化）
+
+#### 📝 従来の手動投稿
 1. Sanity Studio で記事作成・編集
 2. 記事タイプ選択（spot/food/transport/hotel/note）
 3. ギャラリー画像アップロード（最大12枚）
@@ -205,6 +223,17 @@ npm run e2e  # サイト全機能テスト
 - [x] Studio デプロイ（travel-blog-jp.sanity.studio）
 - [x] サンプルデータ作成（浅草寺・銀座寿司）
 - [x] Production デプロイ（Vercel + Studio）
+
+### 🤖 v0.2.3 - ChatGPT記事一括貼り付け機能 - ✅ 完了 
+- [x] カスタム入力コンポーネント（TextPasteInput.jsx）
+- [x] 自動テキスト解析エンジン（textParser.js）
+- [x] タイトル・記事タイプ・都道府県の自動推定
+- [x] 場所名・タグの自動抽出
+- [x] Portable Text自動変換
+- [x] モバイル対応レスポンシブUI
+- [x] エラーハンドリング・ユーザーフィードバック
+- [x] 包括的テストスイート（textParser.test.ts）
+- [x] CI/CD 依存関係解決（legacy-peer-deps）
 
 ### 🔧 v0.2.1 - 運用自動化 & 本番安定化 - 🚧 進行中
 - [x] ISR Webhook 設定（Sanity → Vercel 自動更新）
