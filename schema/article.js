@@ -8,6 +8,16 @@ export default defineType({
   type: 'document',
   fields: [
     defineField({
+      name: 'textPaste',
+      title: '📝 記事テキスト一括入力',
+      type: 'string',
+      description: 'ChatGPTで生成した記事をここに貼り付けて自動変換',
+      components: {
+        input: () => import('../components/TextPasteInput.jsx').then(mod => mod.default)
+      },
+      hidden: ({ document }) => !!document?.title && !!document?.content
+    }),
+    defineField({
       name: 'title',
       title: 'Title',
       type: 'string',
