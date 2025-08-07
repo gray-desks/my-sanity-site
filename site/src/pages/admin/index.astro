@@ -474,8 +474,7 @@ content: |
 
     // Parse the content text and extract article fields
     function parseArticleContent(contentText) {
-      const lines = contentText.split('
-');
+      const lines = contentText.split('\n');
       const articleData = {
         lang: 'ja' // Default to Japanese
       };
@@ -518,8 +517,7 @@ content: |
       }
       
       if (contentLines.length > 0) {
-        articleData.content = contentLines.join('
-');
+        articleData.content = contentLines.join('\n');
       }
 
       // Set default publishedAt if not provided
