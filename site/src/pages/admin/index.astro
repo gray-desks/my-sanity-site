@@ -543,6 +543,7 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
 
     // Minimal Markdown → Sanity Portable Text converter (headings & paragraphs)
     function markdownToPortableText(md) {
+      const genKey = () => Math.random().toString(36).slice(2, 10);
       const lines = md.split(/\r?\n/);
       const blocks = [];
       for (const rawLine of lines) {
@@ -556,12 +557,15 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
         } else if (line.startsWith('# ')) {
           style = 'h1';
         }
-        const text = line.replace(/^#+\s*/, '');
+        const text = line.replace(/^#{1,3}\s*/, '');
         blocks.push({
           _type: 'block',
+          _key: genKey(),
           style,
           markDefs: [],
-          children: [{ _type: 'span', text, marks: [] }]
+          children: [
+            { _type: 'span', _key: genKey(), text, marks: [] }
+          ]
         });
       }
       return blocks;

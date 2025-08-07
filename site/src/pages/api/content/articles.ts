@@ -86,11 +86,13 @@ export const POST: APIRoute = async ({ request }) => {
       contentBlocks = [
         {
           _type: 'block',
+          _key: Math.random().toString(36).slice(2, 10),
           style: 'normal',
           markDefs: [],
           children: [
             {
               _type: 'span',
+              _key: Math.random().toString(36).slice(2, 10),
               text: content,
               marks: []
             }
