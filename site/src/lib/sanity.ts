@@ -165,8 +165,8 @@ export async function getArticleById(articleId: string): Promise<Article | null>
           url
         }
       },
-      body,
-      "bodyText": pt::text(body),
+      "body": content,
+      "bodyText": pt::text(content),
       lang,
       __i18n_lang,
       __i18n_refs
@@ -200,8 +200,8 @@ export async function getArticleBySlug(slug: string, lang = DEFAULT_LANGUAGE): P
           url
         }
       },
-      body,
-      "bodyText": pt::text(body),
+      "body": content,
+      "bodyText": pt::text(content),
       lang,
       __i18n_lang,
       __i18n_refs
