@@ -8,6 +8,15 @@ export const client = createClient({
   apiVersion: '2024-01-01',
 })
 
+// Write client for mutations (requires token)
+export const writeClient = createClient({
+  projectId: 'fcz6on8p',
+  dataset: 'production',
+  useCdn: false, // Don't use CDN for write operations
+  apiVersion: '2024-01-01',
+  token: import.meta.env.SANITY_WRITE_TOKEN || process.env.SANITY_WRITE_TOKEN,
+})
+
 
 export interface Article {
   _id: string

@@ -376,7 +376,18 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
       };
 
       const notification = document.createElement('div');
-      notification.className = `fixed top-4 right-4 ${colors[type]} border rounded-lg p-4 shadow-lg z-50 max-w-sm`;
+      notification.className = `fixed top-4 right-4 ${colors[type]} border rounded-lg p-4 shadow-lg z-50 max-w-md`;
+      
+      // Handle multiline messages
+      const messageLines = message.split('\n');
+      let messageHtml = messageLines.map((line, index) => {
+        if (index === 0) {
+          return `<p class="text-sm font-medium">${line}</p>`;
+        } else {
+          return `<p class="text-xs mt-1 opacity-90">${line}</p>`;
+        }
+      }).join('');
+      
       notification.innerHTML = `
         <div class="flex">
           <div class="flex-shrink-0">
@@ -385,16 +396,30 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
             </svg>
           </div>
           <div class="ml-3">
-            <p class="text-sm">${message}</p>
+            ${messageHtml}
+          </div>
+          <div class="ml-auto pl-3">
+            <div class="-mx-1.5 -my-1.5">
+              <button onclick="this.parentElement.parentElement.parentElement.parentElement.remove()" class="inline-flex rounded-md p-1.5 hover:bg-gray-100 focus:outline-none">
+                <span class="sr-only">Dismiss</span>
+                <svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
           </div>
         </div>
       `;
       
       document.body.appendChild(notification);
       
+      // Auto-remove for success/info, keep error/warning longer
+      const timeout = (type === 'error' || type === 'warning') ? 8000 : 4000;
       setTimeout(() => {
-        notification.remove();
-      }, 4000);
+        if (notification.parentElement) {
+          notification.remove();
+        }
+      }, timeout);
     }
 
     // Article management functions
@@ -428,16 +453,55 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
           body: JSON.stringify(articleData)
         });
 
-        const result = await response.json();
-
-        if (!response.ok) {
-          throw new Error(result.error || '記事の作成に失敗しました');
+        let result: any = null;
+        const isJson = response.headers.get('content-type')?.includes('application/json');
+        
+        try {
+          if (isJson) {
+            result = await response.json();
+          } else {
+            const textResult = await response.text();
+            console.log('Non-JSON response:', textResult);
+            result = { error: `サーバーエラー: ${textResult}` };
+          }
+        } catch (parseError) {
+          console.error('Failed to parse response:', parseError);
+          result = { error: `レスポンス解析エラー (status ${response.status})` };
         }
 
-        showNotification('記事を作成しました', 'success');
+        if (!response.ok) {
+          console.error('API Error Response:', result);
+          let errorMessage = '記事の作成に失敗しました';
+          let errorDetails = '';
+          
+          if (result && typeof result === 'object') {
+            if (result.code === 'MISSING_SANITY_TOKEN' || result.code === 'SANITY_AUTH_ERROR') {
+              errorMessage = '🔐 認証エラー';
+              errorDetails = result.details || 'Sanity書き込み権限が設定されていません';
+            } else if (result.code === 'VALIDATION_ERROR') {
+              errorMessage = '📝 データ形式エラー';
+              errorDetails = result.details || '記事データの形式が正しくありません';
+            } else if (result.code === 'NETWORK_ERROR') {
+              errorMessage = '🌐 接続エラー';
+              errorDetails = result.details || 'サーバーに接続できませんでした';
+            } else {
+              errorMessage = result.error || errorMessage;
+              errorDetails = result.details || `HTTP ${response.status}`;
+            }
+          } else {
+            errorDetails = `HTTP ${response.status}: ${typeof result === 'string' ? result : 'Unknown error'}`;
+          }
+          
+          // Show detailed error message
+          const fullErrorMessage = errorDetails ? `${errorMessage}\n\n詳細: ${errorDetails}` : errorMessage;
+          throw new Error(fullErrorMessage);
+        }
+
+        showNotification('✅ 記事を作成しました', 'success');
         document.getElementById('article-modal').classList.add('hidden');
         clearArticleForm();
       } catch (error) {
+        console.error('Article creation error:', error);
         showNotification(error.message, 'error');
       } finally {
         saveBtn.disabled = false;

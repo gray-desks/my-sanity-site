@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro'
-import { client as sanityClient } from '../../../lib/sanity'
+import { writeClient as sanityClient } from '../../../lib/sanity'
 
 export const GET: APIRoute = async ({ url }) => {
   try {
@@ -36,6 +36,19 @@ export const POST: APIRoute = async ({ request }) => {
   console.log('POST request received');
   
   try {
+    // Check if Sanity write token is configured
+    if (!sanityClient.config().token) {
+      console.error('Sanity write token is not configured');
+      return new Response(JSON.stringify({ 
+        error: 'サーバー設定エラー',
+        details: 'Sanity書き込みトークンが設定されていません。環境変数SANITY_WRITE_TOKENを設定してください。',
+        code: 'MISSING_SANITY_TOKEN'
+      }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+
     const articleData = await request.json();
     console.log('Parsed article data:', articleData);
     
@@ -114,6 +127,9 @@ export const POST: APIRoute = async ({ request }) => {
     
     console.log('Creating Sanity document:', sanityDoc);
     
+    console.log('Creating Sanity document:', sanityDoc);
+    console.log('Using Sanity token:', sanityClient.config().token ? '***configured***' : 'NOT SET');
+    
     // Create document in Sanity
     const result = await sanityClient.create(sanityDoc as any);
     
@@ -135,13 +151,46 @@ export const POST: APIRoute = async ({ request }) => {
       headers: { 'Content-Type': 'application/json' }
     });
     
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error creating article:', error);
+    
+    // Parse different types of Sanity errors
+    let errorMessage = '記事の作成に失敗しました';
+    let errorDetails = error.message || error.toString();
+    let errorCode = 'UNKNOWN_ERROR';
+    let statusCode = 500;
+    
+    if (error.message) {
+      if (error.message.includes('No token')) {
+        errorMessage = 'Sanity認証エラー';
+        errorDetails = 'Sanity書き込みトークンが設定されていないか無効です。環境変数を確認してください。';
+        errorCode = 'SANITY_AUTH_ERROR';
+        statusCode = 401;
+      } else if (error.message.includes('Unauthorized')) {
+        errorMessage = 'Sanity認証エラー';
+        errorDetails = 'Sanityトークンが無効または権限不足です。';
+        errorCode = 'SANITY_UNAUTHORIZED';
+        statusCode = 401;
+      } else if (error.message.includes('validation')) {
+        errorMessage = 'データ検証エラー';
+        errorDetails = 'スキーマ検証に失敗しました: ' + error.message;
+        errorCode = 'VALIDATION_ERROR';
+        statusCode = 400;
+      } else if (error.message.includes('network') || error.message.includes('fetch')) {
+        errorMessage = 'ネットワークエラー';
+        errorDetails = 'Sanity APIへの接続に失敗しました。';
+        errorCode = 'NETWORK_ERROR';
+        statusCode = 503;
+      }
+    }
+    
     return new Response(JSON.stringify({ 
-      error: 'Failed to create article',
-      details: error.message 
+      error: errorMessage,
+      details: errorDetails,
+      code: errorCode,
+      timestamp: new Date().toISOString()
     }), {
-      status: 500,
+      status: statusCode,
       headers: { 'Content-Type': 'application/json' }
     });
   }
