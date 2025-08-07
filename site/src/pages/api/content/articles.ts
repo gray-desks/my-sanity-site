@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro'
-import { sanityClient } from '../../lib/sanity'
+import { client as sanityClient } from '../../lib/sanity'
 
 export const GET: APIRoute = async ({ url }) => {
   try {
