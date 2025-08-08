@@ -72,7 +72,8 @@
       "mcp__serena__insert_after_symbol",
       "Bash(npm test:*)",
       "mcp__serena__insert_before_symbol",
-      "Bash(python3:*)"
+      "Bash(python3:*)",
+      "Bash(timeout 30s npm test:*)"
     ],
     "deny": []
   }

@@ -316,7 +316,7 @@ function extractTags(text) {
  */
 function convertToPortableText(text) {
   const blocks = []
-  const lines = text.split('\n').filter(line => line.trim())
+  const lines = text.split('\n')
   
   let currentParagraph = []
   
@@ -326,7 +326,7 @@ function convertToPortableText(text) {
     if (!trimmedLine) {
       // 空行の場合、現在の段落を終了
       if (currentParagraph.length > 0) {
-        blocks.push(createTextBlock(currentParagraph.join(' ')))
+        blocks.push(createTextBlockWithMarkdown(currentParagraph.join(' ')))
         currentParagraph = []
       }
       continue
@@ -336,7 +336,7 @@ function convertToPortableText(text) {
     if (trimmedLine.startsWith('#')) {
       // 既存の段落を終了
       if (currentParagraph.length > 0) {
-        blocks.push(createTextBlock(currentParagraph.join(' ')))
+        blocks.push(createTextBlockWithMarkdown(currentParagraph.join(' ')))
         currentParagraph = []
       }
       
@@ -348,14 +348,46 @@ function convertToPortableText(text) {
         _type: 'block',
         _key: generateKey(),
         style: `h${level}`,
-        children: [{
-          _type: 'span',
-          _key: generateKey(),
-          text: headerText,
-          marks: []
-        }]
+        children: parseInlineMarkdown(headerText)
       })
-    } else {
+    } 
+    // 番号付きリスト
+    else if (trimmedLine.match(/^\d+\.\s+/)) {
+      // 既存の段落を終了
+      if (currentParagraph.length > 0) {
+        blocks.push(createTextBlockWithMarkdown(currentParagraph.join(' ')))
+        currentParagraph = []
+      }
+      
+      const listText = trimmedLine.replace(/^\d+\.\s+/, '')
+      blocks.push({
+        _type: 'block',
+        _key: generateKey(),
+        style: 'normal',
+        listItem: 'number',
+        level: 1,
+        children: parseInlineMarkdown(listText)
+      })
+    }
+    // 箇条書きリスト
+    else if (trimmedLine.match(/^[-*+]\s+/)) {
+      // 既存の段落を終了
+      if (currentParagraph.length > 0) {
+        blocks.push(createTextBlockWithMarkdown(currentParagraph.join(' ')))
+        currentParagraph = []
+      }
+      
+      const listText = trimmedLine.replace(/^[-*+]\s+/, '')
+      blocks.push({
+        _type: 'block',
+        _key: generateKey(),
+        style: 'normal',
+        listItem: 'bullet',
+        level: 1,
+        children: parseInlineMarkdown(listText)
+      })
+    }
+    else {
       // 通常のテキスト行
       currentParagraph.push(trimmedLine)
     }
@@ -363,29 +395,170 @@ function convertToPortableText(text) {
   
   // 最後の段落を追加
   if (currentParagraph.length > 0) {
-    blocks.push(createTextBlock(currentParagraph.join(' ')))
+    blocks.push(createTextBlockWithMarkdown(currentParagraph.join(' ')))
   }
   
-  return blocks.length > 0 ? blocks : [createTextBlock(text)]
+  return blocks.length > 0 ? blocks : [createTextBlockWithMarkdown(text)]
 }
 
 /**
- * テキストブロックを作成
+ * マークダウン対応のテキストブロックを作成
  * @param {string} text - テキスト
  * @returns {Object} ブロックオブジェクト
  */
-function createTextBlock(text) {
+function createTextBlockWithMarkdown(text) {
   return {
     _type: 'block',
     _key: generateKey(),
     style: 'normal',
-    children: [{
+    children: parseInlineMarkdown(text.trim())
+  }
+}
+
+/**
+ * インラインマークダウンをパース
+ * @param {string} text - テキスト
+ * @returns {Array} children配列
+ */
+function parseInlineMarkdown(text) {
+  const children = []
+  let currentText = text
+  let position = 0
+  
+  // マークダウンパターンの定義（優先順位順）
+  const patterns = [
+    // リンク: [text](url)
+    {
+      regex: /\[([^\]]+)\]\(([^)]+)\)/g,
+      type: 'link',
+      parse: (match) => ({
+        _type: 'span',
+        _key: generateKey(),
+        text: match[1],
+        marks: ['link'],
+        markDefs: [{
+          _type: 'link',
+          _key: generateKey(),
+          href: match[2]
+        }]
+      })
+    },
+    // 太字: **text** または __text__
+    {
+      regex: /(\*\*|__)((?:(?!\1).)+)\1/g,
+      type: 'strong',
+      parse: (match) => ({
+        _type: 'span',
+        _key: generateKey(),
+        text: match[2],
+        marks: ['strong']
+      })
+    },
+    // 斜体: *text* または _text_ (ただし太字の後でチェック)
+    {
+      regex: /(\*|_)((?:(?!\1).)+)\1/g,
+      type: 'em',
+      parse: (match) => ({
+        _type: 'span',
+        _key: generateKey(),
+        text: match[2],
+        marks: ['em']
+      })
+    },
+    // インラインコード: `code`
+    {
+      regex: /`([^`]+)`/g,
+      type: 'code',
+      parse: (match) => ({
+        _type: 'span',
+        _key: generateKey(),
+        text: match[1],
+        marks: ['code']
+      })
+    }
+  ]
+  
+  // マークダウンをパースして順次処理
+  while (position < currentText.length) {
+    let nearestMatch = null
+    let nearestPattern = null
+    let nearestIndex = currentText.length
+    
+    // 最も近いマークダウンパターンを検索
+    for (const pattern of patterns) {
+      pattern.regex.lastIndex = position
+      const match = pattern.regex.exec(currentText)
+      
+      if (match && match.index < nearestIndex) {
+        nearestMatch = match
+        nearestPattern = pattern
+        nearestIndex = match.index
+      }
+    }
+    
+    if (nearestMatch) {
+      // マッチする前のテキストを追加
+      if (nearestIndex > position) {
+        const plainText = currentText.slice(position, nearestIndex)
+        if (plainText) {
+          children.push({
+            _type: 'span',
+            _key: generateKey(),
+            text: plainText,
+            marks: []
+          })
+        }
+      }
+      
+      // マークダウンをパースして追加
+      const parsedSpan = nearestPattern.parse(nearestMatch)
+      
+      // リンクの場合は markDefs を処理
+      if (nearestPattern.type === 'link' && parsedSpan.markDefs) {
+        // markDefsは後でブロックレベルで処理する必要があるため、
+        // ここでは一時的にデータを保持
+        parsedSpan.marks = [parsedSpan.markDefs[0]._key]
+        children.push(parsedSpan)
+      } else {
+        children.push(parsedSpan)
+      }
+      
+      position = nearestMatch.index + nearestMatch[0].length
+    } else {
+      // マッチしない残りのテキストを追加
+      const remainingText = currentText.slice(position)
+      if (remainingText) {
+        children.push({
+          _type: 'span',
+          _key: generateKey(),
+          text: remainingText,
+          marks: []
+        })
+      }
+      break
+    }
+  }
+  
+  // 空の場合はデフォルトのspanを返す
+  if (children.length === 0) {
+    children.push({
       _type: 'span',
       _key: generateKey(),
-      text: text.trim(),
+      text: text,
       marks: []
-    }]
+    })
   }
+  
+  return children
+}
+
+/**
+ * テキストブロックを作成（後方互換性のため残す）
+ * @param {string} text - テキスト
+ * @returns {Object} ブロックオブジェクト
+ */
+function createTextBlock(text) {
+  return createTextBlockWithMarkdown(text)
 }
 
 /**

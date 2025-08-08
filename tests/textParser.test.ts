@@ -172,5 +172,80 @@ describe('Text Parser', () => {
       expect(result.tags).toContain('グルメ')
       expect(result.content.length).toBeGreaterThanOrEqual(4) // 柔軟にチェック
     })
+
+    it('should parse markdown bold text correctly', async () => {
+      const input = `# テストタイトル
+
+これは**太字のテキスト**です。通常のテキストも含まれています。`
+
+      const result = await parseTextToArticle(input)
+      expect(result.content).toBeDefined()
+      
+      // Find the paragraph block
+      const paragraphBlock = result.content.find(block => block.style === 'normal')
+      expect(paragraphBlock).toBeDefined()
+      expect(paragraphBlock.children).toBeDefined()
+      
+      // Should have multiple spans including a bold one
+      const boldSpan = paragraphBlock.children.find(span => span.marks && span.marks.includes('strong'))
+      expect(boldSpan).toBeDefined()
+      expect(boldSpan.text).toBe('太字のテキスト')
+    })
+
+    it('should parse markdown italic text correctly', async () => {
+      const input = `# テストタイトル
+
+これは*斜体のテキスト*です。`
+
+      const result = await parseTextToArticle(input)
+      expect(result.content).toBeDefined()
+      
+      const paragraphBlock = result.content.find(block => block.style === 'normal')
+      expect(paragraphBlock).toBeDefined()
+      
+      const italicSpan = paragraphBlock.children.find(span => span.marks && span.marks.includes('em'))
+      expect(italicSpan).toBeDefined()
+      expect(italicSpan.text).toBe('斜体のテキスト')
+    })
+
+    it('should parse markdown lists correctly', async () => {
+      const input = `# テストタイトル
+
+- アイテム1
+- アイテム2
+1. 番号付きアイテム1
+2. 番号付きアイテム2`
+
+      const result = await parseTextToArticle(input)
+      expect(result.content).toBeDefined()
+      
+      // Find bullet list items
+      const bulletItems = result.content.filter(block => block.listItem === 'bullet')
+      expect(bulletItems.length).toBe(2)
+      expect(bulletItems[0].children[0].text).toBe('アイテム1')
+      expect(bulletItems[1].children[0].text).toBe('アイテム2')
+      
+      // Find numbered list items
+      const numberItems = result.content.filter(block => block.listItem === 'number')
+      expect(numberItems.length).toBe(2)
+      expect(numberItems[0].children[0].text).toBe('番号付きアイテム1')
+      expect(numberItems[1].children[0].text).toBe('番号付きアイテム2')
+    })
+
+    it('should parse inline code correctly', async () => {
+      const input = `# テストタイトル
+
+このコードは\`console.log('hello')\`です。`
+
+      const result = await parseTextToArticle(input)
+      expect(result.content).toBeDefined()
+      
+      const paragraphBlock = result.content.find(block => block.style === 'normal')
+      expect(paragraphBlock).toBeDefined()
+      
+      const codeSpan = paragraphBlock.children.find(span => span.marks && span.marks.includes('code'))
+      expect(codeSpan).toBeDefined()
+      expect(codeSpan.text).toBe(`console.log('hello')`)
+    })
   })
 })
