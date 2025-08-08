@@ -25,7 +25,10 @@ const isDev = import.meta.env.DEV
 const currentPath = Astro.url.pathname
 const isPrivacyPage = currentPath === '/privacy' || currentPath === '/en/privacy'
 
-const showAds = adsenseClientId && adsenseClientId !== "" && !isPrivacyPage
+// Don't show ads if slotId is empty (未実装の広告ユニット)
+const hasValidSlotId = slotId && slotId.trim() !== ""
+
+const showAds = adsenseClientId && adsenseClientId !== "" && !isPrivacyPage && hasValidSlotId
 
 // Responsive classes based on hideOn prop
 const responsiveClasses = {

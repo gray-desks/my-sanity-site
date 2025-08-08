@@ -5,12 +5,12 @@
 export const ADS_SLOTS = {
   // ホームページ広告
   HOME_HERO: "1903058190",
-  HOME_INFEED: "2345678901", // 取得後差し替え：現在AdSense側でコード待ち
+  HOME_INFEED: "", // 取得後差し替え：現在AdSense側でコード待ち
   HOME_FOOTER: "6102125837",
   
   // 記事ページ広告
   POST_TOP: "3219977470",
-  POST_INARTICLE_1: "7890123456", // 取得後差し替え：現在未作成
+  POST_INARTICLE_1: "", // 取得後差し替え：現在未作成
   POST_BOTTOM: "5076016448",
   
   // サイドバー広告
