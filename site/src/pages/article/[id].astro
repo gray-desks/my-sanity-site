@@ -51,11 +51,11 @@ const config = typeConfig[article.type as keyof typeof typeConfig] || typeConfig
       <!-- Main content in center column, sidebar on desktop -->
       <div class="lg:grid lg:grid-cols-4 lg:gap-8">
         <!-- Main Content -->
-        <div class="lg:col-span-3 md:bg-white md:rounded-2xl md:shadow-lg">
+        <div class="lg:col-span-3 bg-white md:rounded-2xl md:shadow-lg">
           <div class="md:p-8">
           <!-- Cover Image (最上部) -->
           {article.coverImage?.asset?.url && (
-            <div class="mb-8 rounded-2xl overflow-hidden shadow-lg">
+            <div class="mb-8 md:rounded-2xl overflow-hidden md:shadow-lg">
               <img 
                 src={`${article.coverImage.asset.url}?w=1200&h=600&fit=crop&auto=format`}
                 alt={article.title}
