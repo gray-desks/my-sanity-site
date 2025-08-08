@@ -20,7 +20,12 @@ const {
 // Only show ads if environment variable is set
 const adsenseClientId = import.meta.env.PUBLIC_ADSENSE_CLIENT_ID
 const isDev = import.meta.env.DEV
-const showAds = adsenseClientId && adsenseClientId !== ""
+
+// Exclude ads on privacy policy pages
+const currentPath = Astro.url.pathname
+const isPrivacyPage = currentPath === '/privacy' || currentPath === '/en/privacy'
+
+const showAds = adsenseClientId && adsenseClientId !== "" && !isPrivacyPage
 
 // Responsive classes based on hideOn prop
 const responsiveClasses = {
