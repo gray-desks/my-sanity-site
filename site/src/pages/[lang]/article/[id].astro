@@ -5,6 +5,7 @@ import AdSlot from '../../../components/AdSlot.astro'
 import PortableTextWithAds from '../../../components/PortableTextWithAds.astro'
 import { getArticleById, client, type Article } from '../../../lib/sanity'
 import { ENABLED_LANGUAGES, getLocalizedPath, getUILabel } from '../../../lib/i18n'
+import { ADS_SLOTS } from '../../../config/ads'
 
 export async function getStaticPaths() {
   const paths = []
@@ -101,7 +102,7 @@ const config = typeConfig[article.type as keyof typeof typeConfig] || typeConfig
 
           <!-- Top Article Ad - タイトル下 -->
           <AdSlot
-            slotId="4567890123"
+            slotId={ADS_SLOTS.POST_TOP}
             format="horizontal"
             reserveHeight={120}
             label={lang === 'en' ? 'Advertisement' : lang === 'zh-cn' ? '广告' : lang === 'zh-tw' ? '廣告' : lang === 'ko' ? '광고' : '広告'}
@@ -155,7 +156,7 @@ const config = typeConfig[article.type as keyof typeof typeConfig] || typeConfig
 
           <!-- In-Article Ad - 本文末 -->
           <AdSlot
-            slotId="5678901234"
+            slotId={ADS_SLOTS.POST_BOTTOM}
             format="horizontal"
             reserveHeight={120}
             label={lang === 'en' ? 'Advertisement' : lang === 'zh-cn' ? '广告' : lang === 'zh-tw' ? '廣告' : lang === 'ko' ? '광고' : '広告'}
@@ -184,7 +185,7 @@ const config = typeConfig[article.type as keyof typeof typeConfig] || typeConfig
         <!-- Sticky Sidebar Ad -->
         <div class="sticky top-8">
           <AdSlot
-            slotId="6789012345"
+            slotId={ADS_SLOTS.SIDEBAR_TOP}
             format="rectangle"
             reserveHeight={280}
             label={lang === 'en' ? 'Advertisement' : lang === 'zh-cn' ? '广告' : lang === 'zh-tw' ? '廣告' : lang === 'ko' ? '광고' : '広告'}

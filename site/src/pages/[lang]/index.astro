@@ -6,6 +6,7 @@ import ArticleCard from '../../components/ArticleCard.astro'
 import SearchFilter from '../../components/SearchFilter.astro'
 import { getArticles, type Article } from '../../lib/sanity'
 import { ENABLED_LANGUAGES, getUILabel } from '../../lib/i18n'
+import { ADS_SLOTS } from '../../config/ads'
 
 export async function getStaticPaths() {
   // 日本語以外の有効な言語のパスを生成
@@ -39,7 +40,7 @@ try {
   <!-- Top Ad - Hero直下 -->
   <div class="max-w-7xl mx-auto px-4 pt-8">
     <AdSlot
-      slotId="1234567890"
+      slotId={ADS_SLOTS.HOME_HERO}
       format="horizontal" 
       reserveHeight={120}
       label={lang === 'en' ? 'Advertisement' : lang === 'zh-cn' ? '广告' : lang === 'zh-tw' ? '廣告' : lang === 'ko' ? '광고' : '広告'}
@@ -68,7 +69,7 @@ try {
               {(index + 1) % 4 === 0 && index < articles.length - 1 && (
                 <div class="col-span-1 md:col-span-2 lg:col-span-3">
                   <AdSlot
-                    slotId="2345678901"
+                    slotId={ADS_SLOTS.HOME_INFEED}
                     format="in-feed"
                     reserveHeight={200}
                     label={lang === 'en' ? 'Advertisement' : lang === 'zh-cn' ? '广告' : lang === 'zh-tw' ? '廣告' : lang === 'ko' ? '광고' : '広告'}
@@ -84,10 +85,10 @@ try {
 
     <!-- Bottom Ad - フッター直前 -->
     <AdSlot
-      slotId="3456789012"
+      slotId={ADS_SLOTS.HOME_FOOTER}
       format="horizontal"
       reserveHeight={120}
-      label={lang === 'en' ? 'Advertisement' : lang === 'zh-cn' ? '广告' : lang === 'zh-tw' ? '廣告' : lang === 'ko' ? '광고' : '広告'}
+      label={lang === 'en' ? 'Advertisement' : lang === 'zh-cn' ? '广告' : lang === 'zh-tw' ? '廣告' : lang === 'ko' ? '광고' : '广告'}
       class="mt-16"
     />
   </div>

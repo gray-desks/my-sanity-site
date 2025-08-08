@@ -1,6 +1,7 @@
 ---
 import { PortableText } from 'astro-portabletext'
 import AdSlot from './AdSlot.astro'
+import { ADS_SLOTS } from '../config/ads'
 
 export interface Props {
   value: any[]
@@ -48,7 +49,7 @@ const afterAd = insertAdAfterIndex >= 0 ? value.slice(insertAdAfterIndex + 1) : 
   <!-- In-Article Ad (only if we have content to split) -->
   {showAds && insertAdAfterIndex >= 0 && (
     <AdSlot
-      slotId="7890123456"
+      slotId={ADS_SLOTS.POST_INARTICLE_1}
       format="in-article"
       reserveHeight={250}
       label={lang === 'en' ? 'Advertisement' : lang === 'zh-cn' ? '广告' : lang === 'zh-tw' ? '廣告' : lang === 'ko' ? '광고' : '广告'}
