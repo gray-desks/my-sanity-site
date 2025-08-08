@@ -71,14 +71,6 @@ const config = typeConfig[article.type as keyof typeof typeConfig] || typeConfig
             </h1>
           </header>
 
-          <!-- Top Article Ad - タイトル下 -->
-          <AdSlot
-            slotId={ADS_SLOTS.POST_TOP}
-            format="horizontal"
-            reserveHeight={120}
-            label="広告"
-            class="mb-8"
-          />
 
           <!-- Tags and Date -->
           <div class="mb-8 pb-6 border-b border-gray-200">
@@ -120,14 +112,6 @@ const config = typeConfig[article.type as keyof typeof typeConfig] || typeConfig
             </div>
           </article>
 
-          <!-- In-Article Ad - 本文末 -->
-          <AdSlot
-            slotId={ADS_SLOTS.POST_BOTTOM}
-            format="horizontal"
-            reserveHeight={120}
-            label="広告"
-            class="mb-8"
-          />
 
           <!-- Gallery -->
           {article.gallery && article.gallery.length > 0 && (
