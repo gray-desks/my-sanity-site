@@ -102,7 +102,7 @@ const config = typeConfig[article.type as keyof typeof typeConfig] || typeConfig
             <div class="prose prose-lg max-w-none">
               {article.body && article.body.length > 0 ? (
                 <div class="article-content">
-                  <PortableTextWithAds value={article.body} lang="ja" showAds={true} />
+                  <PortableTextWithAds value={article.body} lang="ja" showAds={false} />
                 </div>
               ) : (
                 <div class="text-gray-800 leading-relaxed text-lg">
@@ -172,20 +172,26 @@ const config = typeConfig[article.type as keyof typeof typeConfig] || typeConfig
   // Cover Image Lightbox functionality
   document.addEventListener('DOMContentLoaded', () => {
     const coverImage = document.getElementById('cover-image')
+    const coverImageMobile = document.getElementById('cover-image-mobile')
     const lightbox = document.getElementById('cover-lightbox')
     const lightboxImage = document.getElementById('cover-lightbox-image')
     const closeBtn = document.getElementById('cover-lightbox-close')
     
-    if (coverImage && lightbox) {
-      // Open lightbox when cover image is clicked
-      coverImage.addEventListener('click', () => {
-        const lightboxUrl = coverImage.dataset.lightboxUrl
-        if (lightboxUrl && lightboxImage) {
-          lightboxImage.src = lightboxUrl
-        }
-        lightbox.classList.remove('hidden')
-        document.body.style.overflow = 'hidden'
-      })
+    const setupLightbox = (imgElement) => {
+      if (imgElement && lightbox) {
+        imgElement.addEventListener('click', () => {
+          const lightboxUrl = imgElement.dataset.lightboxUrl
+          if (lightboxUrl && lightboxImage) {
+            lightboxImage.src = lightboxUrl
+          }
+          lightbox.classList.remove('hidden')
+          document.body.style.overflow = 'hidden'
+        })
+      }
+    }
+    
+    setupLightbox(coverImage)
+    setupLightbox(coverImageMobile)
       
       // Close lightbox
       const closeLightbox = () => {
@@ -209,11 +215,39 @@ const config = typeConfig[article.type as keyof typeof typeConfig] || typeConfig
           closeLightbox()
         }
       })
-    }
   })
 </script>
 
-<style>
+<style is:global>
+  /* Improved Content Typography for Mobile */
+  .prose {
+    @apply leading-relaxed;
+  }
+  
+  .prose p {
+    @apply my-4;
+  }
+  
+  .prose h2 {
+    @apply text-xl font-bold mt-10 mb-4 pb-2 border-b border-neutral-200;
+  }
+  
+  .prose h3 {
+    @apply text-lg font-semibold mt-8 mb-3;
+  }
+  
+  .prose ul {
+    @apply pl-5 my-4;
+  }
+  
+  .prose li {
+    @apply my-1;
+  }
+  
+  .prose img {
+    @apply rounded-lg;
+  }
+  
   /* Lightbox styles */
   .lightbox-overlay {
     backdrop-filter: blur(4px);

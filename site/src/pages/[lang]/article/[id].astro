@@ -76,40 +76,57 @@ const config = typeConfig[article.type as keyof typeof typeConfig] || typeConfig
     lang: lang
   }}
 >
+  <!-- Hero Image (Mobile Full-bleed) -->
+  {article.coverImage?.asset?.url && (
+    <picture class="block md:hidden -mx-4 sm:-mx-6 mb-4">
+      <img 
+        src={`${article.coverImage.asset.url}?w=1200&h=600&fit=crop&auto=format`}
+        alt={article.title}
+        class="w-full aspect-video object-cover rounded-none cursor-pointer"
+        id="cover-image-mobile"
+        data-lightbox-url={`${article.coverImage.asset.url}?auto=format`}
+        loading="eager"
+      />
+    </picture>
+  )}
+
   <div class="max-w-7xl mx-auto px-4 py-8">
     <!-- Main content in center column, sidebar on desktop -->
     <div class="lg:grid lg:grid-cols-4 lg:gap-8">
       <!-- Main Content -->
-      <div class="lg:col-span-3 bg-white rounded-2xl shadow-lg overflow-hidden">
-        <div class="p-8">
-          <!-- Cover Image (最上部) -->
+      <div class="lg:col-span-3 bg-white rounded-2xl shadow-lg overflow-hidden mt-4 md:mt-0">
+        <div class="px-4 sm:px-6 md:px-8 py-6 md:py-8">
+          <!-- Cover Image (PC only - 最上部) -->
           {article.coverImage?.asset?.url && (
-            <div class="mb-8 rounded-2xl overflow-hidden shadow-lg">
+            <div class="mb-8 rounded-2xl overflow-hidden shadow-lg hidden md:block">
               <img 
                 src={`${article.coverImage.asset.url}?w=1200&h=600&fit=crop&auto=format`}
                 alt={article.title}
-                class="w-full h-96 object-cover"
+                class="w-full h-96 object-cover cursor-pointer"
+                id="cover-image"
+                data-lightbox-url={`${article.coverImage.asset.url}?auto=format`}
               />
             </div>
           )}
 
           <!-- Title -->
           <header class="mb-6">
-            <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-900 leading-tight mb-4">
               {article.title}
             </h1>
           </header>
 
-
           <!-- Tags and Date -->
           <div class="mb-8 pb-6 border-b border-gray-200">
-            <div class="flex flex-wrap items-center gap-4">
-              <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold bg-gray-100 text-gray-700">
-                <span class="mr-2">{config.emoji}</span>
+            <div class="flex flex-wrap items-center gap-3">
+              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-neutral-100 text-neutral-600">
+                <span class="mr-1">{config.emoji}</span>
                 {config.label}
               </span>
+            </div>
+            <div class="flex flex-wrap items-center gap-3 text-sm text-neutral-500 mt-2">
               {article.placeName && (
-                <div class="flex items-center text-gray-600">
+                <div class="flex items-center">
                   <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
@@ -117,9 +134,9 @@ const config = typeConfig[article.type as keyof typeof typeConfig] || typeConfig
                   <span>{article.placeName}</span>
                 </div>
               )}
-              <time datetime={article.publishedAt} class="flex items-center text-gray-600">
+              <time datetime={article.publishedAt} class="flex items-center">
                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 002 2z"></path>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2z"></path>
                 </svg>
                 <span class="ml-1">{formatDate(article.publishedAt)}</span>
               </time>
@@ -127,11 +144,11 @@ const config = typeConfig[article.type as keyof typeof typeConfig] || typeConfig
           </div>
 
           <!-- Content -->
-          <article class="mb-8">
-            <div class="prose prose-lg max-w-none">
+          <article class="mb-8 mt-8">
+            <div class="prose prose-neutral max-w-none px-0">
               {article.body && article.body.length > 0 ? (
                 <div class="article-content">
-                  <PortableTextWithAds value={article.body} lang={lang} showAds={true} />
+                  <PortableTextWithAds value={article.body} lang={lang} showAds={false} />
                 </div>
               ) : (
                 <div class="text-gray-800 leading-relaxed text-lg">
@@ -179,4 +196,140 @@ const config = typeConfig[article.type as keyof typeof typeConfig] || typeConfig
       </div>
     </div>
   </div>
+  
+  <!-- Cover Image Lightbox Modal -->
+  {article.coverImage?.asset?.url && (
+    <div id="cover-lightbox" class="lightbox-overlay hidden fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center p-4">
+      <div class="relative max-w-7xl max-h-full flex items-center justify-center">
+        <!-- Close button -->
+        <button id="cover-lightbox-close" class="absolute top-4 right-4 text-white text-2xl hover:text-gray-300 transition-colors z-10 bg-black bg-opacity-50 rounded-full w-10 h-10 flex items-center justify-center">
+          ×
+        </button>
+        
+        <!-- Lightbox main image -->
+        <img 
+          id="cover-lightbox-image"
+          src={`${article.coverImage.asset.url}?auto=format`}
+          alt={article.title}
+          class="max-w-full max-h-full object-contain cursor-pointer"
+        />
+      </div>
+    </div>
+  )}
 </Layout>
+
+<script>
+  // Cover Image Lightbox functionality
+  document.addEventListener('DOMContentLoaded', () => {
+    const coverImage = document.getElementById('cover-image')
+    const coverImageMobile = document.getElementById('cover-image-mobile')
+    const lightbox = document.getElementById('cover-lightbox')
+    const lightboxImage = document.getElementById('cover-lightbox-image')
+    const closeBtn = document.getElementById('cover-lightbox-close')
+    
+    const setupLightbox = (imgElement) => {
+      if (imgElement && lightbox) {
+        imgElement.addEventListener('click', () => {
+          const lightboxUrl = imgElement.dataset.lightboxUrl
+          if (lightboxUrl && lightboxImage) {
+            lightboxImage.src = lightboxUrl
+          }
+          lightbox.classList.remove('hidden')
+          document.body.style.overflow = 'hidden'
+        })
+      }
+    }
+    
+    setupLightbox(coverImage)
+    setupLightbox(coverImageMobile)
+      
+      // Close lightbox
+      const closeLightbox = () => {
+        lightbox.classList.add('hidden')
+        document.body.style.overflow = ''
+      }
+      
+      closeBtn?.addEventListener('click', closeLightbox)
+      lightboxImage?.addEventListener('click', closeLightbox)
+      
+      // Close on background click
+      lightbox?.addEventListener('click', (e) => {
+        if (e.target === lightbox) {
+          closeLightbox()
+        }
+      })
+      
+      // Close on Escape key
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && lightbox && !lightbox.classList.contains('hidden')) {
+          closeLightbox()
+        }
+      })
+  })
+</script>
+
+<style is:global>
+  /* Improved Content Typography for Mobile */
+  .prose {
+    @apply leading-relaxed;
+  }
+  
+  .prose p {
+    @apply my-4;
+  }
+  
+  .prose h2 {
+    @apply text-xl font-bold mt-10 mb-4 pb-2 border-b border-neutral-200;
+  }
+  
+  .prose h3 {
+    @apply text-lg font-semibold mt-8 mb-3;
+  }
+  
+  .prose ul {
+    @apply pl-5 my-4;
+  }
+  
+  .prose li {
+    @apply my-1;
+  }
+  
+  .prose img {
+    @apply rounded-lg;
+  }
+  
+  /* Lightbox styles */
+  .lightbox-overlay {
+    backdrop-filter: blur(4px);
+    animation: fadeIn 0.2s ease-out;
+  }
+  
+  .lightbox-overlay.hidden {
+    display: none !important;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  .lightbox-overlay img {
+    max-height: 90vh;
+    max-width: 90vw;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  }
+  
+  .lightbox-overlay button {
+    user-select: none;
+    outline: none;
+  }
+  
+  .lightbox-overlay button:focus {
+    outline: 2px solid white;
+    outline-offset: 2px;
+  }
+</style>
