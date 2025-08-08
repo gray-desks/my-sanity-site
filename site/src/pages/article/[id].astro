@@ -45,12 +45,14 @@ const config = typeConfig[article.type as keyof typeof typeConfig] || typeConfig
   title={article.title} 
   description={article.bodyText?.slice(0, 160) || `${article.title}の記事です。`}
 >
-  <div class="max-w-7xl mx-auto px-4 py-8">
-    <!-- Main content in center column, sidebar on desktop -->
-    <div class="lg:grid lg:grid-cols-4 lg:gap-8">
-      <!-- Main Content -->
-      <div class="lg:col-span-3 bg-white rounded-2xl shadow-lg overflow-hidden">
-        <div class="p-8">
+  <!-- Mobile wrapper with padding -->
+  <div class="px-4 md:px-0">
+    <div class="max-w-7xl mx-auto md:px-4 py-8">
+      <!-- Main content in center column, sidebar on desktop -->
+      <div class="lg:grid lg:grid-cols-4 lg:gap-8">
+        <!-- Main Content -->
+        <div class="lg:col-span-3 md:bg-white md:rounded-2xl md:shadow-lg">
+          <div class="md:p-8">
           <!-- Cover Image (最上部) -->
           {article.coverImage?.asset?.url && (
             <div class="mb-8 rounded-2xl overflow-hidden shadow-lg">
@@ -98,8 +100,8 @@ const config = typeConfig[article.type as keyof typeof typeConfig] || typeConfig
           </div>
 
           <!-- Content -->
-          <article class="mb-8">
-            <div class="prose prose-lg max-w-none">
+          <article class="mb-8 mt-8">
+            <div class="prose prose-neutral max-w-none px-0">
               {article.body && article.body.length > 0 ? (
                 <div class="article-content">
                   <PortableTextWithAds value={article.body} lang="ja" showAds={false} />
@@ -128,11 +130,11 @@ const config = typeConfig[article.type as keyof typeof typeConfig] || typeConfig
               ← 記事一覧に戻る
             </a>
           </div>
+          </div>
         </div>
-      </div>
-      
-      <!-- Sidebar - Desktop only -->
-      <div class="hidden lg:block lg:col-span-1 space-y-6">
+        
+        <!-- Sidebar - Desktop only -->
+        <div class="hidden lg:block lg:col-span-1 space-y-6">
         <!-- Sticky Sidebar Ad -->
         <div class="sticky top-8">
           <AdSlot
@@ -142,6 +144,7 @@ const config = typeConfig[article.type as keyof typeof typeConfig] || typeConfig
             label="広告"
             class="bg-white rounded-2xl shadow-lg p-4"
           />
+          </div>
         </div>
       </div>
     </div>
