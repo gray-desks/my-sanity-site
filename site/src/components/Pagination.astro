@@ -1,0 +1,165 @@
+---
+import { getUILabel } from '../lib/i18n'
+
+export interface Props {
+  currentPage: number
+  totalPages: number
+  basePath: string // "" for Japanese, "/en" for English, etc.
+  lang?: string
+}
+
+const { currentPage, totalPages, basePath, lang = 'ja' } = Astro.props
+
+// Generate page numbers to show (show max 5 numbers around current page)
+function getPageNumbers(current: number, total: number): (number | string)[] {
+  if (total <= 7) {
+    return Array.from({ length: total }, (_, i) => i + 1)
+  }
+  
+  const numbers: (number | string)[] = []
+  
+  // Always show first page
+  numbers.push(1)
+  
+  if (current <= 4) {
+    // Show pages 2-5 and ellipsis
+    for (let i = 2; i <= Math.min(5, total - 1); i++) {
+      numbers.push(i)
+    }
+    if (total > 6) numbers.push('...')
+    if (total > 1) numbers.push(total)
+  } else if (current >= total - 3) {
+    // Show ellipsis and last few pages
+    if (total > 6) numbers.push('...')
+    for (let i = Math.max(total - 4, 2); i <= total; i++) {
+      numbers.push(i)
+    }
+  } else {
+    // Show ellipsis, current page area, ellipsis
+    numbers.push('...')
+    for (let i = current - 1; i <= current + 1; i++) {
+      numbers.push(i)
+    }
+    numbers.push('...')
+    numbers.push(total)
+  }
+  
+  return numbers
+}
+
+const pageNumbers = getPageNumbers(currentPage, totalPages)
+
+function getPageUrl(pageNum: number): string {
+  if (pageNum === 1) {
+    return basePath === '' ? '/' : basePath + '/'
+  }
+  return basePath + '/page/' + pageNum
+}
+
+const prevUrl = currentPage > 1 ? getPageUrl(currentPage - 1) : null
+const nextUrl = currentPage < totalPages ? getPageUrl(currentPage + 1) : null
+
+// Labels
+const prevLabel = getUILabel(lang, 'prevPage') || (lang === 'en' ? 'Previous' : '前のページ')
+const nextLabel = getUILabel(lang, 'nextPage') || (lang === 'en' ? 'Next' : '次のページ')
+const pageLabel = (lang === 'en' ? 'Page' : 'ページ')
+---
+
+{totalPages > 1 && (
+  <nav class="flex justify-center items-center space-x-2 py-8" aria-label="pagination">
+    <!-- Previous Button -->
+    {prevUrl ? (
+      <a 
+        href={prevUrl} 
+        class="flex items-center px-4 py-2 text-sm font-medium text-secondary bg-white border border-border rounded-lg hover:bg-gray-50 hover:text-primary transition-colors duration-200"
+        rel="prev"
+        aria-label={`${prevLabel} (${pageLabel} ${currentPage - 1})`}
+      >
+        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+        </svg>
+        <span class="hidden sm:inline">{prevLabel}</span>
+        <span class="sm:hidden">‹</span>
+      </a>
+    ) : (
+      <span class="flex items-center px-4 py-2 text-sm font-medium text-gray-400 bg-gray-50 border border-gray-200 rounded-lg cursor-not-allowed">
+        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+        </svg>
+        <span class="hidden sm:inline">{prevLabel}</span>
+        <span class="sm:hidden">‹</span>
+      </span>
+    )}
+
+    <!-- Page Numbers -->
+    <div class="flex items-center space-x-1">
+      {pageNumbers.map((pageNum) => (
+        pageNum === '...' ? (
+          <span class="px-3 py-2 text-sm text-gray-500" aria-hidden="true">…</span>
+        ) : pageNum === currentPage ? (
+          <span 
+            class="px-4 py-2 text-sm font-semibold text-white bg-primary rounded-lg"
+            aria-current="page"
+            aria-label={`${pageLabel} ${pageNum} (現在のページ)`}
+          >
+            {pageNum}
+          </span>
+        ) : (
+          <a 
+            href={getPageUrl(pageNum as number)}
+            class="px-4 py-2 text-sm font-medium text-secondary bg-white border border-border rounded-lg hover:bg-gray-50 hover:text-primary transition-colors duration-200"
+            aria-label={`${pageLabel} ${pageNum}`}
+          >
+            {pageNum}
+          </a>
+        )
+      ))}
+    </div>
+
+    <!-- Next Button -->
+    {nextUrl ? (
+      <a 
+        href={nextUrl} 
+        class="flex items-center px-4 py-2 text-sm font-medium text-secondary bg-white border border-border rounded-lg hover:bg-gray-50 hover:text-primary transition-colors duration-200"
+        rel="next"
+        aria-label={`${nextLabel} (${pageLabel} ${currentPage + 1})`}
+      >
+        <span class="hidden sm:inline">{nextLabel}</span>
+        <span class="sm:hidden">›</span>
+        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+        </svg>
+      </a>
+    ) : (
+      <span class="flex items-center px-4 py-2 text-sm font-medium text-gray-400 bg-gray-50 border border-gray-200 rounded-lg cursor-not-allowed">
+        <span class="hidden sm:inline">{nextLabel}</span>
+        <span class="sm:hidden">›</span>
+        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+        </svg>
+      </span>
+    )}
+  </nav>
+
+  <!-- Screen reader summary -->
+  <div class="sr-only" aria-live="polite">
+    {lang === 'en' 
+      ? `Page ${currentPage} of ${totalPages}` 
+      : `${totalPages}ページ中 ${currentPage}ページ目`
+    }
+  </div>
+)}
+
+<style>
+  /* Additional hover states for better UX */
+  nav a:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Focus states for accessibility */
+  nav a:focus {
+    outline: 2px solid theme('colors.primary');
+    outline-offset: 2px;
+  }
+</style>

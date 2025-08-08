@@ -116,13 +116,19 @@ const prefectures = [
       this.prefectureFilter = document.getElementById('prefecture-filter') as HTMLSelectElement
       this.searchButton = document.getElementById('search-button') as HTMLButtonElement
       this.resetButton = document.getElementById('reset-button') as HTMLButtonElement
+      
+      // ページング対応: 現在のページの記事のみを対象にする
       this.articles = Array.from(document.querySelectorAll('[data-article]'))
+      this.totalArticles = this.articles.length
       
       this.bindEvents()
       // セッションストレージから状態を復元
       this.loadState()
       // 復元した状態でフィルタリングを実行
       this.filterArticles()
+      
+      // ページネーション情報の表示更新
+      this.updatePageInfo()
     }
 
     bindEvents() {
@@ -233,6 +239,18 @@ const prefectures = [
       }
     }
 
+    updatePageInfo() {
+      // ページネーション対応: 現在ページの記事数情報を表示
+      const pageInfoEl = document.getElementById('page-info')
+      if (pageInfoEl) {
+        const currentLang = document.documentElement.lang || 'ja'
+        const infoText = currentLang === 'en' 
+          ? `Showing ${this.totalArticles} articles on this page`
+          : `このページに${this.totalArticles}件の記事があります`
+        pageInfoEl.textContent = infoText
+      }
+    }
+
     updateNoResultsMessage(visibleCount: number) {
       let noResultsEl = document.getElementById('no-results-message')
       
@@ -242,49 +260,49 @@ const prefectures = [
           noResultsEl.id = 'no-results-message'
           noResultsEl.className = 'text-center py-16 bg-white rounded-2xl shadow-lg border border-gray-100'
           const noResultsTitle = {
-            'ja': '検索結果が見つかりませんでした',
-            'en': 'No search results found',
-            'zh-cn': '未找到搜索结果',
-            'zh-tw': '未找到搜尋結果',
-            'ko': '검색 결과를 찾을 수 없습니다',
-            'th': 'ไม่พบผลการค้นหา',
-            'vi': 'Không tìm thấy kết quả tìm kiếm',
-            'id': 'Tidak ditemukan hasil pencarian',
-            'ms': 'Tiada hasil carian ditemui',
-            'tl': 'Walang nahanap na resulta',
-            'fr': 'Aucun résultat trouvé',
-            'de': 'Keine Suchergebnisse gefunden',
-            'es': 'No se encontraron resultados',
-            'it': 'Nessun risultato trovato',
-            'pt': 'Nenhum resultado encontrado',
-            'ru': 'Результаты не найдены',
-            'ar': 'لم يتم العثور على نتائج',
-            'hi': 'कोई खोज परिणाम नहीं मिला',
-            'tr': 'Arama sonucu bulunamadı',
-            'pt-br': 'Nenhum resultado encontrado'
+            'ja': 'このページに該当する記事が見つかりませんでした',
+            'en': 'No matching articles found on this page',
+            'zh-cn': '在此页面未找到匹配的文章',
+            'zh-tw': '在此頁面未找到符合的文章',
+            'ko': '이 페이지에서 일치하는 기사를 찾을 수 없습니다',
+            'th': 'ไม่พบบทความที่ตรงกันในหน้านี้',
+            'vi': 'Không tìm thấy bài viết phù hợp trên trang này',
+            'id': 'Tidak ditemukan artikel yang cocok di halaman ini',
+            'ms': 'Tiada artikel yang sepadan ditemui di halaman ini',
+            'tl': 'Walang nahanap na tugmang artikulo sa page na ito',
+            'fr': 'Aucun article correspondant trouvé sur cette page',
+            'de': 'Keine passenden Artikel auf dieser Seite gefunden',
+            'es': 'No se encontraron artículos coincidentes en esta página',
+            'it': 'Nessun articolo corrispondente trovato in questa pagina',
+            'pt': 'Nenhum artigo correspondente encontrado nesta página',
+            'ru': 'На этой странице не найдено подходящих статей',
+            'ar': 'لم يتم العثور على مقالات مطابقة في هذه الصفحة',
+            'hi': 'इस पृष्ठ पर कोई मेल खाता लेख नहीं मिला',
+            'tr': 'Bu sayfada eşleşen makale bulunamadı',
+            'pt-br': 'Nenhum artigo correspondente encontrado nesta página'
           }
           
           const noResultsSubtitle = {
-            'ja': '他のキーワードで検索してみてください',
-            'en': 'Try searching with different keywords',
-            'zh-cn': '请尝试使用其他关键词搜索',
-            'zh-tw': '請嘗試使用其他關鍵詞搜尋',
-            'ko': '다른 키워드로 검색해보세요',
-            'th': 'ลองค้นหาด้วยคำอื่น',
-            'vi': 'Thử tìm kiếm với từ khóa khác',
-            'id': 'Coba cari dengan kata kunci lain',
-            'ms': 'Cuba cari dengan kata kunci lain',
-            'tl': 'Subukan maghanap gamit ang ibang keyword',
-            'fr': 'Essayez avec d\'autres mots-clés',
-            'de': 'Versuchen Sie es mit anderen Suchbegriffen',
-            'es': 'Intenta buscar con otras palabras clave',
-            'it': 'Prova a cercare con altre parole chiave',
-            'pt': 'Tente procurar com outras palavras-chave',
-            'ru': 'Попробуйте поиск с другими ключевыми словами',
-            'ar': 'جرب البحث بكلمات مفتاحية أخرى',
-            'hi': 'अन्य कीवर्ड के साथ खोजने का प्रयास करें',
-            'tr': 'Başka anahtar kelimelerle arama yapmayı deneyin',
-            'pt-br': 'Tente buscar com outras palavras-chave'
+            'ja': '他のキーワードを試すか、別のページをご確認ください',
+            'en': 'Try different keywords or check other pages',
+            'zh-cn': '请尝试其他关键词或查看其他页面',
+            'zh-tw': '請嘗試其他關鍵詞或查看其他頁面',
+            'ko': '다른 키워드를 시도하거나 다른 페이지를 확인하세요',
+            'th': 'ลองคำอื่นหรือดูหน้าอื่น',
+            'vi': 'Thử từ khóa khác hoặc kiểm tra trang khác',
+            'id': 'Coba kata kunci lain atau periksa halaman lain',
+            'ms': 'Cuba kata kunci lain atau semak halaman lain',
+            'tl': 'Subukan ang ibang keyword o tingnan ang ibang page',
+            'fr': 'Essayez d\'autres mots-clés ou consultez d\'autres pages',
+            'de': 'Versuchen Sie andere Suchbegriffe oder andere Seiten',
+            'es': 'Intenta con otras palabras clave o revisa otras páginas',
+            'it': 'Prova altre parole chiave o controlla altre pagine',
+            'pt': 'Tente outras palavras-chave ou verifique outras páginas',
+            'ru': 'Попробуйте другие ключевые слова или проверьте другие страницы',
+            'ar': 'جرب كلمات مفتاحية أخرى أو تحقق من صفحات أخرى',
+            'hi': 'अन्य कीवर्ड आज़माएं या अन्य पृष्ठ देखें',
+            'tr': 'Başka anahtar kelimeler deneyin veya diğer sayfaları kontrol edin',
+            'pt-br': 'Tente outras palavras-chave ou verifique outras páginas'
           }
           
           const currentLang = document.documentElement.lang || 'ja'
@@ -295,7 +313,7 @@ const prefectures = [
             <p class="text-gray-400">${noResultsSubtitle[currentLang] || noResultsSubtitle['ja']}</p>
           `
           
-          const articlesContainer = document.querySelector('#articles .columns-1, #articles .columns-2, #articles .columns-3')
+          const articlesContainer = document.querySelector('#articles .grid')
           articlesContainer?.parentNode?.appendChild(noResultsEl)
         }
         noResultsEl.style.display = 'block'

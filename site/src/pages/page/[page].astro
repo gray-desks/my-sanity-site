@@ -1,0 +1,84 @@
+---
+import ArticleIndex from '../_templates/ArticleIndex.astro'
+import { getArticlesPaged, getArticleCount } from '../../lib/sanity'
+import { PAGE_SIZE, calculateTotalPages, calculateOffset, isValidPageNumber } from '../../config/site'
+
+export const prerender = true
+
+export async function getStaticPaths() {
+  const lang = 'ja'
+  
+  try {
+    const totalCount = await getArticleCount(lang)
+    const totalPages = calculateTotalPages(totalCount, PAGE_SIZE)
+    
+    // Generate paths for pages 2 and beyond (page 1 is handled by index.astro)
+    const paths = []
+    for (let page = 2; page <= totalPages; page++) {
+      paths.push({
+        params: { page: page.toString() }
+      })
+    }
+    
+    return paths
+  } catch (error) {
+    console.error('Failed to generate static paths:', error)
+    return []
+  }
+}
+
+const { page } = Astro.params
+const currentPage = parseInt(page || '1', 10)
+const lang = 'ja'
+const basePath = ''
+
+// Validate page number and fetch data
+let articles = []
+let totalPages = 1
+let totalCount = 0
+
+try {
+  totalCount = await getArticleCount(lang)
+  totalPages = calculateTotalPages(totalCount, PAGE_SIZE)
+  
+  // Return 404 if page number is invalid
+  if (!isValidPageNumber(currentPage, totalPages)) {
+    return Astro.redirect('/404')
+  }
+  
+  const offset = calculateOffset(currentPage, PAGE_SIZE)
+  articles = await getArticlesPaged(lang, offset, PAGE_SIZE)
+} catch (error) {
+  console.error('Failed to fetch articles:', error)
+  return Astro.redirect('/404')
+}
+
+// SEO and meta information
+const pageTitle = `ページ ${currentPage} | 旅ログ - 日本全国の旅記録`
+const pageDescription = `日本全国の旅ログを多言語で発信するブログ。各地の魅力を写真と文章でお届けします。(${currentPage}/${totalPages}ページ目)`
+const canonicalUrl = `${Astro.site?.toString() || ''}page/${currentPage}`
+
+// Pagination URLs
+const prevUrl = currentPage > 2 
+  ? `/page/${currentPage - 1}` 
+  : currentPage === 2 
+    ? '/' 
+    : undefined
+
+const nextUrl = currentPage < totalPages 
+  ? `/page/${currentPage + 1}` 
+  : undefined
+---
+
+<ArticleIndex 
+  articles={articles}
+  currentPage={currentPage}
+  totalPages={totalPages}
+  lang={lang}
+  basePath={basePath}
+  pageTitle={pageTitle}
+  pageDescription={pageDescription}
+  canonicalUrl={canonicalUrl}
+  prevUrl={prevUrl}
+  nextUrl={nextUrl}
+/>

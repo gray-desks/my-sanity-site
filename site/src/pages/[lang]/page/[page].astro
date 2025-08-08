@@ -1,0 +1,95 @@
+---
+import ArticleIndex from '../../_templates/ArticleIndex.astro'
+import { getArticlesPaged, getArticleCount } from '../../../lib/sanity'
+import { ENABLED_LANGUAGES, getUILabel } from '../../../lib/i18n'
+import { PAGE_SIZE, calculateTotalPages, calculateOffset, isValidPageNumber } from '../../../config/site'
+
+export const prerender = true
+
+export async function getStaticPaths() {
+  const paths = []
+  
+  // Generate paths for all enabled languages except Japanese
+  for (const language of ENABLED_LANGUAGES.filter(lang => lang.id !== 'ja')) {
+    try {
+      const totalCount = await getArticleCount(language.id)
+      const totalPages = calculateTotalPages(totalCount, PAGE_SIZE)
+      
+      // Generate paths for pages 2 and beyond (page 1 is handled by [lang]/index.astro)
+      for (let page = 2; page <= totalPages; page++) {
+        paths.push({
+          params: { 
+            lang: language.id, 
+            page: page.toString() 
+          }
+        })
+      }
+    } catch (error) {
+      console.error(`Failed to generate paths for language ${language.id}:`, error)
+    }
+  }
+  
+  return paths
+}
+
+const { lang, page } = Astro.params
+const currentPage = parseInt(page || '1', 10)
+const basePath = `/${lang}`
+
+// Validate page number and fetch data
+let articles = []
+let totalPages = 1
+let totalCount = 0
+
+try {
+  totalCount = await getArticleCount(lang)
+  totalPages = calculateTotalPages(totalCount, PAGE_SIZE)
+  
+  // Return 404 if page number is invalid
+  if (!isValidPageNumber(currentPage, totalPages)) {
+    return Astro.redirect('/404')
+  }
+  
+  const offset = calculateOffset(currentPage, PAGE_SIZE)
+  articles = await getArticlesPaged(lang, offset, PAGE_SIZE)
+} catch (error) {
+  console.error('Failed to fetch articles:', error)
+  return Astro.redirect('/404')
+}
+
+// SEO and meta information
+const pageLabel = lang === 'en' ? 'Page' : 'ページ'
+const pageTitle = lang === 'en' 
+  ? `Page ${currentPage} | ${getUILabel(lang, 'siteTitle')}` 
+  : `${pageLabel} ${currentPage} | ${getUILabel(lang, 'siteTitle')}`
+
+const pageDescription = lang === 'en'
+  ? `${getUILabel(lang, 'siteDescription')} (Page ${currentPage} of ${totalPages})`
+  : `${getUILabel(lang, 'siteDescription')} (${currentPage}/${totalPages}ページ目)`
+
+const canonicalUrl = `${Astro.site?.toString() || ''}${lang}/page/${currentPage}`
+
+// Pagination URLs
+const prevUrl = currentPage > 2 
+  ? `/${lang}/page/${currentPage - 1}` 
+  : currentPage === 2 
+    ? `/${lang}/` 
+    : undefined
+
+const nextUrl = currentPage < totalPages 
+  ? `/${lang}/page/${currentPage + 1}` 
+  : undefined
+---
+
+<ArticleIndex 
+  articles={articles}
+  currentPage={currentPage}
+  totalPages={totalPages}
+  lang={lang}
+  basePath={basePath}
+  pageTitle={pageTitle}
+  pageDescription={pageDescription}
+  canonicalUrl={canonicalUrl}
+  prevUrl={prevUrl}
+  nextUrl={nextUrl}
+/>

@@ -96,6 +96,58 @@ export async function getArticles(lang = DEFAULT_LANGUAGE): Promise<Article[]> {
   return await client.fetch(query, { lang })
 }
 
+// ======= PAGINATION FUNCTIONS =======
+
+// 記事総数取得（ページネーション用）
+export async function getArticleCount(lang = DEFAULT_LANGUAGE): Promise<number> {
+  const query = `
+    count(*[_type == "article" 
+      && (lang == $lang || (!defined(lang) && $lang == "ja")) 
+      && defined(slug.current)
+    ])
+  `
+  return await client.fetch(query, { lang })
+}
+
+// ページング対応記事一覧取得
+export async function getArticlesPaged(
+  lang = DEFAULT_LANGUAGE, 
+  offset: number = 0, 
+  limit: number = 12
+): Promise<Article[]> {
+  const query = `
+    *[_type == "article" 
+      && (lang == $lang || (!defined(lang) && $lang == "ja")) 
+      && defined(slug.current)
+    ] | order(publishedAt desc) [$offset...$end] {
+      _id,
+      title,
+      slug,
+      type,
+      placeName,
+      prefecture,
+      publishedAt,
+      visitDate,
+      tags,
+      coverImage {
+        asset->{
+          _id,
+          url,
+          metadata {
+            dimensions
+          }
+        }
+      },
+      "bodyText": pt::text(content),
+      lang,
+      __i18n_lang,
+      __i18n_refs
+    }
+  `
+  const end = offset + limit - 1
+  return await client.fetch(query, { lang, offset, end })
+}
+
 // 全言語の記事を一括取得（将来の多言語展開用）
 export async function getAllLanguageArticles(): Promise<MultiLanguageArticles> {
   const results: MultiLanguageArticles = {}

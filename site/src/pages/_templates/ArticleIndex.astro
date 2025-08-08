@@ -1,0 +1,153 @@
+---
+import Layout from '../../layouts/Layout.astro'
+import Hero from '../../components/Hero.astro'
+import AdSlot from '../../components/AdSlot.astro'
+import ArticleCard from '../../components/ArticleCard.astro'
+import SearchFilter from '../../components/SearchFilter.astro'
+import Pagination from '../../components/Pagination.astro'
+import { getUILabel } from '../../lib/i18n'
+import { ADS_SLOTS } from '../../config/ads'
+import type { Article } from '../../lib/sanity'
+
+export interface Props {
+  articles: Article[]
+  currentPage: number
+  totalPages: number
+  lang: string
+  basePath: string
+  pageTitle: string
+  pageDescription: string
+  canonicalUrl: string
+  prevUrl?: string
+  nextUrl?: string
+}
+
+const { 
+  articles, 
+  currentPage, 
+  totalPages, 
+  lang, 
+  basePath, 
+  pageTitle, 
+  pageDescription, 
+  canonicalUrl,
+  prevUrl,
+  nextUrl
+} = Astro.props
+
+// Generate structured data for pagination
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": pageTitle,
+  "description": pageDescription,
+  "url": canonicalUrl
+}
+---
+
+<Layout 
+  title={pageTitle}
+  description={pageDescription}
+  lang={lang}
+  canonicalUrl={canonicalUrl}
+  prevUrl={prevUrl}
+  nextUrl={nextUrl}
+>
+  <!-- Structured Data -->
+  <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+
+  <!-- Hero Section (only on first page) -->
+  {currentPage === 1 && <Hero lang={lang} />}
+
+  <!-- Top Ad - Hero直下 (only on first page) -->
+  {currentPage === 1 && (
+    <div class="max-w-7xl mx-auto px-4 pt-8">
+      <AdSlot
+        slotId={ADS_SLOTS.HOME_HERO}
+        format="horizontal" 
+        reserveHeight={120}
+        label={lang === 'en' ? 'Advertisement' : lang === 'zh-cn' ? '广告' : lang === 'zh-tw' ? '廣告' : lang === 'ko' ? '광고' : '광고'}
+        class="mb-8"
+      />
+    </div>
+  )}
+
+  <div class="max-w-7xl mx-auto px-4 py-8 space-y-16">
+    <!-- Page Title for pagination pages -->
+    {currentPage > 1 && (
+      <div class="text-center">
+        <h1 class="text-3xl md:text-4xl font-bold text-ink mb-4">
+          {getUILabel(lang, 'siteTitle')}
+        </h1>
+        <p class="text-lg text-secondary mb-2">
+          {lang === 'en' 
+            ? `Page ${currentPage} of ${totalPages}` 
+            : `${totalPages}ページ中 ${currentPage}ページ目`
+          }
+        </p>
+        <p class="text-secondary">
+          {getUILabel(lang, 'siteDescription')}
+        </p>
+      </div>
+    )}
+
+    <!-- Search and Filter Section (only show on first page or limit to current page results) -->
+    <SearchFilter lang={lang} />
+    
+    <!-- Articles Section -->
+    <section id="articles" class="relative">
+      {articles.length === 0 ? (
+        <div class="text-center py-16 bg-white rounded-2xl shadow-lg border border-gray-100">
+          <div class="text-6xl mb-4">📝</div>
+          <p class="text-gray-500 text-xl mb-2">
+            {currentPage > 1 
+              ? (lang === 'en' ? 'No articles on this page' : 'このページに記事はありません')
+              : getUILabel(lang, 'noArticlesTitle')
+            }
+          </p>
+          <p class="text-gray-400">
+            {currentPage > 1 
+              ? (lang === 'en' ? 'Please try a different page' : '他のページをご確認ください')
+              : getUILabel(lang, 'noArticlesSubtitle')
+            }
+          </p>
+        </div>
+      ) : (
+        <>
+          <!-- Article Grid -->
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {articles.map((article, index) => (
+              <ArticleCard article={article} lang={lang} />
+            ))}
+          </div>
+
+          <!-- Pagination -->
+          <Pagination 
+            currentPage={currentPage}
+            totalPages={totalPages}
+            basePath={basePath}
+            lang={lang}
+          />
+        </>
+      )}
+    </section>
+
+    <!-- Bottom Ad - フッター直前 -->
+    <AdSlot
+      slotId={ADS_SLOTS.HOME_FOOTER}
+      format="horizontal"
+      reserveHeight={120}
+      label={lang === 'en' ? 'Advertisement' : lang === 'zh-cn' ? '广告' : lang === 'zh-tw' ? '廣告' : lang === 'ko' ? '광고' : '広告'}
+      class="mt-16"
+    />
+  </div>
+</Layout>
+
+<style>
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style>

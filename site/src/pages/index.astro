@@ -1,95 +1,45 @@
 ---
-import Layout from '../layouts/Layout.astro'
-import Hero from '../components/Hero.astro'
-import AdSlot from '../components/AdSlot.astro'
-import ArticleCard from '../components/ArticleCard.astro'
-import SearchFilter from '../components/SearchFilter.astro'
-import { getArticles, type Article } from '../lib/sanity'
-import { ADS_SLOTS } from '../config/ads'
+import ArticleIndex from './_templates/ArticleIndex.astro'
+import { getArticlesPaged, getArticleCount } from '../lib/sanity'
+import { PAGE_SIZE, calculateTotalPages } from '../config/site'
 
-let articles: Article[] = []
+const lang = 'ja'
+const currentPage = 1
+const basePath = ''
+
+// Fetch articles and count for first page
+let articles = []
+let totalPages = 1
+
 try {
-  articles = await getArticles()
+  const [articlesData, totalCount] = await Promise.all([
+    getArticlesPaged(lang, 0, PAGE_SIZE),
+    getArticleCount(lang)
+  ])
+  
+  articles = articlesData
+  totalPages = calculateTotalPages(totalCount, PAGE_SIZE)
 } catch (error) {
   console.error('Failed to fetch articles:', error)
 }
+
+// SEO and meta information
+const pageTitle = '旅ログ - 日本全国の旅記録'
+const pageDescription = '日本全国の旅ログを多言語で発信するブログ。各地の魅力を写真と文章でお届けします。'
+const canonicalUrl = Astro.site?.toString() || ''
+
+// Pagination URLs
+const nextUrl = totalPages > 1 ? '/page/2' : undefined
 ---
 
-<Layout 
-  title="旅ログ - 日本全国の旅記録" 
-  description="日本全国の旅ログを多言語で発信するブログ。各地の魅力を写真と文章でお届けします。"
-  lang="ja"
-  frontmatter={{
-    title: "旅ログ - 日本全国の旅記録",
-    description: "日本全国の旅ログを多言語で発信するブログ。各地の魅力を写真と文章でお届けします。",
-    lang: "ja"
-  }}
->
-  <!-- Hero Section -->
-  <Hero lang="ja" />
-
-  <!-- Top Ad - Hero直下 -->
-  <div class="max-w-7xl mx-auto px-4 pt-8">
-    <AdSlot
-      slotId={ADS_SLOTS.HOME_HERO}
-      format="horizontal" 
-      reserveHeight={120}
-      label="広告"
-      class="mb-8"
-    />
-  </div>
-
-  <div class="max-w-7xl mx-auto px-4 py-8 space-y-16">
-    <!-- Search and Filter Section -->
-    <SearchFilter lang="ja" />
-    
-    <!-- Articles Section with In-Feed Ads -->
-    <section id="articles" class="relative">
-      {articles.length === 0 ? (
-        <div class="text-center py-16 bg-white rounded-2xl shadow-lg border border-gray-100">
-          <div class="text-6xl mb-4">📝</div>
-          <p class="text-gray-500 text-xl mb-2">まだ記事がありません</p>
-          <p class="text-gray-400">Sanity Studio で最初の記事を作成してください</p>
-        </div>
-      ) : (
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {articles.map((article, index) => (
-            <>
-              <ArticleCard article={article} lang="ja" />
-              {/* In-feed ads every 4 articles */}
-              {(index + 1) % 4 === 0 && index < articles.length - 1 && (
-                <div class="col-span-1 md:col-span-2 lg:col-span-3">
-                  <AdSlot
-                    slotId={ADS_SLOTS.HOME_INFEED}
-                    format="in-feed"
-                    reserveHeight={200}
-                    label="広告"
-                    class="bg-white rounded-2xl shadow-lg border border-gray-100 p-6"
-                  />
-                </div>
-              )}
-            </>
-          ))}
-        </div>
-      )}
-    </section>
-
-    <!-- Bottom Ad - フッター直前 -->
-    <AdSlot
-      slotId={ADS_SLOTS.HOME_FOOTER}
-      format="horizontal"
-      reserveHeight={120}
-      label="広告"
-      class="mt-16"
-    />
-  </div>
-</Layout>
-
-<style>
-  .line-clamp-3 {
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-</style>
+<ArticleIndex 
+  articles={articles}
+  currentPage={currentPage}
+  totalPages={totalPages}
+  lang={lang}
+  basePath={basePath}
+  pageTitle={pageTitle}
+  pageDescription={pageDescription}
+  canonicalUrl={canonicalUrl}
+  nextUrl={nextUrl}
+/>
