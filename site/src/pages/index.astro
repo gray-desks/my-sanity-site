@@ -1,7 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro'
 import Hero from '../components/Hero.astro'
-import AdSense from '../components/AdSense.astro'
+import AdSlot from '../components/AdSlot.astro'
 import ArticleCard from '../components/ArticleCard.astro'
 import SearchFilter from '../components/SearchFilter.astro'
 import { getArticles, type Article } from '../lib/sanity'
@@ -27,13 +27,23 @@ try {
   <!-- Hero Section -->
   <Hero lang="ja" />
 
-  <div class="max-w-7xl mx-auto px-4 py-16 space-y-16">
+  <!-- Top Ad - Hero直下 -->
+  <div class="max-w-7xl mx-auto px-4 pt-8">
+    <AdSlot
+      slotId="1234567890"
+      format="horizontal" 
+      reserveHeight={120}
+      label="広告"
+      class="mb-8"
+    />
+  </div>
+
+  <div class="max-w-7xl mx-auto px-4 py-8 space-y-16">
     <!-- Search and Filter Section -->
     <SearchFilter lang="ja" />
     
-    <!-- Articles Section -->
+    <!-- Articles Section with In-Feed Ads -->
     <section id="articles" class="relative">
-      
       {articles.length === 0 ? (
         <div class="text-center py-16 bg-white rounded-2xl shadow-lg border border-gray-100">
           <div class="text-6xl mb-4">📝</div>
@@ -42,19 +52,34 @@ try {
         </div>
       ) : (
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {articles.map((article) => (
-            <ArticleCard article={article} lang="ja" />
+          {articles.map((article, index) => (
+            <>
+              <ArticleCard article={article} lang="ja" />
+              {/* In-feed ads every 4 articles */}
+              {(index + 1) % 4 === 0 && index < articles.length - 1 && (
+                <div class="col-span-1 md:col-span-2 lg:col-span-3">
+                  <AdSlot
+                    slotId="2345678901"
+                    format="in-feed"
+                    reserveHeight={200}
+                    label="広告"
+                    class="bg-white rounded-2xl shadow-lg border border-gray-100 p-6"
+                  />
+                </div>
+              )}
+            </>
           ))}
         </div>
       )}
     </section>
 
-    <!-- Google AdSense 広告 -->
-    <AdSense 
-      slot="homepage-bottom"
-      format="banner"
-      lang="ja"
-      className="mt-16"
+    <!-- Bottom Ad - フッター直前 -->
+    <AdSlot
+      slotId="3456789012"
+      format="horizontal"
+      reserveHeight={120}
+      label="広告"
+      class="mt-16"
     />
   </div>
 </Layout>

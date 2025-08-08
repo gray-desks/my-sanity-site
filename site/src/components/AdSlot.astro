@@ -1,0 +1,124 @@
+---
+export interface Props {
+  slotId: string
+  format?: "horizontal" | "in-article" | "in-feed" | "rectangle"
+  reserveHeight?: number
+  label?: string
+  class?: string
+  hideOn?: "mobile" | "desktop" | "none"
+}
+
+const { 
+  slotId,
+  format = "horizontal",
+  reserveHeight = 120,
+  label = "広告",
+  class: className = "",
+  hideOn = "none"
+} = Astro.props
+
+// Only show ads if environment variable is set
+const adsenseClientId = import.meta.env.PUBLIC_ADSENSE_CLIENT_ID
+const isDev = import.meta.env.DEV
+const showAds = adsenseClientId && adsenseClientId !== ""
+
+// Responsive classes based on hideOn prop
+const responsiveClasses = {
+  mobile: "hidden md:block",
+  desktop: "block md:hidden", 
+  none: "block"
+}
+
+// Format-specific configurations
+const formatConfig = {
+  horizontal: {
+    adFormat: "auto",
+    containerClass: "w-full",
+    height: reserveHeight || 120
+  },
+  "in-article": {
+    adFormat: "fluid",
+    containerClass: "w-full my-8",
+    height: reserveHeight || 250
+  },
+  "in-feed": {
+    adFormat: "fluid",
+    containerClass: "w-full",
+    height: reserveHeight || 200
+  },
+  rectangle: {
+    adFormat: "auto", 
+    containerClass: "w-full max-w-md mx-auto",
+    height: reserveHeight || 250
+  }
+}
+
+const config = formatConfig[format]
+---
+
+{showAds ? (
+  <div class={`ad-container ${responsiveClasses[hideOn]} ${className}`}>
+    <!-- Ad label -->
+    <div class="text-xs text-neutral-400 text-center mb-2">{label}</div>
+    
+    <!-- Ad slot with CLS prevention -->
+    <div 
+      class={`ad-slot ${config.containerClass}`} 
+      style={`min-height: ${config.height}px;`}
+    >
+      {isDev ? (
+        <!-- Development placeholder -->
+        <div 
+          class="bg-gray-100 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center text-center"
+          style={`height: ${config.height}px;`}
+        >
+          <div class="text-gray-500">
+            <div class="text-2xl mb-2">📢</div>
+            <p class="font-medium text-sm">Google AdSense</p>
+            <p class="text-xs mt-1">Slot: {slotId}</p>
+            <p class="text-xs">Format: {format}</p>
+          </div>
+        </div>
+      ) : (
+        <!-- Production ad -->
+        <ins 
+          class="adsbygoogle block w-full"
+          style="display:block"
+          data-ad-client={adsenseClientId}
+          data-ad-slot={slotId}
+          data-ad-format={config.adFormat}
+          data-full-width-responsive="true"
+        ></ins>
+      )}
+    </div>
+  </div>
+) : null}
+
+{/* Only load push script in production when ads are enabled */}
+{showAds && !isDev && (
+  <script is:inline>
+    try {
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    } catch(e) {
+      // Silently handle ad blocker or script loading errors
+      console.debug('AdSense push failed:', e.message);
+    }
+  </script>
+)}
+
+<style>
+  .ad-container {
+    /* Ensure ads don't cause layout shifts */
+    contain: layout style;
+  }
+  
+  .ad-slot {
+    /* Smooth transitions for ad loading */
+    transition: all 0.3s ease;
+  }
+  
+  /* Ensure ads are accessible */
+  .adsbygoogle {
+    outline: none;
+  }
+</style>

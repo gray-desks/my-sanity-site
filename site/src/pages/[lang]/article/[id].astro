@@ -1,9 +1,10 @@
 ---
 import Layout from '../../../layouts/Layout.astro'
 import Gallery from '../../../components/Gallery.astro'
+import AdSlot from '../../../components/AdSlot.astro'
+import PortableTextWithAds from '../../../components/PortableTextWithAds.astro'
 import { getArticleById, client, type Article } from '../../../lib/sanity'
 import { ENABLED_LANGUAGES, getLocalizedPath, getUILabel } from '../../../lib/i18n'
-import { PortableText } from 'astro-portabletext'
 
 export async function getStaticPaths() {
   const paths = []
@@ -74,85 +75,123 @@ const config = typeConfig[article.type as keyof typeof typeConfig] || typeConfig
     lang: lang
   }}
 >
-  <div class="max-w-4xl mx-auto px-4 py-8 bg-white">
-    <!-- Cover Image (最上部) -->
-    {article.coverImage?.asset?.url && (
-      <div class="mb-8 rounded-2xl overflow-hidden shadow-lg">
-        <img 
-          src={`${article.coverImage.asset.url}?w=1200&h=600&fit=crop&auto=format`}
-          alt={article.title}
-          class="w-full h-96 object-cover"
-        />
-      </div>
-    )}
-
-    <!-- Title -->
-    <header class="mb-6">
-      <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-        {article.title}
-      </h1>
-    </header>
-
-    <!-- Tags and Date -->
-    <div class="mb-8 pb-6 border-b border-gray-200">
-      <div class="flex flex-wrap items-center gap-4">
-        <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold bg-gray-100 text-gray-700">
-          <span class="mr-2">{config.emoji}</span>
-          {config.label}
-        </span>
-        {article.placeName && (
-          <div class="flex items-center text-gray-600">
-            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-            </svg>
-            <span>{article.placeName}</span>
-          </div>
-        )}
-        <time datetime={article.publishedAt} class="flex items-center text-gray-600">
-          <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-          </svg>
-          <span class="ml-1">{formatDate(article.publishedAt)}</span>
-        </time>
-      </div>
-    </div>
-
-    <!-- Content -->
-    <article class="mb-8">
-      <div class="bg-white p-8">
-        <div class="prose prose-lg max-w-none">
-          {article.body && article.body.length > 0 ? (
-            <div class="article-content">
-              <PortableText value={article.body} />
-            </div>
-          ) : (
-            <div class="text-gray-800 leading-relaxed text-lg">
-              {article.bodyText || 
-               (lang === 'en' ? 'No content available.' :
-                lang === 'zh-cn' ? '暂无内容。' :
-                lang === 'zh-tw' ? '暫無內容。' :
-                lang === 'ko' ? '콘텐츠가 없습니다.' :
-                '記事の内容がありません。')}
+  <div class="max-w-7xl mx-auto px-4 py-8">
+    <!-- Main content in center column, sidebar on desktop -->
+    <div class="lg:grid lg:grid-cols-4 lg:gap-8">
+      <!-- Main Content -->
+      <div class="lg:col-span-3 bg-white rounded-2xl shadow-lg overflow-hidden">
+        <div class="p-8">
+          <!-- Cover Image (最上部) -->
+          {article.coverImage?.asset?.url && (
+            <div class="mb-8 rounded-2xl overflow-hidden shadow-lg">
+              <img 
+                src={`${article.coverImage.asset.url}?w=1200&h=600&fit=crop&auto=format`}
+                alt={article.title}
+                class="w-full h-96 object-cover"
+              />
             </div>
           )}
+
+          <!-- Title -->
+          <header class="mb-6">
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+              {article.title}
+            </h1>
+          </header>
+
+          <!-- Top Article Ad - タイトル下 -->
+          <AdSlot
+            slotId="4567890123"
+            format="horizontal"
+            reserveHeight={120}
+            label={lang === 'en' ? 'Advertisement' : lang === 'zh-cn' ? '广告' : lang === 'zh-tw' ? '廣告' : lang === 'ko' ? '광고' : '広告'}
+            class="mb-8"
+          />
+
+          <!-- Tags and Date -->
+          <div class="mb-8 pb-6 border-b border-gray-200">
+            <div class="flex flex-wrap items-center gap-4">
+              <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold bg-gray-100 text-gray-700">
+                <span class="mr-2">{config.emoji}</span>
+                {config.label}
+              </span>
+              {article.placeName && (
+                <div class="flex items-center text-gray-600">
+                  <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                  </svg>
+                  <span>{article.placeName}</span>
+                </div>
+              )}
+              <time datetime={article.publishedAt} class="flex items-center text-gray-600">
+                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 002 2z"></path>
+                </svg>
+                <span class="ml-1">{formatDate(article.publishedAt)}</span>
+              </time>
+            </div>
+          </div>
+
+          <!-- Content -->
+          <article class="mb-8">
+            <div class="prose prose-lg max-w-none">
+              {article.body && article.body.length > 0 ? (
+                <div class="article-content">
+                  <PortableTextWithAds value={article.body} lang={lang} showAds={true} />
+                </div>
+              ) : (
+                <div class="text-gray-800 leading-relaxed text-lg">
+                  {article.bodyText || 
+                   (lang === 'en' ? 'No content available.' :
+                    lang === 'zh-cn' ? '暂无内容。' :
+                    lang === 'zh-tw' ? '暫無內容。' :
+                    lang === 'ko' ? '콘텐츠가 없습니다.' :
+                    '記事の内容がありません。')}
+                </div>
+              )}
+            </div>
+          </article>
+
+          <!-- In-Article Ad - 本文末 -->
+          <AdSlot
+            slotId="5678901234"
+            format="horizontal"
+            reserveHeight={120}
+            label={lang === 'en' ? 'Advertisement' : lang === 'zh-cn' ? '广告' : lang === 'zh-tw' ? '廣告' : lang === 'ko' ? '광고' : '広告'}
+            class="mb-8"
+          />
+
+          <!-- Gallery -->
+          {article.gallery && article.gallery.length > 0 && (
+            <Gallery images={article.gallery} />
+          )}
+
+          <!-- Navigation -->
+          <div class="mt-12 text-center">
+            <a 
+              href={getLocalizedPath('/', lang)} 
+              class="inline-flex items-center px-6 py-3 rounded-full bg-brand-600 text-white font-semibold hover:bg-brand-700 transition-colors"
+            >
+              ← {getUILabel(lang, 'backToHome')}
+            </a>
+          </div>
         </div>
       </div>
-    </article>
-
-    <!-- Gallery -->
-    {article.gallery && article.gallery.length > 0 && (
-      <Gallery images={article.gallery} />
-    )}
-
-    <!-- Navigation -->
-    <div class="mt-12 text-center">
-      <a 
-        href={getLocalizedPath('/', lang)} 
-        class="inline-flex items-center px-6 py-3 rounded-full bg-brand-600 text-white font-semibold hover:bg-brand-700 transition-colors"
-      >
-        ← {getUILabel(lang, 'backToHome')}
-      </a>
+      
+      <!-- Sidebar - Desktop only -->
+      <div class="hidden lg:block lg:col-span-1 space-y-6">
+        <!-- Sticky Sidebar Ad -->
+        <div class="sticky top-8">
+          <AdSlot
+            slotId="6789012345"
+            format="rectangle"
+            reserveHeight={280}
+            label={lang === 'en' ? 'Advertisement' : lang === 'zh-cn' ? '广告' : lang === 'zh-tw' ? '廣告' : lang === 'ko' ? '광고' : '広告'}
+            class="bg-white rounded-2xl shadow-lg p-4"
+          />
+        </div>
+      </div>
     </div>
   </div>
 </Layout>
