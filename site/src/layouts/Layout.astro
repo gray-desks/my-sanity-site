@@ -120,9 +120,21 @@ const currentPath = Astro.url.pathname
         </div>
         
         <!-- Bottom bar -->
-        <div class="border-t border-white/10 pt-8 text-center">
-          <div class="text-gray-400 text-sm">
+        <div class="border-t border-white/10 pt-8">
+          <!-- Copyright and Privacy Links -->
+          <div class="flex flex-col md:flex-row justify-between items-center text-gray-400 text-sm space-y-2 md:space-y-0">
             <p>&copy; 2025 {getUILabel(lang, 'siteTitle')}</p>
+            
+            <!-- Privacy Policy Links -->
+            <div class="flex items-center space-x-2">
+              <a href="/privacy" class="hover:text-white hover:underline transition-colors">
+                プライバシーポリシー
+              </a>
+              <span class="text-gray-500">|</span>
+              <a href="/en/privacy" class="hover:text-white hover:underline transition-colors">
+                Privacy Policy
+              </a>
+            </div>
           </div>
         </div>
       </div>

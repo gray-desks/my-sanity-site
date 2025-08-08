@@ -1,0 +1,14 @@
+# ads.txt for Japan Travel Journal
+# 審査通過後に本番AdSense公開IDに差し替える
+# Replace with actual AdSense publisher ID after approval
+google.com, pub-xxxxxxxxxxxxxxxx, DIRECT, f08c47fec0942fa0
+
+# Instructions:
+# 1. Replace "pub-xxxxxxxxxxxxxxxx" with your actual Google AdSense Publisher ID
+# 2. The format is: google.com, pub-XXXXXXXXXXXXXXXX, DIRECT, f08c47fec0942fa0
+# 3. You can find your Publisher ID in your AdSense account settings
+# 4. This file must be accessible at https://yourdomain.com/ads.txt
+
+# Additional networks can be added here if needed
+# Example for other ad networks:
+# network.com, pub-id, DIRECT, certification-authority-id
