@@ -26,14 +26,97 @@ const prefectures = [
 ]
 ---
 
-<div class="bg-base/80 backdrop-blur-sm rounded-xl shadow-sm border border-border p-6 mb-8">
-  <div class="flex flex-col lg:flex-row gap-4">
-    <!-- 検索フィールド -->
-    <div class="flex-1">
+<div class="rounded-xl border border-neutral-200 bg-white/90 backdrop-blur px-3 py-3 mb-8">
+  <!-- Mobile: 2-tier layout -->
+  <div class="block md:hidden space-y-3">
+    <!-- Tier 1: Search + Button -->
+    <div class="grid grid-cols-[1fr,auto] gap-2 h-11">
+      <!-- Search Input -->
       <div class="relative">
         <input
           type="text"
           id="search-input"
+          placeholder={getUILabel(lang, 'searchPlaceholder')}
+          class="w-full h-full pl-10 pr-4 text-sm text-ink bg-white border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200"
+        />
+        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+          <svg class="h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+          </svg>
+        </div>
+      </div>
+      
+      <!-- Search Button -->
+      <button
+        id="search-button"
+        class="h-full px-4 bg-primary text-white font-medium rounded-lg hover:bg-accent focus:outline-none focus:ring-2 focus:ring-primary transition-all duration-200"
+      >
+        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Tier 2: Collapsible Filters -->
+    <div class="relative">
+      <!-- Filter Toggle Chip -->
+      <div class="flex justify-end mb-2">
+        <button
+          id="filter-toggle"
+          class="inline-flex items-center gap-1 px-3 py-1 text-xs font-medium bg-neutral-100 text-neutral-600 rounded-full hover:bg-neutral-200 transition-colors"
+        >
+          <span>Filters</span>
+          <svg id="filter-icon" class="h-3 w-3 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+          </svg>
+        </button>
+      </div>
+      
+      <!-- Collapsible Filter Panel -->
+      <div id="filter-panel" class="max-h-0 overflow-hidden transition-all duration-300 ease-in-out">
+        <div class="space-y-3 pt-1">
+
+          <!-- Type Filter -->
+          <select
+            id="type-filter"
+            class="w-full pl-4 pr-10 py-2.5 text-sm text-ink bg-white border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200 appearance-none cursor-pointer"
+          >
+            {articleTypes.map(type => (
+              <option value={type.value}>{type.label}</option>
+            ))}
+          </select>
+          
+          <!-- Prefecture Filter -->
+          <select
+            id="prefecture-filter"
+            class="w-full pl-4 pr-10 py-2.5 text-sm text-ink bg-white border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200 appearance-none cursor-pointer"
+          >
+            {prefectures.map(prefecture => (
+              <option value={prefecture.code}>{prefecture.name}</option>
+            ))}
+          </select>
+          
+          <!-- Reset Button -->
+          <button
+            id="reset-button"
+            class="w-full py-2.5 bg-neutral-100 text-neutral-600 font-medium rounded-lg hover:bg-neutral-200 focus:outline-none focus:ring-2 focus:ring-neutral-400 transition-all duration-200"
+          >
+            {getUILabel(lang, 'reset')}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Desktop: Original 3-column layout -->
+  <div class="hidden md:flex flex-col lg:flex-row gap-4">
+
+    <!-- Desktop Search Field -->
+    <div class="flex-1">
+      <div class="relative">
+        <input
+          type="text"
+          id="search-input-desktop"
           placeholder={getUILabel(lang, 'searchPlaceholder')}
           class="w-full pl-12 pr-4 py-3 text-ink bg-base border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200"
         />
@@ -45,11 +128,11 @@ const prefectures = [
       </div>
     </div>
 
-    <!-- フィルター選択 -->
+    <!-- Desktop Filter Selects -->
     <div class="flex flex-col sm:flex-row gap-4 flex-shrink-0">
-      <!-- 記事タイプフィルター -->
+      <!-- Type Filter -->
       <select
-        id="type-filter"
+        id="type-filter-desktop"
         class="w-full sm:w-auto pl-4 pr-10 py-3 text-ink bg-base border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200 appearance-none cursor-pointer"
       >
         {articleTypes.map(type => (
@@ -57,9 +140,9 @@ const prefectures = [
         ))}
       </select>
       
-      <!-- 都道府県フィルター -->
+      <!-- Prefecture Filter -->
       <select
-        id="prefecture-filter"
+        id="prefecture-filter-desktop"
         class="w-full sm:w-auto pl-4 pr-10 py-3 text-ink bg-base border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200 appearance-none cursor-pointer"
       >
         {prefectures.map(prefecture => (
@@ -68,11 +151,11 @@ const prefectures = [
       </select>
     </div>
 
-    <!-- ボタングループ -->
+    <!-- Desktop Buttons -->
     <div class="flex gap-2">
-      <!-- 検索ボタン -->
+      <!-- Search Button -->
       <button
-        id="search-button"
+        id="search-button-desktop"
         class="px-6 py-3 bg-primary text-white font-medium rounded-xl hover:bg-accent focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-all duration-200 transform hover:scale-105"
       >
         <span class="hidden sm:inline">{getUILabel(lang, 'search')}</span>
@@ -81,9 +164,9 @@ const prefectures = [
         </svg>
       </button>
       
-      <!-- リセットボタン -->
+      <!-- Reset Button -->
       <button
-        id="reset-button"
+        id="reset-button-desktop"
         class="px-4 py-3 bg-secondary/20 text-secondary font-medium rounded-xl hover:bg-secondary/30 focus:outline-none focus:ring-2 focus:ring-secondary focus:ring-offset-2 transition-all duration-200 transform hover:scale-105"
         title={getUILabel(lang, 'reset')}
       >
@@ -99,11 +182,16 @@ const prefectures = [
 <!-- カスタム矢印アイコンをCSSで追加 -->
 <style>
   /* selectボックスの矢印をカスタマイズ */
-  #type-filter, #prefecture-filter {
+  #type-filter, #prefecture-filter, #type-filter-desktop, #prefecture-filter-desktop {
     background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
     background-position: right 0.75rem center;
     background-repeat: no-repeat;
     background-size: 1.5em 1.5em;
+  }
+  
+  /* Filter panel max height when expanded */
+  .filter-expanded {
+    max-height: 320px !important;
   }
 </style>
 
@@ -111,11 +199,24 @@ const prefectures = [
   const FILTER_STORAGE_KEY = 'blogFilterState';
   class SearchFilter {
     constructor() {
+      // Mobile elements
       this.searchInput = document.getElementById('search-input') as HTMLInputElement
       this.typeFilter = document.getElementById('type-filter') as HTMLSelectElement
       this.prefectureFilter = document.getElementById('prefecture-filter') as HTMLSelectElement
       this.searchButton = document.getElementById('search-button') as HTMLButtonElement
       this.resetButton = document.getElementById('reset-button') as HTMLButtonElement
+      
+      // Desktop elements
+      this.searchInputDesktop = document.getElementById('search-input-desktop') as HTMLInputElement
+      this.typeFilterDesktop = document.getElementById('type-filter-desktop') as HTMLSelectElement
+      this.prefectureFilterDesktop = document.getElementById('prefecture-filter-desktop') as HTMLSelectElement
+      this.searchButtonDesktop = document.getElementById('search-button-desktop') as HTMLButtonElement
+      this.resetButtonDesktop = document.getElementById('reset-button-desktop') as HTMLButtonElement
+      
+      // Mobile accordion elements
+      this.filterToggle = document.getElementById('filter-toggle') as HTMLButtonElement
+      this.filterPanel = document.getElementById('filter-panel') as HTMLDivElement
+      this.filterIcon = document.getElementById('filter-icon') as SVGElement
       
       // ページング対応: 現在のページの記事のみを対象にする
       this.articles = Array.from(document.querySelectorAll('[data-article]'))
@@ -132,29 +233,88 @@ const prefectures = [
     }
 
     bindEvents() {
-      // リアルタイム検索
-      this.searchInput?.addEventListener('input', () => this.filterArticles())
-      this.typeFilter?.addEventListener('change', () => this.filterArticles())
-      this.prefectureFilter?.addEventListener('change', () => this.filterArticles())
+      // Mobile filter accordion toggle
+      this.filterToggle?.addEventListener('click', () => this.toggleFilters())
       
-      // 検索ボタン
+      // Mobile events
+      this.searchInput?.addEventListener('input', () => this.syncAndFilter())
+      this.typeFilter?.addEventListener('change', () => this.syncAndFilter())
+      this.prefectureFilter?.addEventListener('change', () => this.syncAndFilter())
       this.searchButton?.addEventListener('click', () => this.filterArticles())
-      
-      // リセットボタン
       this.resetButton?.addEventListener('click', () => this.resetFilters())
-      
-      // Enterキーで検索
       this.searchInput?.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
           this.filterArticles()
         }
       })
+      
+      // Desktop events
+      this.searchInputDesktop?.addEventListener('input', () => this.syncAndFilter())
+      this.typeFilterDesktop?.addEventListener('change', () => this.syncAndFilter())
+      this.prefectureFilterDesktop?.addEventListener('change', () => this.syncAndFilter())
+      this.searchButtonDesktop?.addEventListener('click', () => this.filterArticles())
+      this.resetButtonDesktop?.addEventListener('click', () => this.resetFilters())
+      this.searchInputDesktop?.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          this.filterArticles()
+        }
+      })
+    }
+    
+    toggleFilters() {
+      if (this.filterPanel && this.filterIcon) {
+        const isExpanded = this.filterPanel.classList.contains('filter-expanded')
+        
+        if (isExpanded) {
+          this.filterPanel.classList.remove('filter-expanded')
+          this.filterIcon.style.transform = 'rotate(0deg)'
+        } else {
+          this.filterPanel.classList.add('filter-expanded')
+          this.filterIcon.style.transform = 'rotate(180deg)'
+        }
+      }
+    }
+    
+    // Sync mobile and desktop inputs
+    syncAndFilter() {
+      this.syncInputs()
+      this.filterArticles()
+    }
+    
+    syncInputs() {
+      // Sync search input
+      const mobileValue = this.searchInput?.value || ''
+      const desktopValue = this.searchInputDesktop?.value || ''
+      
+      if (mobileValue !== desktopValue) {
+        if (this.searchInput) this.searchInput.value = desktopValue || mobileValue
+        if (this.searchInputDesktop) this.searchInputDesktop.value = mobileValue || desktopValue
+      }
+      
+      // Sync type filter
+      const mobileType = this.typeFilter?.value || ''
+      const desktopType = this.typeFilterDesktop?.value || ''
+      
+      if (mobileType !== desktopType) {
+        if (this.typeFilter) this.typeFilter.value = desktopType || mobileType
+        if (this.typeFilterDesktop) this.typeFilterDesktop.value = mobileType || desktopType
+      }
+      
+      // Sync prefecture filter
+      const mobilePrefecture = this.prefectureFilter?.value || ''
+      const desktopPrefecture = this.prefectureFilterDesktop?.value || ''
+      
+      if (mobilePrefecture !== desktopPrefecture) {
+        if (this.prefectureFilter) this.prefectureFilter.value = desktopPrefecture || mobilePrefecture
+        if (this.prefectureFilterDesktop) this.prefectureFilterDesktop.value = mobilePrefecture || desktopPrefecture
+      }
     }
 
     filterArticles() {
-      const searchTerm = this.searchInput?.value.toLowerCase() || ''
-      const selectedType = this.typeFilter?.value || ''
-      const selectedPrefecture = this.prefectureFilter?.value || ''
+      // Get values from either mobile or desktop inputs
+      const searchTerm = (this.searchInput?.value || this.searchInputDesktop?.value || '').toLowerCase()
+      const selectedType = this.typeFilter?.value || this.typeFilterDesktop?.value || ''
+      const selectedPrefecture = this.prefectureFilter?.value || this.prefectureFilterDesktop?.value || ''
       
       let visibleCount = 0
       
@@ -192,7 +352,7 @@ const prefectures = [
     }
 
     resetFilters() {
-      // 全ての入力フィールドをリセット
+      // Reset mobile inputs
       if (this.searchInput) {
         this.searchInput.value = ''
       }
@@ -201,6 +361,17 @@ const prefectures = [
       }
       if (this.prefectureFilter) {
         this.prefectureFilter.selectedIndex = 0
+      }
+      
+      // Reset desktop inputs
+      if (this.searchInputDesktop) {
+        this.searchInputDesktop.value = ''
+      }
+      if (this.typeFilterDesktop) {
+        this.typeFilterDesktop.selectedIndex = 0
+      }
+      if (this.prefectureFilterDesktop) {
+        this.prefectureFilterDesktop.selectedIndex = 0
       }
       
       // 全ての記事を表示
@@ -221,9 +392,9 @@ const prefectures = [
 
     saveState() {
       const payload = {
-        searchTerm: this.searchInput?.value || '',
-        selectedType: this.typeFilter?.value || '',
-        selectedPrefecture: this.prefectureFilter?.value || ''
+        searchTerm: this.searchInput?.value || this.searchInputDesktop?.value || '',
+        selectedType: this.typeFilter?.value || this.typeFilterDesktop?.value || '',
+        selectedPrefecture: this.prefectureFilter?.value || this.prefectureFilterDesktop?.value || ''
       }
       sessionStorage.setItem(FILTER_STORAGE_KEY, JSON.stringify(payload))
     }
@@ -231,9 +402,20 @@ const prefectures = [
     loadState() {
       try {
         const saved = JSON.parse(sessionStorage.getItem(FILTER_STORAGE_KEY) || '{}')
-        if (this.searchInput && saved.searchTerm !== undefined) this.searchInput.value = saved.searchTerm
-        if (this.typeFilter && saved.selectedType !== undefined) this.typeFilter.value = saved.selectedType
-        if (this.prefectureFilter && saved.selectedPrefecture !== undefined) this.prefectureFilter.value = saved.selectedPrefecture
+        
+        // Load into both mobile and desktop inputs
+        if (saved.searchTerm !== undefined) {
+          if (this.searchInput) this.searchInput.value = saved.searchTerm
+          if (this.searchInputDesktop) this.searchInputDesktop.value = saved.searchTerm
+        }
+        if (saved.selectedType !== undefined) {
+          if (this.typeFilter) this.typeFilter.value = saved.selectedType
+          if (this.typeFilterDesktop) this.typeFilterDesktop.value = saved.selectedType
+        }
+        if (saved.selectedPrefecture !== undefined) {
+          if (this.prefectureFilter) this.prefectureFilter.value = saved.selectedPrefecture
+          if (this.prefectureFilterDesktop) this.prefectureFilterDesktop.value = saved.selectedPrefecture
+        }
       } catch (e) {
         console.error('Failed to load filter state', e)
       }

@@ -87,9 +87,9 @@ const currentPath = Astro.url.pathname
       </main>
     </div>
 
-    <footer class="relative mt-24 bg-ink text-base-content border-t border-primary/20">
+    <footer class="relative mt-8 pt-6 border-t border-neutral-200">
       
-      <div class="relative max-w-7xl mx-auto px-4 sm:px-6 py-8 md:py-12">
+      <div class="relative max-w-7xl mx-auto px-4 sm:px-6 py-6 md:py-8">
         <!-- Mobile Simplified Brand Section -->
         <div class="mb-6 md:mb-8 block md:hidden">
           <div class="text-center">
@@ -132,36 +132,17 @@ const currentPath = Astro.url.pathname
           </div>
         </div>
         
-        <!-- Bottom bar -->
-        <div class="border-t border-white/10 pt-6 md:pt-8">
-          <!-- Mobile simplified bottom -->
-          <div class="block md:hidden text-center space-y-3">
-            <div class="flex flex-wrap justify-center gap-3 text-sm">
-              <a href="/privacy" class="hover:text-white hover:underline transition-colors py-3 px-2 text-gray-400">
-                プライバシーポリシー
-              </a>
-              <a href="/en/privacy" class="hover:text-white hover:underline transition-colors py-3 px-2 text-gray-400">
-                Privacy Policy
-              </a>
-            </div>
-            <p class="text-gray-400 text-sm">&copy; 2025 {getUILabel(lang, 'siteTitle')}</p>
+        <!-- Light footer links - centered -->
+        <div class="text-center">
+          <div class="flex justify-center gap-4 text-xs text-neutral-500 mb-3">
+            <a href="/privacy" class="hover:text-neutral-700 transition-colors">
+              プライバシーポリシー
+            </a>
+            <a href="/en/privacy" class="hover:text-neutral-700 transition-colors">
+              Privacy Policy
+            </a>
           </div>
-          
-          <!-- Desktop bottom -->
-          <div class="hidden md:flex flex-row justify-between items-center text-gray-400 text-sm">
-            <p>&copy; 2025 {getUILabel(lang, 'siteTitle')}</p>
-            
-            <!-- Privacy Policy Links -->
-            <div class="flex items-center space-x-2">
-              <a href="/privacy" class="hover:text-white hover:underline transition-colors">
-                プライバシーポリシー
-              </a>
-              <span class="text-gray-500">|</span>
-              <a href="/en/privacy" class="hover:text-white hover:underline transition-colors">
-                Privacy Policy
-              </a>
-            </div>
-          </div>
+          <p class="text-neutral-400 text-xs">&copy; 2025 {getUILabel(lang, 'siteTitle')}</p>
         </div>
       </div>
     </footer>
