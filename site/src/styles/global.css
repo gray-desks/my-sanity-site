@@ -5,13 +5,15 @@
 
 /* 日本風カラーテーマ変数 */
 :root {
-  /* Japan default: 朱・薄紅トーン */
-  --theme-accent: #E4514A;        /* 朱（ボタン、強調） */
-  --theme-accent-weak: #FDECEF;   /* 薄紅（背景帯） */
+  /* Japan default: 薄赤・日の丸トーン */
+  --theme-accent: #DC2626;        /* 薄赤（ボタン、強調） */
+  --theme-accent-weak: #FDE2E2;   /* 日の丸薄赤（背景帯） */
+  --theme-accent-fade: #FAD4D4;   /* より薄い赤（グラデーション用） */
   --theme-ink-strong: #2F455C;    /* 藍（見出し） */
+  --washi-color: #F8F8F4;         /* 胡粉色（和紙背景） */
 
-  /* Tag colors - 日本の伝統色 */
-  --tag-spot: #E4514A;      /* 朱 - スポット */
+  /* Tag colors - 薄赤基調 */
+  --tag-spot: #DC2626;      /* 薄赤 - スポット */
   --tag-gourmet: #F59E0B;   /* 橙 - グルメ */
   --tag-transport: #3B82F6; /* 青 - 交通 */
   --tag-hotel: #8B5CF6;     /* 紫 - 宿泊 */
@@ -159,8 +161,14 @@ img, video {
 /* High contrast mode support */
 @media (prefers-contrast: high) {
   :root {
-    --theme-accent: #0066CC;
-    --theme-accent-weak: #E6F3FF;
+    --theme-accent: #CC0000;
+    --theme-accent-weak: #FFFFFF;
+    --washi-color: #FFFFFF;
+  }
+  
+  /* Hide background pattern in high contrast mode */
+  #japanese-hemp {
+    display: none;
   }
 }
 

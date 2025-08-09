@@ -24,7 +24,7 @@ const adLabel = lang === 'en' ? 'Advertisement' :
                '広告'
 ---
 
-<div class={`rounded-xl border border-dashed p-3 mb-4 bg-[#FFF7F8] border-[rgba(228,81,74,0.25)] ${className}`}>
+<div class={`rounded-xl border border-dashed p-3 mb-4 bg-[var(--theme-accent-fade)] border-[var(--theme-accent)]/20 ${className}`}>
   <!-- Ad Label -->
   <div class="flex justify-center mb-2">
     <span class="text-[10px] text-neutral-500 font-medium">{adLabel}</span>
@@ -48,7 +48,7 @@ const adLabel = lang === 'en' ? 'Advertisement' :
     
     <!-- Fallback placeholder when no ads configured -->
     {!import.meta.env.PUBLIC_ADSENSE_CLIENT_ID && (
-      <div class="w-full h-full flex items-center justify-center bg-[#FFF0F1] rounded-lg text-[var(--theme-accent)]/70 text-sm">
+      <div class="w-full h-full flex items-center justify-center bg-[var(--theme-accent-weak)] rounded-lg text-[var(--theme-accent)]/70 text-sm">
         {adLabel}
       </div>
     )}

@@ -12,12 +12,17 @@ const subtitle = getUILabel(lang, 'heroSubtitle')
 const ctaText = getUILabel(lang, 'readStories')
 ---
 
-<section class="relative overflow-hidden min-h-[35vh] flex items-center justify-center bg-base py-10 md:py-16">
-  <!-- Japan-inspired gradient background -->
-  <div class="absolute inset-x-0 -top-20 h-72 pointer-events-none bg-[radial-gradient(circle_at_40%_0%,_var(--theme-accent-weak)_0%,_transparent_60%)]"></div>
+<section class="relative overflow-hidden min-h-[35vh] flex items-center justify-center bg-white py-10 md:py-16">
+  <!-- Hinomaru-inspired circle background -->
+  <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] pointer-events-none">
+    <div class="w-full h-full rounded-full opacity-35 hinomaru-circle"></div>
+  </div>
+  
+  <!-- Fade to white at top -->
+  <div class="absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-white to-transparent pointer-events-none"></div>
 
   <!-- Content -->
-  <div class="relative max-w-4xl mx-auto px-6 text-center">
+  <div class="relative max-w-4xl mx-auto px-6 text-center z-10">
     <h1 class="text-3xl md:text-4xl font-bold tracking-tight text-[var(--theme-ink-strong)] mb-3">
       {title}
     </h1>
@@ -28,6 +33,11 @@ const ctaText = getUILabel(lang, 'readStories')
 </section>
 
 <style>
+  /* Hinomaru-inspired radial gradient */
+  .hinomaru-circle {
+    background: radial-gradient(circle, var(--theme-accent-weak) 0%, var(--theme-accent-fade) 40%, transparent 70%);
+  }
+
   @media (prefers-reduced-motion: reduce) {
     * {
       animation: none !important;
