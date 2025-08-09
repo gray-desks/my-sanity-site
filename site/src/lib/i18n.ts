@@ -178,7 +178,7 @@ export const UI_LABELS = {
     search: '検索',
     searchPlaceholder: 'キーワードで検索...',
     allTypes: 'すべて',
-    spot: '観光地',
+    spot: 'スポット',
     food: 'グルメ',
     transport: '交通',
     hotel: '宿泊',
