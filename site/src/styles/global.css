@@ -3,17 +3,24 @@
 @tailwind components;
 @tailwind utilities;
 
-/* 季節カラーテーマ変数 */
+/* 日本風カラーテーマ変数 */
 :root {
-  /* 夏：海のブルーをベースに */
-  --theme-accent: #2A7DE1;
-  --theme-accent-weak: #E7F1FF;
-  --tag-spot: #0EA5E9;     /* スポット */
-  --tag-gourmet: #F97316;  /* グルメ */
-  --tag-transport: #06B6D4; /* 交通 */
-  --tag-hotel: #8B5CF6;    /* 宿泊 */
-  --tag-event: #EC4899;    /* イベント */
-  --tag-note: #6B7280;     /* メモ */
+  /* Japan default: 朱・薄紅トーン */
+  --theme-accent: #E4514A;        /* 朱（ボタン、強調） */
+  --theme-accent-weak: #FDECEF;   /* 薄紅（背景帯） */
+  --theme-ink-strong: #2F455C;    /* 藍（見出し） */
+
+  /* Tag colors - 日本の伝統色 */
+  --tag-spot: #E4514A;      /* 朱 - スポット */
+  --tag-gourmet: #F59E0B;   /* 橙 - グルメ */
+  --tag-transport: #3B82F6; /* 青 - 交通 */
+  --tag-hotel: #8B5CF6;     /* 紫 - 宿泊 */
+  --tag-event: #EC4899;     /* 桃 - イベント */
+  --tag-note: #6B7280;      /* 鼠 - メモ */
+
+  /* Neutral tones */
+  --neutral-50: #F5F5F7;
+  --neutral-500: #6B7280;
 }
 
 /* 将来の季節切替用（実装時に有効化）
