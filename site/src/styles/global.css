@@ -7,8 +7,8 @@
 :root {
   /* Japan default: 薄赤・日の丸トーン */
   --theme-accent: #DC2626;        /* 薄赤（ボタン、強調） */
-  --theme-accent-weak: #FDE2E2;   /* 日の丸薄赤（背景帯） */
-  --theme-accent-fade: #FAD4D4;   /* より薄い赤（グラデーション用） */
+  --theme-accent-weak: #FEE2E2;   /* 日の丸薄赤（背景帯）- 馴染む薄さ */
+  --theme-accent-fade: #FEF2F2;   /* より薄い赤（グラデーション用） */
   --theme-ink-strong: #2F455C;    /* 藍（見出し） */
   --washi-color: #F8F8F4;         /* 胡粉色（和紙背景） */
 

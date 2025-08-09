@@ -12,30 +12,39 @@ const subtitle = getUILabel(lang, 'heroSubtitle')
 const ctaText = getUILabel(lang, 'readStories')
 ---
 
-<section class="relative overflow-hidden min-h-[35vh] flex items-center justify-center bg-white py-10 md:py-16">
+<section class="relative overflow-hidden min-h-[40vh] flex items-center justify-center bg-white py-12 md:py-20">
   <!-- Hinomaru-inspired circle background -->
-  <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] pointer-events-none">
-    <div class="w-full h-full rounded-full opacity-35 hinomaru-circle"></div>
+  <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none hinomaru-container">
+    <div class="w-full h-full rounded-full hinomaru-circle"></div>
   </div>
   
-  <!-- Fade to white at top -->
-  <div class="absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-white to-transparent pointer-events-none"></div>
+  <!-- Fade to white at bottom -->
+  <div class="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-white to-transparent pointer-events-none"></div>
 
   <!-- Content -->
-  <div class="relative max-w-4xl mx-auto px-6 text-center z-10">
-    <h1 class="text-3xl md:text-4xl font-bold tracking-tight text-[var(--theme-ink-strong)] mb-3">
+  <div class="relative max-w-4xl mx-auto px-4 text-center z-10">
+    <h1 class="text-3xl md:text-5xl font-bold tracking-wide text-gray-800 mb-3 drop-shadow-sm hero-title">
       {title}
     </h1>
-    <p class="mt-2 text-sm md:text-base text-neutral-600 max-w-2xl mx-auto">
+    <p class="mt-2 text-base md:text-lg text-gray-700 max-w-2xl mx-auto leading-relaxed drop-shadow-sm hero-subtitle">
       {subtitle}
     </p>
   </div>
 </section>
 
 <style>
-  /* Hinomaru-inspired radial gradient */
+  /* Responsive Hinomaru container */
+  .hinomaru-container {
+    width: 80vw;
+    height: 80vw;
+    max-width: 700px;
+    max-height: 700px;
+  }
+  
+  /* Hinomaru-inspired solid circle with soft edge */
   .hinomaru-circle {
-    background: radial-gradient(circle, var(--theme-accent-weak) 0%, var(--theme-accent-fade) 40%, transparent 70%);
+    background: radial-gradient(circle, var(--theme-accent-weak) 0%, var(--theme-accent-weak) 70%, var(--theme-accent-fade) 85%, transparent 100%);
+    opacity: 0.8;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -60,6 +69,21 @@ const ctaText = getUILabel(lang, 'readStories')
   
   .animate-dash {
     animation: dash 3s linear infinite;
+  }
+  
+  /* Japanese typography for hero section */
+  .hero-title {
+    font-family: 'Shippori Mincho', 'Noto Serif JP', serif;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  .hero-subtitle {
+    font-family: 'Shippori Mincho', 'Noto Serif JP', serif;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
   
   /* Professional typography enhancements */

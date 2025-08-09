@@ -3,7 +3,6 @@ import Layout from '../../layouts/Layout.astro'
 import Hero from '../../components/Hero.astro'
 import AdSlot from '../../components/AdSlot.astro'
 import ArticleCard from '../../components/ArticleCard.astro'
-import InfeedAdCard from '../../components/InfeedAdCard.astro'
 import SearchFilter from '../../components/SearchFilter.astro'
 import Pagination from '../../components/Pagination.astro'
 import { getUILabel } from '../../lib/i18n'
@@ -62,14 +61,14 @@ const structuredData = {
 
   <!-- Search and Filter Section - ヒーロー直下に配置 (only on first page) -->
   {currentPage === 1 && (
-    <div class="max-w-7xl mx-auto px-4 -mt-6">
+    <div class="max-w-4xl mx-auto px-4 pt-8">
       <SearchFilter lang={lang} />
     </div>
   )}
 
   <!-- Top Ad - 検索の下に配置 (only on first page) -->
   {currentPage === 1 && (
-    <div class="max-w-7xl mx-auto px-4 pt-4">
+    <div class="max-w-4xl mx-auto px-4 pt-4">
       <AdSlot
         slotId={ADS_SLOTS.HOME_HERO}
         format="horizontal" 
@@ -122,28 +121,11 @@ const structuredData = {
         </div>
       ) : (
         <>
-          <!-- Article Grid with Infeed Ads -->
+          <!-- Article Grid -->
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {articles.map((article, index) => {
-              const items = []
-              
-              // Add article card
-              items.push(<ArticleCard article={article} lang={lang} />)
-              
-              // Add infeed ad every 8 articles (after 7th, 15th, 23rd, etc.)
-              if ((index + 1) % 8 === 0 && index < articles.length - 1 && shouldShowAds()) {
-                items.push(
-                  <InfeedAdCard 
-                    slotId={ADS_SLOTS.HOME_INFEED}
-                    lang={lang}
-                    format="rectangle"
-                    reserveHeight={180}
-                  />
-                )
-              }
-              
-              return items
-            }).flat()}
+            {articles.map((article, index) => (
+              <ArticleCard article={article} lang={lang} />
+            ))}
           </div>
 
           <!-- Pagination -->

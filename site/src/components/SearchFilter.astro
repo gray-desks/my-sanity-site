@@ -9,11 +9,26 @@ export interface Props {
 const { lang = DEFAULT_LANGUAGE } = Astro.props
 
 // プレースホルダーテキストの定義
-const searchPlaceholder = lang === 'en' ? 'Search by location or keywords' :
-                         lang === 'zh-cn' ? '按地点或关键词搜索' :
-                         lang === 'zh-tw' ? '按地點或關鍵詞搜索' :
-                         lang === 'ko' ? '지명이나 키워드로 검색' :
-                         '地名やキーワードで検索'
+const searchPlaceholder = lang === 'en' ? 'Search by keywords' :
+                         lang === 'zh-cn' ? '按关键词搜索' :
+                         lang === 'zh-tw' ? '按關鍵詞搜索' :
+                         lang === 'ko' ? '키워드로 검색' :
+                         lang === 'th' ? 'ค้นหาด้วยคำสำคัญ' :
+                         lang === 'vi' ? 'Tìm kiếm bằng từ khóa' :
+                         lang === 'id' ? 'Cari dengan kata kunci' :
+                         lang === 'ms' ? 'Cari dengan kata kunci' :
+                         lang === 'tl' ? 'Maghanap gamit ang mga keyword' :
+                         lang === 'fr' ? 'Rechercher par mots-clés' :
+                         lang === 'de' ? 'Mit Stichworten suchen' :
+                         lang === 'es' ? 'Buscar por palabras clave' :
+                         lang === 'it' ? 'Cerca per parole chiave' :
+                         lang === 'pt' ? 'Pesquisar por palavras-chave' :
+                         lang === 'pt-br' ? 'Pesquisar por palavras-chave' :
+                         lang === 'ru' ? 'Поиск по ключевым словам' :
+                         lang === 'ar' ? 'البحث بالكلمات المفتاحية' :
+                         lang === 'hi' ? 'कीवर्ड से खोजें' :
+                         lang === 'tr' ? 'Anahtar kelimelerle ara' :
+                         'キーワードで検索'
 
 // 記事タイプの定義
 const articleTypes = [
@@ -43,7 +58,7 @@ const prefectures = [
         <input
           type="text"
           id="search-input"
-          placeholder="地名・スポット名・キーワードで検索"
+          placeholder={searchPlaceholder}
           class="w-full h-12 pl-10 pr-4 text-sm placeholder:text-neutral-400 text-ink bg-white border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--theme-accent)] focus:border-transparent transition-all duration-200"
           aria-label="検索キーワード入力"
         />
@@ -130,7 +145,7 @@ const prefectures = [
         <input
           type="text"
           id="search-input-desktop"
-          placeholder="地名・スポット名・キーワードで検索"
+          placeholder={searchPlaceholder}
           class="w-full pl-12 pr-4 py-3 text-ink bg-base border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--theme-accent)] focus:border-transparent transition-all duration-200"
           aria-label="検索キーワード入力"
         />
