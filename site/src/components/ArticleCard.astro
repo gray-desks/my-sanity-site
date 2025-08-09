@@ -108,6 +108,27 @@ const articleUrl = lang === 'ja'
       {article.title}
     </h3>
     
+    <!-- Gallery preview (if available) -->
+    {article.gallery && article.gallery.length > 0 && (
+      <div class="flex gap-1 mb-3 overflow-hidden">
+        {article.gallery.slice(0, 4).map((image, index) => (
+          <div class="flex-shrink-0 w-12 h-12 rounded-lg overflow-hidden border border-neutral-200">
+            <img 
+              src={`${image.asset.url}?w=48&h=48&fit=crop&auto=format`}
+              alt=""
+              class="w-full h-full object-cover"
+              loading="lazy"
+            />
+          </div>
+        ))}
+        {article.gallery.length > 4 && (
+          <div class="flex-shrink-0 w-12 h-12 rounded-lg bg-neutral-100 border border-neutral-200 flex items-center justify-center">
+            <span class="text-xs text-neutral-500 font-medium">+{article.gallery.length - 4}</span>
+          </div>
+        )}
+      </div>
+    )}
+    
     <!-- Meta info (1 line) with bullet separator -->
     <div class="flex items-center gap-1.5 text-xs text-neutral-500">
       {article.placeName && (
