@@ -3,10 +3,11 @@ import Layout from '../../layouts/Layout.astro'
 import Hero from '../../components/Hero.astro'
 import AdSlot from '../../components/AdSlot.astro'
 import ArticleCard from '../../components/ArticleCard.astro'
+import InfeedAdCard from '../../components/InfeedAdCard.astro'
 import SearchFilter from '../../components/SearchFilter.astro'
 import Pagination from '../../components/Pagination.astro'
 import { getUILabel } from '../../lib/i18n'
-import { ADS_SLOTS } from '../../config/ads'
+import { ADS_SLOTS, shouldShowAds } from '../../config/ads'
 import type { Article } from '../../lib/sanity'
 
 export interface Props {
@@ -59,9 +60,16 @@ const structuredData = {
   <!-- Hero Section (only on first page) -->
   {currentPage === 1 && <Hero lang={lang} />}
 
-  <!-- Top Ad - Hero直下 (only on first page) -->
+  <!-- Search and Filter Section - ヒーロー直下に配置 (only on first page) -->
   {currentPage === 1 && (
-    <div class="max-w-7xl mx-auto px-4 pt-8">
+    <div class="max-w-7xl mx-auto px-4 -mt-6">
+      <SearchFilter lang={lang} />
+    </div>
+  )}
+
+  <!-- Top Ad - 検索の下に配置 (only on first page) -->
+  {currentPage === 1 && (
+    <div class="max-w-7xl mx-auto px-4 pt-4">
       <AdSlot
         slotId={ADS_SLOTS.HOME_HERO}
         format="horizontal" 
@@ -91,8 +99,8 @@ const structuredData = {
       </div>
     )}
 
-    <!-- Search and Filter Section (only show on first page or limit to current page results) -->
-    <SearchFilter lang={lang} />
+    <!-- Search and Filter Section for pagination pages -->
+    {currentPage > 1 && <SearchFilter lang={lang} />}
     
     <!-- Articles Section -->
     <section id="articles" class="relative">
@@ -114,11 +122,28 @@ const structuredData = {
         </div>
       ) : (
         <>
-          <!-- Article Grid -->
+          <!-- Article Grid with Infeed Ads -->
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {articles.map((article, index) => (
-              <ArticleCard article={article} lang={lang} />
-            ))}
+            {articles.map((article, index) => {
+              const items = []
+              
+              // Add article card
+              items.push(<ArticleCard article={article} lang={lang} />)
+              
+              // Add infeed ad every 8 articles (after 7th, 15th, 23rd, etc.)
+              if ((index + 1) % 8 === 0 && index < articles.length - 1 && shouldShowAds()) {
+                items.push(
+                  <InfeedAdCard 
+                    slotId={ADS_SLOTS.HOME_INFEED}
+                    lang={lang}
+                    format="rectangle"
+                    reserveHeight={180}
+                  />
+                )
+              }
+              
+              return items
+            }).flat()}
           </div>
 
           <!-- Pagination -->

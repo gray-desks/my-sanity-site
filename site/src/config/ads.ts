@@ -5,7 +5,7 @@
 export const ADS_SLOTS = {
   // ホームページ広告
   HOME_HERO: "1903058190",
-  HOME_INFEED: "", // 取得後差し替え：現在AdSense側でコード待ち
+  HOME_INFEED: "7324168905", // インフィード広告用スロット
   HOME_FOOTER: "6102125837",
   
   // 記事ページ広告

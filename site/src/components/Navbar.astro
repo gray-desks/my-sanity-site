@@ -16,8 +16,12 @@ const availableLanguages = ENABLED_LANGUAGES
 <nav class="sticky top-0 z-50 bg-base/80 backdrop-blur-md border-b border-border">
   <div class="max-w-7xl mx-auto px-4 py-3 sm:py-4 flex items-center justify-between">
     <!-- Logo -->
-    <a href={lang === 'ja' ? '/' : `/${lang}/`} class="flex items-center gap-3 group">
-      <div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
+    <a 
+      href={lang === 'ja' ? '/' : `/${lang}/`} 
+      class="flex items-center gap-3 group"
+      aria-label={`${getUILabel(lang, 'siteTitle')} - ${getUILabel(lang, 'home')}`}
+    >
+      <div class="w-10 h-10 bg-[var(--theme-accent)] rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
         <span class="text-white font-bold text-lg">旅</span>
       </div>
       <span class="text-2xl font-bold text-ink">
@@ -29,16 +33,20 @@ const availableLanguages = ENABLED_LANGUAGES
     <div class="flex items-center gap-4">
       
       <!-- モバイル用言語メニュー -->
-      <details class="sm:hidden relative">
-        <summary class="flex items-center gap-1 px-3 h-10 rounded-lg bg-ink/5 text-ink focus:ring-2 focus:ring-primary cursor-pointer">
+      <details class="sm:hidden relative" role="navigation" aria-label="Language selection">
+        <summary 
+          class="flex items-center gap-1 px-3 h-10 rounded-lg bg-ink/5 text-ink focus:ring-2 focus:ring-[var(--theme-accent)] cursor-pointer"
+          aria-label="Select language"
+          aria-expanded="false"
+        >
           🌐
         </summary>
         <div class="absolute right-0 mt-2 w-48 bg-base rounded-lg shadow-lg border border-ink/10 z-50 max-h-80 overflow-y-auto">
           {availableLanguages.map((language) => (
             <a
               href={language.id === 'ja' ? '/' : `/${language.id}/`}
-              class={`block px-4 py-2 text-sm hover:bg-primary/10 transition-colors ${
-                language.id === lang ? 'font-semibold text-primary bg-primary/5' : 'text-secondary'
+              class={`block px-4 py-2 text-sm hover:bg-[var(--theme-accent)]/10 transition-colors ${
+                language.id === lang ? 'font-semibold text-[var(--theme-accent)] bg-[var(--theme-accent)]/5' : 'text-secondary'
               }`}}
               title={language.nativeName}
             >
@@ -72,10 +80,10 @@ const availableLanguages = ENABLED_LANGUAGES
                   href={cleanPath}
                   aria-label={`Switch to ${language.nativeName}`}
                   class={`
-                     inline-flex items-center justify-center w-14 h-8 rounded-lg transition-all duration-200 ease-out focus:ring-2 focus:ring-primary focus:outline-none shrink-0
+                     inline-flex items-center justify-center w-14 h-8 rounded-lg transition-all duration-200 ease-out focus:ring-2 focus:ring-[var(--theme-accent)] focus:outline-none shrink-0
                      ${isCurrentLang 
-                      ? 'bg-primary text-white shadow-md' 
-                      : 'bg-ink/5 text-ink hover:bg-primary/10 hover:text-primary'
+                      ? 'bg-[var(--theme-accent)] text-white shadow-md' 
+                      : 'bg-ink/5 text-ink hover:bg-[var(--theme-accent)]/10 hover:text-[var(--theme-accent)]'
                     }
                   `}
                   title={language.nativeName}
@@ -117,10 +125,10 @@ const availableLanguages = ENABLED_LANGUAGES
                   href={cleanPath}
                   aria-label={`Switch to ${language.nativeName}`}
                   class={`
-                     inline-flex items-center justify-center w-14 h-8 rounded-lg transition-all duration-200 ease-out focus:ring-2 focus:ring-primary focus:outline-none shrink-0
+                     inline-flex items-center justify-center w-14 h-8 rounded-lg transition-all duration-200 ease-out focus:ring-2 focus:ring-[var(--theme-accent)] focus:outline-none shrink-0
                      ${isCurrentLang 
-                      ? 'bg-primary text-white shadow-md' 
-                      : 'bg-ink/5 text-ink hover:bg-primary/10 hover:text-primary'
+                      ? 'bg-[var(--theme-accent)] text-white shadow-md' 
+                      : 'bg-ink/5 text-ink hover:bg-[var(--theme-accent)]/10 hover:text-[var(--theme-accent)]'
                     }
                   `}
                   title={language.nativeName}
