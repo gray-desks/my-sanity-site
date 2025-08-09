@@ -1,6 +1,4 @@
-import {defineCliConfig} from 'sanity/cli'
-
-export default defineCliConfig({
+export default {
   api: {
     projectId: 'fcz6on8p',
     dataset: 'production'
@@ -11,4 +9,4 @@ export default defineCliConfig({
    */
   autoUpdates: true,
   studioHost: 'travel-blog-jp',
-})
+}
