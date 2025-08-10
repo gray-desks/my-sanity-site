@@ -1,27 +1,28 @@
 // Central definition of supported languages for Sanity Studio
 // Keep this list in sync with documentInternationalization and deskStructure
+// Updated to use DeepL API-supported languages (19 languages + Japanese = 20 total)
 export const supportedLanguages = [
-  // Phase 1
-  { id: 'ja', title: '日本語' },
+  // 日本語（原文）
+  { id: 'ja', title: '日本語', isDefault: true },
+
+  // DeepL API対応の翻訳対象 19言語（タイ語含む）
   { id: 'en', title: 'English' },
-  { id: 'zh-cn', title: '中文（简体）' },
-  { id: 'zh-tw', title: '中文（繁體）' },
-  { id: 'ko', title: '한국어' },
-  { id: 'th', title: 'ไทย' },
-  { id: 'vi', title: 'Tiếng Việt' },
-  // Phase 2
-  { id: 'id', title: 'Bahasa Indonesia' },
-  { id: 'ms', title: 'Bahasa Melayu' },
-  { id: 'tl', title: 'Filipino' },
+  { id: 'es', title: 'Español' },
   { id: 'fr', title: 'Français' },
   { id: 'de', title: 'Deutsch' },
-  { id: 'es', title: 'Español' },
-  // Phase 3
   { id: 'it', title: 'Italiano' },
-  { id: 'pt', title: 'Português' },
-  { id: 'ru', title: 'Русский' },
-  { id: 'ar', title: 'العربية' },
-  { id: 'hi', title: 'हिन्दी' },
-  { id: 'tr', title: 'Türkçe' },
   { id: 'pt-br', title: 'Português (Brasil)' },
+  { id: 'ru', title: 'Русский' },
+  { id: 'ko', title: '한국어' },
+  { id: 'zh-cn', title: '中文（简体）' },
+  { id: 'zh-tw', title: '中文（繁體）' },
+  { id: 'ar', title: 'العربية' },
+  { id: 'tr', title: 'Türkçe' },
+  { id: 'th', title: 'ไทย' },
+  { id: 'nl', title: 'Nederlands' },
+  { id: 'pl', title: 'Polski' },
+  { id: 'sv', title: 'Svenska' },
+  { id: 'da', title: 'Dansk' },
+  { id: 'fi', title: 'Suomi' },
+  { id: 'id', title: 'Bahasa Indonesia' },
 ];

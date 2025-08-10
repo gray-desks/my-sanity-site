@@ -167,6 +167,35 @@ v1.0	20 言語フル自動翻訳 + マップ埋込
 
 ---
 
+## 🌍 多言語対応方針（2025-08-10 更新）
+
+### DeepL API 対応20言語への統一
+**背景**: n8n翻訳パイプラインでDeepL API未対応言語によるエラーが発生していたため、対応言語のみに統一。
+
+#### ✅ 採用言語（20言語）
+**原文**: 日本語（ja）`isDefault: true`
+
+**DeepL API対応19言語**:
+- **アジア**: English, 한국어, 中文（简体/繁體）, ไทย, Bahasa Indonesia
+- **ヨーロッパ**: Français, Deutsch, Español, Italiano, Português (Brasil), Русский, Nederlands, Polski, Svenska, Dansk, Suomi
+- **その他**: العربية, Türkçe
+
+#### 🚫 除去対象
+| 言語コード | 言語名 | 除去理由 |
+|-----------|--------|----------|
+| `hi` | हिन्दी | DeepL API未対応 |
+| `ms` | Bahasa Melayu | DeepL API未対応 |
+| `tl` | Filipino | DeepL API未対応 |
+| `vi` | Tiếng Việt | DeepL API未対応 |
+
+#### 📂 影響ファイル
+- `supportedLanguages.js` ✅ **更新完了**
+- `sanity.config.js` - documentInternationalization設定
+- `site/src/` - Astroルーティング・コンポーネント
+- テストファイル群
+
+---
+
 ## 📝 開発履歴 (History)
 
 ### v0.2-dev Article Schema Migration (2025-01-27)
@@ -288,3 +317,46 @@ cd site && npm run e2e
 
 **テスト結果**: 20/20 tests passed ✅  
 **検証項目**: 必須フィールド処理、多言語サポート、backward compatibility
+
+### v0.2.3 DeepL API対応20言語への移行完了 (2025-08-10)
+**実装**: 翻訳パイプライン互換性改善 + 言語設定統一
+
+#### ✅ 完了項目
+- **言語設定統一**: DeepL API対応20言語への統一完了
+- **除去言語**: vi, ms, tl, hi の4言語を削除（DeepL API未対応）
+- **追加言語**: nl, pl, sv, da, fi の5言語を追加（DeepL API対応）
+- **中央設定更新**: `supportedLanguages.js` を基準とした動的言語管理
+- **コンポーネント修正**: ハードコード言語参照を全て動的取得に変更
+- **Prefecture翻訳**: 47都道府県 × 削除言語分のデータクリーンアップ
+- **OG画像対応**: 新言語分のタイトル生成設定追加
+
+#### 🔧 技術改修詳細
+**コンポーネント修正**:
+- `SearchFilter.astro`: i18n関数による動的文言取得
+- `ArticleCard.astro`: 動的ロケールマッピング
+- `Seo.astro`: OG locale動的対応
+
+**設定ファイル**:
+- `sanity.config.js`: 中央言語設定からの自動取得
+- `astro.config.mjs`: 動的i18nルーティング設定
+- `i18n.ts`: 20言語分のUI翻訳追加
+
+#### 📊 検証結果
+**ビルドテスト**: ✅ **全言語成功**
+- Sanity Studio: ビルドクリア
+- Astro Frontend: 20言語プリレンダリング成功
+- サイトマップ: 全言語URL生成完了
+
+**テストスイート**: ✅ **41/41テスト成功**
+- textParser: 21テスト成功
+- markdown: 11テスト成功  
+- post: 9テスト成功
+
+#### 🌍 対応言語 (20言語)
+**原文**: 日本語 (ja)
+**DeepL API対応19言語**: en, es, fr, de, it, pt-br, ru, ko, zh-cn, zh-tw, ar, tr, th, nl, pl, sv, da, fi, id
+
+#### ⚠️ 移行影響
+**既存データ**: 削除言語の記事は保持（新規翻訳のみ停止）
+**URL構造**: 変更なし（既存リンク互換性維持）
+**パフォーマンス**: 言語数変更なし（20言語維持）

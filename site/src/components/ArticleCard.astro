@@ -10,28 +10,34 @@ interface Props {
 const { article, lang = DEFAULT_LANGUAGE } = Astro.props
 
 const formatDate = (dateString: string) => {
-  const locale = lang === 'ja' ? 'ja-JP' :
-                 lang === 'en' ? 'en-US' :
-                 lang === 'zh-cn' ? 'zh-CN' :
-                 lang === 'zh-tw' ? 'zh-TW' :
-                 lang === 'ko' ? 'ko-KR' :
-                 lang === 'th' ? 'th-TH' :
-                 lang === 'vi' ? 'vi-VN' :
-                 lang === 'ar' ? 'ar-SA' :
-                 lang === 'hi' ? 'hi-IN' :
-                 lang === 'ru' ? 'ru-RU' :
-                 lang === 'fr' ? 'fr-FR' :
-                 lang === 'de' ? 'de-DE' :
-                 lang === 'es' ? 'es-ES' :
-                 lang === 'it' ? 'it-IT' :
-                 lang === 'pt' ? 'pt-PT' :
-                 lang === 'pt-br' ? 'pt-BR' :
-                 lang === 'tr' ? 'tr-TR' :
-                 'en-US'
+  // 動的ロケール取得
+  const localeMap: Record<string, string> = {
+    ja: 'ja-JP',
+    en: 'en-US',
+    'zh-cn': 'zh-CN',
+    'zh-tw': 'zh-TW',
+    ko: 'ko-KR',
+    th: 'th-TH',
+    ar: 'ar-SA',
+    ru: 'ru-RU',
+    fr: 'fr-FR',
+    de: 'de-DE',
+    es: 'es-ES',
+    it: 'it-IT',
+    'pt-br': 'pt-BR',
+    tr: 'tr-TR',
+    nl: 'nl-NL',
+    pl: 'pl-PL',
+    sv: 'sv-SE',
+    da: 'da-DK',
+    fi: 'fi-FI',
+    id: 'id-ID'
+  }
+  const locale = localeMap[lang] || 'en-US'
   
   return new Date(dateString).toLocaleDateString(locale, {
     year: 'numeric',
-    month: 'long',
+    month: 'short',
     day: 'numeric'
   })
 }

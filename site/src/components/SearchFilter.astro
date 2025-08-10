@@ -8,27 +8,8 @@ export interface Props {
 
 const { lang = DEFAULT_LANGUAGE } = Astro.props
 
-// プレースホルダーテキストの定義
-const searchPlaceholder = lang === 'en' ? 'Search by keywords' :
-                         lang === 'zh-cn' ? '按关键词搜索' :
-                         lang === 'zh-tw' ? '按關鍵詞搜索' :
-                         lang === 'ko' ? '키워드로 검색' :
-                         lang === 'th' ? 'ค้นหาด้วยคำสำคัญ' :
-                         lang === 'vi' ? 'Tìm kiếm bằng từ khóa' :
-                         lang === 'id' ? 'Cari dengan kata kunci' :
-                         lang === 'ms' ? 'Cari dengan kata kunci' :
-                         lang === 'tl' ? 'Maghanap gamit ang mga keyword' :
-                         lang === 'fr' ? 'Rechercher par mots-clés' :
-                         lang === 'de' ? 'Mit Stichworten suchen' :
-                         lang === 'es' ? 'Buscar por palabras clave' :
-                         lang === 'it' ? 'Cerca per parole chiave' :
-                         lang === 'pt' ? 'Pesquisar por palavras-chave' :
-                         lang === 'pt-br' ? 'Pesquisar por palavras-chave' :
-                         lang === 'ru' ? 'Поиск по ключевым словам' :
-                         lang === 'ar' ? 'البحث بالكلمات المفتاحية' :
-                         lang === 'hi' ? 'कीवर्ड से खोजें' :
-                         lang === 'tr' ? 'Anahtar kelimelerle ara' :
-                         'キーワードで検索'
+// プレースホルダーテキストの定義 (i18n対応)
+const searchPlaceholder = getUILabel(lang, 'searchPlaceholder')
 
 // 記事タイプの定義
 const articleTypes = [
@@ -470,58 +451,16 @@ const prefectures = [
           noResultsEl = document.createElement('div')
           noResultsEl.id = 'no-results-message'
           noResultsEl.className = 'text-center py-16 bg-white rounded-2xl shadow-lg border border-gray-100'
-          const noResultsTitle = {
-            'ja': 'このページに該当する記事が見つかりませんでした',
-            'en': 'No matching articles found on this page',
-            'zh-cn': '在此页面未找到匹配的文章',
-            'zh-tw': '在此頁面未找到符合的文章',
-            'ko': '이 페이지에서 일치하는 기사를 찾을 수 없습니다',
-            'th': 'ไม่พบบทความที่ตรงกันในหน้านี้',
-            'vi': 'Không tìm thấy bài viết phù hợp trên trang này',
-            'id': 'Tidak ditemukan artikel yang cocok di halaman ini',
-            'ms': 'Tiada artikel yang sepadan ditemui di halaman ini',
-            'tl': 'Walang nahanap na tugmang artikulo sa page na ito',
-            'fr': 'Aucun article correspondant trouvé sur cette page',
-            'de': 'Keine passenden Artikel auf dieser Seite gefunden',
-            'es': 'No se encontraron artículos coincidentes en esta página',
-            'it': 'Nessun articolo corrispondente trovato in questa pagina',
-            'pt': 'Nenhum artigo correspondente encontrado nesta página',
-            'ru': 'На этой странице не найдено подходящих статей',
-            'ar': 'لم يتم العثور على مقالات مطابقة في هذه الصفحة',
-            'hi': 'इस पृष्ठ पर कोई मेल खाता लेख नहीं मिला',
-            'tr': 'Bu sayfada eşleşen makale bulunamadı',
-            'pt-br': 'Nenhum artigo correspondente encontrado nesta página'
-          }
+          const noResultsTitle = getUILabel(document.documentElement.lang || 'ja', 'noArticlesTitle')
           
-          const noResultsSubtitle = {
-            'ja': '他のキーワードを試すか、別のページをご確認ください',
-            'en': 'Try different keywords or check other pages',
-            'zh-cn': '请尝试其他关键词或查看其他页面',
-            'zh-tw': '請嘗試其他關鍵詞或查看其他頁面',
-            'ko': '다른 키워드를 시도하거나 다른 페이지를 확인하세요',
-            'th': 'ลองคำอื่นหรือดูหน้าอื่น',
-            'vi': 'Thử từ khóa khác hoặc kiểm tra trang khác',
-            'id': 'Coba kata kunci lain atau periksa halaman lain',
-            'ms': 'Cuba kata kunci lain atau semak halaman lain',
-            'tl': 'Subukan ang ibang keyword o tingnan ang ibang page',
-            'fr': 'Essayez d\'autres mots-clés ou consultez d\'autres pages',
-            'de': 'Versuchen Sie andere Suchbegriffe oder andere Seiten',
-            'es': 'Intenta con otras palabras clave o revisa otras páginas',
-            'it': 'Prova altre parole chiave o controlla altre pagine',
-            'pt': 'Tente outras palavras-chave ou verifique outras páginas',
-            'ru': 'Попробуйте другие ключевые слова или проверьте другие страницы',
-            'ar': 'جرب كلمات مفتاحية أخرى أو تحقق من صفحات أخرى',
-            'hi': 'अन्य कीवर्ड आज़माएं या अन्य पृष्ठ देखें',
-            'tr': 'Başka anahtar kelimeler deneyin veya diğer sayfaları kontrol edin',
-            'pt-br': 'Tente outras palavras-chave ou verifique outras páginas'
-          }
+          const noResultsSubtitle = getUILabel(document.documentElement.lang || 'ja', 'noArticlesSubtitle')
           
           const currentLang = document.documentElement.lang || 'ja'
           
           noResultsEl.innerHTML = `
             <div class="text-6xl mb-4">🔍</div>
-            <p class="text-gray-500 text-xl mb-2">${noResultsTitle[currentLang] || noResultsTitle['ja']}</p>
-            <p class="text-gray-400">${noResultsSubtitle[currentLang] || noResultsSubtitle['ja']}</p>
+            <p class="text-gray-500 text-xl mb-2">${noResultsTitle}</p>
+            <p class="text-gray-400">${noResultsSubtitle}</p>
           `
           
           const articlesContainer = document.querySelector('#articles .grid')

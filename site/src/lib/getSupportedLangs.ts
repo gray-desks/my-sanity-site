@@ -24,24 +24,24 @@ export const getHreflangCode = (langId: string): string => {
   const hreflangMap: Record<string, string> = {
     'ja': 'ja',
     'en': 'en',
-    'zh-cn': 'zh-Hans',
-    'zh-tw': 'zh-Hant',
-    'ko': 'ko',
-    'th': 'th',
-    'vi': 'vi',
-    'id': 'id',
-    'ms': 'ms',
-    'tl': 'tl',
+    'es': 'es',
     'fr': 'fr',
     'de': 'de',
-    'es': 'es',
     'it': 'it',
-    'pt': 'pt',
+    'pt-br': 'pt-BR',
     'ru': 'ru',
+    'ko': 'ko',
+    'zh-cn': 'zh-Hans',
+    'zh-tw': 'zh-Hant',
     'ar': 'ar',
-    'hi': 'hi',
     'tr': 'tr',
-    'pt-br': 'pt-BR'
+    'th': 'th',
+    'nl': 'nl',
+    'pl': 'pl',
+    'sv': 'sv',
+    'da': 'da',
+    'fi': 'fi',
+    'id': 'id'
   };
   
   return hreflangMap[langId] || langId;

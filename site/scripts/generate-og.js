@@ -6,29 +6,8 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-// Language configurations
-const supportedLanguages = [
-  { id: 'ja', title: '日本語' },
-  { id: 'en', title: 'English' },
-  { id: 'zh-cn', title: '中文（简体）' },
-  { id: 'zh-tw', title: '中文（繁體）' },
-  { id: 'ko', title: '한국어' },
-  { id: 'th', title: 'ไทย' },
-  { id: 'vi', title: 'Tiếng Việt' },
-  { id: 'id', title: 'Bahasa Indonesia' },
-  { id: 'ms', title: 'Bahasa Melayu' },
-  { id: 'tl', title: 'Filipino' },
-  { id: 'fr', title: 'Français' },
-  { id: 'de', title: 'Deutsch' },
-  { id: 'es', title: 'Español' },
-  { id: 'it', title: 'Italiano' },
-  { id: 'pt', title: 'Português' },
-  { id: 'ru', title: 'Русский' },
-  { id: 'ar', title: 'العربية' },
-  { id: 'hi', title: 'हिन्दी' },
-  { id: 'tr', title: 'Türkçe' },
-  { id: 'pt-br', title: 'Português (Brasil)' }
-];
+// Language configurations - Import from central config
+import { supportedLanguages } from '../../supportedLanguages.js';
 
 // OG Image dimensions
 const OG_WIDTH = 1200;
@@ -42,20 +21,20 @@ const langTitles = {
   'zh-tw': '旅行日誌 - 日本全國旅行記錄',
   'ko': '여행 로그 - 일본 전국 여행 기록',
   'th': 'บันทึกการเดินทาง - บันทึกการเดินทางทั่วญี่ปุ่น',
-  'vi': 'Nhật ký du lịch - Ghi chép du lịch toàn Nhật Bản',
   'id': 'Log Perjalanan - Catatan Perjalanan Seluruh Jepang',
-  'ms': 'Log Perjalanan - Catatan Perjalanan Seluruh Jepang',
-  'tl': 'Travel Log - Tala ng Paglalakbay sa Buong Japan',
+  'nl': 'Reisjournaal - Reisverslagen uit heel Japan',
+  'pl': 'Dziennik Podróży - Zapiski podróżne z całej Japonii',
+  'sv': 'Resedagbok - Reseanteckningar från hela Japan',
+  'da': 'Rejsedagbog - Rejseoptegnelser fra hele Japan',
+  'fi': 'Matkapäiväkirja - Matkamuistiinpanot koko Japanista',
+  'tr': 'Seyahat Günlüğü - Tüm Japonya Seyahat Kayıtları',
+  'pt-br': 'Diário de Viagem - Registros de viagem por todo o Japão',
   'fr': 'Journal de Voyage - Carnets de voyage du Japon',
   'de': 'Reisetagebuch - Japan Reiseaufzeichnungen',
   'es': 'Diario de Viaje - Registro de viajes por todo Japón',
   'it': 'Diario di Viaggio - Registri di viaggio in tutto il Giappone',
-  'pt': 'Diário de Viagem - Registros de viagem por todo o Japão',
   'ru': 'Дневник путешествий - Записи путешествий по всей Японии',
-  'ar': 'مذكرات السفر - سجلات السفر في جميع أنحاء اليابان',
-  'hi': 'यात्रा डायरी - पूरे जापान की यात्रा रिकॉर्ड',
-  'tr': 'Seyahat Günlüğü - Tüm Japonya Seyahat Kayıtları',
-  'pt-br': 'Diário de Viagem - Registros de viagem por todo o Japão'
+  'ar': 'مذكرات السفر - سجلات السفر في جميع أنحاء اليابان'
 };
 
 async function generateOgImages() {
