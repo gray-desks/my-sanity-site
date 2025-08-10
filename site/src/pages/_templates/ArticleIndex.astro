@@ -59,14 +59,9 @@ const structuredData = {
   <!-- Hero Section (only on first page) -->
   {currentPage === 1 && <Hero lang={lang} />}
 
-  <!-- Search and Filter Section - ヒーロー直下に配置 (only on first page) -->
-  {currentPage === 1 && (
-    <div class="max-w-4xl mx-auto px-4 pt-8">
-      <SearchFilter lang={lang} />
-    </div>
-  )}
+  <!-- SearchFilter is embedded inside Hero on the first page -->
 
-  <!-- Top Ad - 検索の下に配置 (only on first page) -->
+  <!-- Top Ad - ヒーローの下に配置 (only on first page) -->
   {currentPage === 1 && (
     <div class="max-w-4xl mx-auto px-4 pt-4">
       <AdSlot
