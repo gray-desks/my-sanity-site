@@ -13,8 +13,8 @@ const subtitle = getUILabel(lang, 'heroSubtitle')
 const ctaText = getUILabel(lang, 'readStories')
 ---
 
-<section class="relative overflow-hidden min-h-[45vh] md:min-h-[52vh] flex items-start justify-center bg-white pt-8 pb-12 md:pt-24 md:pb-24">
-  <div class="absolute top-1/2 left-1/2 transform -translate-x-[52%] -translate-y-1/2 pointer-events-none hinomaru-container">
+<section class="relative overflow-hidden min-h-[38vh] md:min-h-[52vh] flex items-start justify-center bg-white pt-8 pb-6 md:pt-24 md:pb-24">
+  <div class="absolute top-1/2 left-1/2 transform -translate-x-[62%] -translate-y-1/2 pointer-events-none hinomaru-container">
     <div class="w-full h-full rounded-full hinomaru-circle"></div>
   </div>
   <!-- Soft fade on the right to blend character and background -->
@@ -24,14 +24,14 @@ const ctaText = getUILabel(lang, 'readStories')
   <!-- Character moved to global floating assistant (see Layout.astro) -->
 
   <!-- Fade to white at bottom -->
-  <div class="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-white to-transparent pointer-events-none z-5"></div>
+  <div class="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-white to-transparent pointer-events-none z-5"></div>
 
   <!-- Content with entrance animations -->
-  <div class="relative max-w-5xl mx-auto px-4 text-center z-10 mt-8 md:mt-12">
+  <div class="relative max-w-5xl mx-auto px-4 text-center z-10 mt-6 md:mt-12">
     <h1 class="text-4xl md:text-6xl font-semibold tracking-wide text-gray-900 mb-4 drop-shadow-sm hero-title animate-fade-in-up">
       {title}
     </h1>
-    <p class="mt-2 text-base md:text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed drop-shadow-sm hero-subtitle animate-fade-in-up-delay mb-6 md:mb-16">
+    <p class="mt-2 text-base md:text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed drop-shadow-sm hero-subtitle animate-fade-in-up-delay mb-4 md:mb-16">
       {subtitle}
     </p>
     
