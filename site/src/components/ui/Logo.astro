@@ -1,18 +1,38 @@
 ---
 export interface Props {
-  size?: number | string     // icon size (height in px or Tailwind class e.g. 'h-8')
-  subtitle?: boolean         // show “旅ログ” subtitle
+  size?: number            // pixel size of the circular mark (default 64)
+  kanji?: string           // character inside the circle (default '旅')
+  withBadge?: boolean      // show small gold badge dot (default true)
+  href?: string            // link href (default '/')
+  ariaLabel?: string       // accessible label
+  class?: string           // extra classes for wrapper
 }
-const { size = 8, subtitle = true } = Astro.props
+
+const {
+  size = 64,
+  kanji = '旅',
+  withBadge = true,
+  href = '/',
+  ariaLabel = 'Site logo',
+  class: className = ''
+} = Astro.props as Props
 ---
-<a href="/" class="group inline-flex items-center gap-2">
-  <img src="/logo.svg" alt="Travel Log logo" class={typeof size === 'number' ? `h-${size} w-${size}` : size} />
-  <span class="font-black text-xl md:text-2xl tracking-tight text-brand-primary group-hover:text-brand-secondary transition-colors">
-    旅ログ
-  </span>
-  {subtitle && (
-    <span class="ml-1 text-xs md:text-sm font-medium text-gray-500 group-hover:text-gray-700 transition-colors">
-      Japan Travel Log
-    </span>
-  )}
+
+<a href={href} aria-label={ariaLabel} class={`group inline-flex items-center ${className}`}>
+  <div class="relative">
+    <div
+      class="rounded-full flex items-center justify-center shadow-lg border-2 border-white bg-gradient-to-br from-[var(--theme-accent)] to-[var(--theme-accent)]/80"
+      style={`width:${size}px;height:${size}px;`}
+    >
+      <span class="text-white font-bold font-serif" style={`font-size:${Math.round(size * 0.4)}px;`}>
+        {kanji}
+      </span>
+    </div>
+    {withBadge && (
+      <div
+        class="absolute -top-1 -right-1 rounded-full border-2 border-white"
+        style={`width:${Math.max(8, Math.round(size * 0.25))}px;height:${Math.max(8, Math.round(size * 0.25))}px;background:#d4af37;`}
+      />
+    )}
+  </div>
 </a>

@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css'
 import Navbar from '../components/Navbar.astro'
+import Logo from '../components/ui/Logo.astro'
 import HreflangLinks from '../components/HreflangLinks.astro'
 import Seo from '../components/Seo.astro'
 import { isRTL, getFontFamily, getUILabel, getLocalizedPath, DEFAULT_LANGUAGE } from '../lib/i18n'
@@ -110,81 +111,149 @@ const currentPath = Astro.url.pathname
       </main>
     </div>
 
-    <footer class="relative mt-12 pt-8 bg-[var(--theme-accent-weak)] border-t border-[var(--theme-accent)]/10">
-      <!-- Japanese wave pattern overlay -->
-      <div class="absolute inset-0 opacity-5">
-        <svg class="w-full h-full" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 20">
-          <pattern id="japanese-wave" patternUnits="userSpaceOnUse" width="100" height="20">
-            <path d="M0 10 Q25 0 50 10 T100 10" stroke="var(--theme-accent)" stroke-width="2" fill="none"/>
-            <path d="M0 15 Q25 5 50 15 T100 15" stroke="var(--theme-accent)" stroke-width="1" fill="none" opacity="0.6"/>
+    <!-- Enhanced Japanese-style footer -->
+    <footer class="relative mt-16 bg-gradient-to-b from-[#f8f6f3] via-[#f5f3f0] to-[#f0ede8] border-t-2 border-[var(--theme-accent)]/20 overflow-hidden">
+      <!-- Traditional Japanese cloud pattern background -->
+      <div class="absolute inset-0 opacity-[0.08]">
+        <svg class="w-full h-full" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200">
+          <pattern id="kumo-pattern" patternUnits="userSpaceOnUse" width="400" height="200">
+            <!-- Traditional cloud shapes (kumo) -->
+            <g fill="var(--theme-accent)">
+              <!-- Main cloud -->
+              <ellipse cx="100" cy="80" rx="60" ry="20" opacity="0.6"/>
+              <ellipse cx="80" cy="75" rx="40" ry="15" opacity="0.7"/>
+              <ellipse cx="120" cy="85" rx="35" ry="12" opacity="0.8"/>
+              
+              <!-- Secondary clouds -->
+              <ellipse cx="250" cy="60" rx="45" ry="15" opacity="0.5"/>
+              <ellipse cx="280" cy="65" rx="30" ry="10" opacity="0.6"/>
+              
+              <ellipse cx="350" cy="120" rx="50" ry="18" opacity="0.4"/>
+              <ellipse cx="380" cy="125" rx="25" ry="8" opacity="0.7"/>
+            </g>
           </pattern>
-          <rect width="100%" height="100%" fill="url(#japanese-wave)"/>
+          <rect width="100%" height="100%" fill="url(#kumo-pattern)"/>
         </svg>
       </div>
       
-      <div class="relative max-w-7xl mx-auto px-4 sm:px-6 py-8 md:py-10">
-        <!-- Mobile Simplified Brand Section -->
-        <div class="mb-6 md:mb-8 block md:hidden">
-          <div class="text-center">
-            <div class="flex items-center justify-center gap-2 mb-3">
-              <div class="w-8 h-8 bg-[var(--theme-accent)] rounded-lg flex items-center justify-center shadow-lg flex-shrink-0">
-                <span class="text-white font-bold text-sm">旅</span>
+      <!-- Decorative top border with traditional pattern -->
+      <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[var(--theme-accent)] to-transparent"></div>
+      <div class="absolute top-1 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[var(--theme-accent)]/40 to-transparent"></div>
+      
+      <div class="relative max-w-6xl mx-auto px-6 py-12">
+        <!-- Main content grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-10">
+          
+          <!-- Brand section with Japanese aesthetics -->
+          <div class="lg:col-span-2 space-y-6">
+            <!-- Enhanced logo section -->
+            <div class="flex items-center gap-4 mb-6">
+              <!-- Traditional circular logo design -->
+              <!-- Logo component -->
+              <Logo size={64} kanji="旅" withBadge={true} ariaLabel={getUILabel(lang, 'siteTitle')} class="mr-2" />
+              
+              <div class="space-y-1">
+                <h2 class="text-2xl font-bold text-[#2d3748] font-serif tracking-wide">
+                  {getUILabel(lang, 'siteTitle')}
+                </h2>
+                <p class="text-sm text-[#666] leading-relaxed font-light">
+                  {getUILabel(lang, 'siteDescription')}
+                </p>
               </div>
-              <span class="font-serif text-lg font-bold text-black">
-                {getUILabel(lang, 'siteTitle')}
-              </span>
-            </div>
-            <p class="text-gray-400 text-sm leading-relaxed">- {getUILabel(lang, 'siteDescription')}</p>
-          </div>
-        </div>
-        
-        <!-- Desktop Brand Section -->
-        <div class="mb-8 hidden md:block">
-          <div class="max-w-md mx-auto text-center">
-            <div class="flex items-baseline justify-center gap-3 mb-6 flex-wrap">
-              <div class="w-10 h-10 bg-[var(--theme-accent)] rounded-lg flex items-center justify-center shadow-lg flex-shrink-0">
-                <span class="text-white font-bold text-lg">旅</span>
-              </div>
-              <span class="font-serif text-xl font-bold text-black">
-                {getUILabel(lang, 'siteTitle')}
-              </span>
-              <p class="text-gray-400 text-sm leading-relaxed">- {getUILabel(lang, 'siteDescription')}</p>
             </div>
             
-            <!-- Travel stats -->
-            <div class="grid grid-cols-2 gap-4">
-              <div class="text-center p-4 bg-base/5 rounded-lg">
-                <div class="text-2xl font-bold text-[var(--theme-accent)]">20+</div>
-                <div class="text-sm text-gray-400">Languages</div>
+            <!-- Japanese-style description -->
+            <div class="bg-white/50 backdrop-blur-sm rounded-lg p-6 border border-[var(--theme-accent)]/10 shadow-sm">
+              <p class="text-[#4a5568] leading-relaxed text-sm mb-4 font-light">
+                日本全国の美しい風景、伝統文化、美食体験を世界20言語で発信。
+                <br class="hidden sm:block"/>
+                一期一会の旅の記録をお届けします。
+              </p>
+              
+              <!-- Stats with Japanese design -->
+              <div class="grid grid-cols-3 gap-4 mt-6">
+                <div class="text-center p-3 bg-gradient-to-b from-white to-[#fafafa] rounded-lg border border-gray-200/50">
+                  <div class="text-lg font-bold text-[var(--theme-accent)] font-serif">20+</div>
+                  <div class="text-xs text-gray-500 font-light">言語</div>
+                </div>
+                <div class="text-center p-3 bg-gradient-to-b from-white to-[#fafafa] rounded-lg border border-gray-200/50">
+                  <div class="text-lg font-bold text-[var(--theme-accent)] font-serif">∞</div>
+                  <div class="text-xs text-gray-500 font-light">体験</div>
+                </div>
+                <div class="text-center p-3 bg-gradient-to-b from-white to-[#fafafa] rounded-lg border border-gray-200/50">
+                  <div class="text-lg font-bold text-[var(--theme-accent)] font-serif">💝</div>
+                  <div class="text-xs text-gray-500 font-light">思い出</div>
+                </div>
               </div>
-              <div class="text-center p-4 bg-base/5 rounded-lg">
-                <div class="text-2xl font-bold text-[var(--theme-accent)]/80">∞</div>
-                <div class="text-sm text-gray-400">Adventures</div>
+            </div>
+          </div>
+          
+          <!-- Side content with traditional elements -->
+          <div class="space-y-6">
+            <!-- Seasonal greeting (季節の挨拶) -->
+            <div class="bg-white/60 backdrop-blur-sm rounded-lg p-5 border border-[var(--theme-accent)]/10 shadow-sm">
+              <h3 class="font-semibold text-[#2d3748] mb-3 text-sm font-serif border-b border-gray-200/50 pb-2">
+                🌸 季節のご挨拶
+              </h3>
+              <p class="text-xs text-[#666] leading-relaxed font-light">
+                四季折々の日本の美しさを
+                <br/>世界の皆様にお届けいたします。
+              </p>
+            </div>
+            
+            <!-- Quick links with Japanese styling -->
+            <div class="bg-white/60 backdrop-blur-sm rounded-lg p-5 border border-[var(--theme-accent)]/10 shadow-sm">
+              <h3 class="font-semibold text-[#2d3748] mb-3 text-sm font-serif border-b border-gray-200/50 pb-2">
+                📍 人気のカテゴリ
+              </h3>
+              <div class="space-y-2">
+                <a href="/spot" class="block text-xs text-[#666] hover:text-[var(--theme-accent)] transition-colors font-light">
+                  🏯 観光スポット
+                </a>
+                <a href="/food" class="block text-xs text-[#666] hover:text-[var(--theme-accent)] transition-colors font-light">
+                  🍜 グルメ・料理
+                </a>
+                <a href="/hotel" class="block text-xs text-[#666] hover:text-[var(--theme-accent)] transition-colors font-light">
+                  🏨 宿泊・温泉
+                </a>
               </div>
             </div>
           </div>
         </div>
         
-        <!-- Japan-themed footer content -->
-        <div class="text-center">
-          <p class="text-sm text-[var(--theme-ink-strong)]/80 mb-4">日本全国の旅記録を多言語で発信</p>
+        <!-- Bottom section with traditional separator -->
+        <div class="border-t border-[var(--theme-accent)]/20 pt-6 mt-8">
+          <!-- Decorative separator -->
+          <div class="flex items-center justify-center mb-6">
+            <div class="flex-1 h-px bg-gradient-to-r from-transparent via-[var(--theme-accent)]/20 to-[var(--theme-accent)]/20"></div>
+            <div class="px-4 text-[var(--theme-accent)] text-sm">❀</div>
+            <div class="flex-1 h-px bg-gradient-to-l from-transparent via-[var(--theme-accent)]/20 to-[var(--theme-accent)]/20"></div>
+          </div>
           
-          <!-- Legal links -->
-          <div class="border-t border-[var(--theme-accent)]/20 pt-4">
-            <div class="flex justify-center gap-2 text-xs text-neutral-500 mb-3">
-              <span>&copy; 2025 {getUILabel(lang, 'siteTitle')}</span>
-              <span>・</span>
-              <a href="/privacy" class="hover:text-[var(--theme-accent)] transition-colors underline">
+          <!-- Copyright and links -->
+          <div class="text-center space-y-3">
+            <div class="flex flex-wrap justify-center items-center gap-3 text-xs text-[#666]">
+              <span class="font-light">&copy; 2025 {getUILabel(lang, 'siteTitle')}</span>
+              <span class="text-[var(--theme-accent)]">•</span>
+              <a href="/privacy" class="hover:text-[var(--theme-accent)] transition-colors font-light underline decoration-1 underline-offset-2">
                 プライバシーポリシー
               </a>
-              <span>・</span>
-              <a href="/en/privacy" class="hover:text-[var(--theme-accent)] transition-colors underline">
+              <span class="text-[var(--theme-accent)]">•</span>
+              <a href="/en/privacy" class="hover:text-[var(--theme-accent)] transition-colors font-light underline decoration-1 underline-offset-2">
                 Privacy Policy
               </a>
             </div>
+            
+            <!-- Final tagline with elegant typography -->
+            <p class="text-xs text-[#888] font-light italic">
+              ― 心に残る旅の記録を、世界へ ―
+            </p>
           </div>
         </div>
       </div>
+      
+      <!-- Subtle bottom gradient -->
+      <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[var(--theme-accent)]/10 to-transparent"></div>
     </footer>
 
     <!-- Professional animations and interactions -->
