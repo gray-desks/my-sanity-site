@@ -73,6 +73,19 @@ const typeConfig = {
 const config = typeConfig[article.type as keyof typeof typeConfig] || typeConfig.note
 const typeLabel = config.label[lang as keyof typeof config.label] || config.label.ja
 
+// Tag color variable mapping (ensure 'food' maps to '--tag-gourmet')
+const tagVarMap: Record<string, string> = {
+  spot: '--tag-spot',
+  food: '--tag-gourmet',
+  transport: '--tag-transport',
+  hotel: '--tag-hotel',
+  note: '--tag-note',
+  event: '--tag-event'
+}
+const tagVar = tagVarMap[article.type] || '--tag-note'
+// Inline style leveraging CSS color-mix when available; falls back to solid color
+const badgeStyle = `background: var(${tagVar}); border-color: color-mix(in srgb, var(${tagVar}) 70%, white 30%);`
+
 // 多言語対応URL生成
 const articleUrl = lang === 'ja' 
   ? `/article/${article._id}` 
@@ -99,10 +112,14 @@ const articleUrl = lang === 'ja'
         loading="lazy"
         decoding="async"
       />
-      <!-- Optional Type Label with theme color -->
+      <!-- Type Badge (refined) -->
       {config.emoji && (
-        <div class="absolute top-2 left-2 px-2 py-0.5 rounded-full text-[11px] text-white font-medium" style={`background: var(--tag-${article.type})`}>
-          {config.emoji} {typeLabel}
+        <div 
+          class="absolute top-2 left-2 inline-flex items-center gap-1 pl-2 pr-2.5 py-1 rounded-full text-[11px] text-white font-medium shadow-[0_2px_8px_rgba(0,0,0,0.18)] ring-1 ring-white/40 backdrop-blur-[2px]"
+          style={badgeStyle}
+        >
+          <span class="-ml-0.5 drop-shadow-[0_1px_0_rgba(0,0,0,0.25)]">{config.emoji}</span>
+          <span class="tracking-wide">{typeLabel}</span>
         </div>
       )}
     </div>
@@ -116,22 +133,30 @@ const articleUrl = lang === 'ja'
     
     <!-- Gallery preview (if available) -->
     {article.gallery && article.gallery.length > 0 && (
-      <div class="flex gap-1 mb-3 overflow-hidden">
-        {article.gallery.slice(0, 4).map((image, index) => (
-          <div class="flex-shrink-0 w-12 h-12 rounded-lg overflow-hidden border border-neutral-200">
-            <img 
-              src={`${image.asset.url}?w=48&h=48&fit=crop&auto=format`}
-              alt=""
-              class="w-full h-full object-cover"
-              loading="lazy"
-            />
-          </div>
-        ))}
-        {article.gallery.length > 4 && (
-          <div class="flex-shrink-0 w-12 h-12 rounded-lg bg-neutral-100 border border-neutral-200 flex items-center justify-center">
-            <span class="text-xs text-neutral-500 font-medium">+{article.gallery.length - 4}</span>
-          </div>
-        )}
+      <div class="mb-4">
+        <div class="flex gap-3 overflow-x-auto pb-2">
+          {article.gallery.slice(0, 5).map((image, index) => (
+            <div class="relative group/gallery">
+              <img 
+                src={`${image.asset.url}?w=56&h=56&fit=crop&auto=format`}
+                alt=""
+                class="w-14 h-14 object-cover rounded-xl flex-shrink-0 ring-2 ring-white/50 shadow-lg hover:ring-brand-400 hover:scale-110 transition-all duration-300 hover:shadow-xl"
+                loading="lazy"
+                decoding="async"
+                style={`--animation-delay: ${index * 100}ms; animation-delay: var(--animation-delay);`}
+              />
+              <div class="absolute inset-0 bg-gradient-to-t from-brand-500/20 to-transparent opacity-0 group-hover/gallery:opacity-100 transition-opacity duration-300 rounded-xl"></div>
+            </div>
+          ))}
+          {article.gallery.length > 5 && (
+            <div class="relative group/gallery">
+              <div class="w-14 h-14 rounded-xl flex-shrink-0 ring-2 ring-white/50 shadow-lg bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center hover:ring-brand-400 hover:scale-110 transition-all duration-300 hover:shadow-xl">
+                <span class="text-xs text-gray-600 font-medium">+{article.gallery.length - 5}</span>
+              </div>
+              <div class="absolute inset-0 bg-gradient-to-t from-brand-500/20 to-transparent opacity-0 group-hover/gallery:opacity-100 transition-opacity duration-300 rounded-xl"></div>
+            </div>
+          )}
+        </div>
       </div>
     )}
     

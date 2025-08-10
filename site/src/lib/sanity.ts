@@ -138,7 +138,13 @@ export async function getArticlesPaged(
           }
         }
       },
-      "bodyText": pt::text(content),
+      gallery[] {
+        asset->{
+          _id,
+          url
+        }
+      },
+      "bodyText": pt::text(coalesce(content, body)),
       lang,
       __i18n_lang,
       __i18n_refs

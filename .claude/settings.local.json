@@ -74,7 +74,9 @@
       "mcp__serena__insert_before_symbol",
       "Bash(python3:*)",
       "Bash(timeout 30s npm test:*)",
-      "WebFetch(domain:localhost)"
+      "WebFetch(domain:localhost)",
+      "mcp__serena__think_about_collected_information",
+      "Bash(cp:*)"
     ],
     "deny": []
   }

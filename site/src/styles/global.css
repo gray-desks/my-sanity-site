@@ -107,6 +107,14 @@
   line-height: 1.7;
 }
 
+/* Shared Japanese serif font (match Hero title) */
+.jp-serif {
+  font-family: 'Shippori Mincho', 'Noto Serif JP', serif;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
 /* Arabic text alignment */
 .lang-ar p, .lang-ar h1, .lang-ar h2, .lang-ar h3 {
   text-align: right;

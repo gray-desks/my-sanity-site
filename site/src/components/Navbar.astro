@@ -1,5 +1,6 @@
 ---
 import { getUILabel, getLocalizedPath, ENABLED_LANGUAGES, ALL_LANGUAGES, DEFAULT_LANGUAGE } from '../lib/i18n'
+import Logo from './ui/Logo.astro'
 import { langToCountry, type SupportedLanguage } from '../lib/langToCountry'
 import FlagIcon from './FlagIcon.astro'
 
@@ -16,18 +17,16 @@ const availableLanguages = ENABLED_LANGUAGES
 <nav class="sticky top-0 z-50 bg-base/80 backdrop-blur-md border-b border-border">
   <div class="max-w-7xl mx-auto px-4 py-3 sm:py-4 flex items-center justify-between">
     <!-- Logo -->
-    <a 
-      href={lang === 'ja' ? '/' : `/${lang}/`} 
-      class="flex items-center gap-3 group"
-      aria-label={`${getUILabel(lang, 'siteTitle')} - ${getUILabel(lang, 'home')}`}
-    >
-      <div class="w-10 h-10 bg-[var(--theme-accent)] rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
-        <span class="text-white font-bold text-lg">旅</span>
-      </div>
-      <span class="text-2xl font-bold text-ink">
+    <div class="flex items-center gap-3 group">
+      <Logo size={40} kanji="旅" withBadge={true} href={lang === 'ja' ? '/' : `/${lang}/`} ariaLabel={`${getUILabel(lang, 'siteTitle')} - ${getUILabel(lang, 'home')}`} />
+      <a 
+        href={lang === 'ja' ? '/' : `/${lang}/`} 
+        class="text-2xl font-bold text-ink hover:text-[var(--theme-accent)] transition-colors jp-serif"
+        aria-label={`${getUILabel(lang, 'siteTitle')} - ${getUILabel(lang, 'home')}`}
+      >
         {getUILabel(lang, 'siteTitle')}
-      </span>
-    </a>
+      </a>
+    </div>
     
     <!-- Navigation Links -->
     <div class="flex items-center gap-4">
