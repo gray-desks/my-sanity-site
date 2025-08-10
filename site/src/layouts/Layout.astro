@@ -141,18 +141,17 @@ const currentPath = Astro.url.pathname
       <div class="absolute top-1 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[var(--theme-accent)]/40 to-transparent"></div>
       
       <div class="relative max-w-6xl mx-auto px-6 py-12">
-        <!-- Main content grid -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-10">
-          
+        <!-- Main content centered and simplified -->
+        <div class="max-w-4xl mx-auto">
           <!-- Brand section with Japanese aesthetics -->
-          <div class="lg:col-span-2 space-y-6">
+          <div class="space-y-6">
             <!-- Enhanced logo section -->
-            <div class="flex items-center gap-4 mb-6">
+            <div class="flex items-center justify-center gap-4 mb-8">
               <!-- Traditional circular logo design -->
               <!-- Logo component -->
               <Logo size={64} kanji="旅" withBadge={true} ariaLabel={getUILabel(lang, 'siteTitle')} class="mr-2" />
               
-              <div class="space-y-1">
+              <div class="space-y-1 text-center">
                 <h2 class="text-2xl font-bold text-[#2d3748] font-serif tracking-wide">
                   {getUILabel(lang, 'siteTitle')}
                 </h2>
@@ -164,58 +163,116 @@ const currentPath = Astro.url.pathname
             
             <!-- Japanese-style description -->
             <div class="bg-white/50 backdrop-blur-sm rounded-lg p-6 border border-[var(--theme-accent)]/10 shadow-sm">
-              <p class="text-[#4a5568] leading-relaxed text-sm mb-4 font-light">
-                日本全国の美しい風景、伝統文化、美食体験を世界20言語で発信。
-                <br class="hidden sm:block"/>
-                一期一会の旅の記録をお届けします。
+              <p class="text-[#4a5568] leading-relaxed text-sm mb-6 font-light text-center">
+                {lang === 'ja' && (
+                  <>
+                    日本全国の美しい風景、伝統文化、美食体験を世界20言語で発信。
+                    <br class="hidden sm:block"/>
+                    一期一会の旅の記録をお届けします。
+                  </>
+                )}
+                {lang === 'en' && (
+                  <>
+                    Sharing Japan's beautiful landscapes, traditional culture, and culinary experiences in 20 languages worldwide.
+                    <br class="hidden sm:block"/>
+                    Delivering unforgettable travel memories from across Japan.
+                  </>
+                )}
+                {lang !== 'ja' && lang !== 'en' && (
+                  <>
+                    日本全国の美しい風景、伝統文化、美食体験を世界20言語で発信。
+                    <br class="hidden sm:block"/>
+                    一期一会の旅の記録をお届けします。
+                  </>
+                )}
               </p>
               
               <!-- Stats with Japanese design -->
-              <div class="grid grid-cols-3 gap-4 mt-6">
+              <div class="grid grid-cols-2 gap-4 max-w-sm mx-auto mb-6">
                 <div class="text-center p-3 bg-gradient-to-b from-white to-[#fafafa] rounded-lg border border-gray-200/50">
                   <div class="text-lg font-bold text-[var(--theme-accent)] font-serif">20+</div>
-                  <div class="text-xs text-gray-500 font-light">言語</div>
+                  <div class="text-xs text-gray-500 font-light">
+                    {lang === 'ja' && '言語'}
+                    {lang === 'en' && 'Languages'}
+                    {lang === 'es' && 'Idiomas'}
+                    {lang === 'fr' && 'Langues'}
+                    {lang === 'de' && 'Sprachen'}
+                    {lang === 'it' && 'Lingue'}
+                    {lang === 'pt-br' && 'Idiomas'}
+                    {lang === 'ru' && 'Языки'}
+                    {lang === 'ko' && '언어'}
+                    {lang === 'zh-cn' && '语言'}
+                    {lang === 'zh-tw' && '語言'}
+                    {lang === 'ar' && 'لغات'}
+                    {lang === 'tr' && 'Diller'}
+                    {lang === 'th' && 'ภาษา'}
+                    {lang === 'nl' && 'Talen'}
+                    {lang === 'pl' && 'Języki'}
+                    {lang === 'sv' && 'Språk'}
+                    {lang === 'da' && 'Sprog'}
+                    {lang === 'fi' && 'Kielet'}
+                    {lang === 'id' && 'Bahasa'}
+                  </div>
                 </div>
                 <div class="text-center p-3 bg-gradient-to-b from-white to-[#fafafa] rounded-lg border border-gray-200/50">
                   <div class="text-lg font-bold text-[var(--theme-accent)] font-serif">∞</div>
-                  <div class="text-xs text-gray-500 font-light">体験</div>
-                </div>
-                <div class="text-center p-3 bg-gradient-to-b from-white to-[#fafafa] rounded-lg border border-gray-200/50">
-                  <div class="text-lg font-bold text-[var(--theme-accent)] font-serif">💝</div>
-                  <div class="text-xs text-gray-500 font-light">思い出</div>
+                  <div class="text-xs text-gray-500 font-light">
+                    {lang === 'ja' && '体験'}
+                    {lang === 'en' && 'Experiences'}
+                    {lang === 'es' && 'Experiencias'}
+                    {lang === 'fr' && 'Expériences'}
+                    {lang === 'de' && 'Erfahrungen'}
+                    {lang === 'it' && 'Esperienze'}
+                    {lang === 'pt-br' && 'Experiências'}
+                    {lang === 'ru' && 'Опыт'}
+                    {lang === 'ko' && '경험'}
+                    {lang === 'zh-cn' && '体验'}
+                    {lang === 'zh-tw' && '體驗'}
+                    {lang === 'ar' && 'تجارب'}
+                    {lang === 'tr' && 'Deneyimler'}
+                    {lang === 'th' && 'ประสบการณ์'}
+                    {lang === 'nl' && 'Ervaringen'}
+                    {lang === 'pl' && 'Doświadczenia'}
+                    {lang === 'sv' && 'Upplevelser'}
+                    {lang === 'da' && 'Oplevelser'}
+                    {lang === 'fi' && 'Kokemukset'}
+                    {lang === 'id' && 'Pengalaman'}
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
-          
-          <!-- Side content with traditional elements -->
-          <div class="space-y-6">
-            <!-- Seasonal greeting (季節の挨拶) -->
-            <div class="bg-white/60 backdrop-blur-sm rounded-lg p-5 border border-[var(--theme-accent)]/10 shadow-sm">
-              <h3 class="font-semibold text-[#2d3748] mb-3 text-sm font-serif border-b border-gray-200/50 pb-2">
-                🌸 季節のご挨拶
-              </h3>
-              <p class="text-xs text-[#666] leading-relaxed font-light">
-                四季折々の日本の美しさを
-                <br/>世界の皆様にお届けいたします。
-              </p>
-            </div>
-            
-            <!-- Quick links with Japanese styling -->
-            <div class="bg-white/60 backdrop-blur-sm rounded-lg p-5 border border-[var(--theme-accent)]/10 shadow-sm">
-              <h3 class="font-semibold text-[#2d3748] mb-3 text-sm font-serif border-b border-gray-200/50 pb-2">
-                📍 人気のカテゴリ
-              </h3>
-              <div class="space-y-2">
-                <a href="/spot" class="block text-xs text-[#666] hover:text-[var(--theme-accent)] transition-colors font-light">
-                  🏯 観光スポット
-                </a>
-                <a href="/food" class="block text-xs text-[#666] hover:text-[var(--theme-accent)] transition-colors font-light">
-                  🍜 グルメ・料理
-                </a>
-                <a href="/hotel" class="block text-xs text-[#666] hover:text-[var(--theme-accent)] transition-colors font-light">
-                  🏨 宿泊・温泉
-                </a>
+              
+              <!-- Social Media Links -->
+              <div class="flex justify-center gap-4">
+                <button 
+                  disabled
+                  class="w-10 h-10 bg-gradient-to-b from-white to-[#fafafa] rounded-full border border-gray-200/50 flex items-center justify-center text-gray-300 cursor-not-allowed"
+                  title="X (Twitter) - 準備中"
+                  aria-label="X (Twitter) - 準備中"
+                >
+                  <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                  </svg>
+                </button>
+                <button 
+                  disabled
+                  class="w-10 h-10 bg-gradient-to-b from-white to-[#fafafa] rounded-full border border-gray-200/50 flex items-center justify-center text-gray-300 cursor-not-allowed"
+                  title="Instagram - 準備中"
+                  aria-label="Instagram - 準備中"
+                >
+                  <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                  </svg>
+                </button>
+                <button 
+                  disabled
+                  class="w-10 h-10 bg-gradient-to-b from-white to-[#fafafa] rounded-full border border-gray-200/50 flex items-center justify-center text-gray-300 cursor-not-allowed"
+                  title="YouTube - 準備中"
+                  aria-label="YouTube - 準備中"
+                >
+                  <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                  </svg>
+                </button>
               </div>
             </div>
           </div>
@@ -231,22 +288,43 @@ const currentPath = Astro.url.pathname
           </div>
           
           <!-- Copyright and links -->
-          <div class="text-center space-y-3">
-            <div class="flex flex-wrap justify-center items-center gap-3 text-xs text-[#666]">
+          <div class="text-center space-y-4">
+            <div class="flex flex-col sm:flex-row sm:flex-wrap justify-center items-center gap-2 sm:gap-3 text-xs text-[#666]">
               <span class="font-light">&copy; 2025 {getUILabel(lang, 'siteTitle')}</span>
-              <span class="text-[var(--theme-accent)]">•</span>
-              <a href="/privacy" class="hover:text-[var(--theme-accent)] transition-colors font-light underline decoration-1 underline-offset-2">
-                プライバシーポリシー
-              </a>
-              <span class="text-[var(--theme-accent)]">•</span>
-              <a href="/en/privacy" class="hover:text-[var(--theme-accent)] transition-colors font-light underline decoration-1 underline-offset-2">
-                Privacy Policy
-              </a>
+              <div class="flex items-center gap-3">
+                <span class="text-[var(--theme-accent)] hidden sm:inline">•</span>
+                <a href="/privacy" class="hover:text-[var(--theme-accent)] transition-colors font-light underline decoration-1 underline-offset-2">
+                  プライバシーポリシー
+                </a>
+                <span class="text-[var(--theme-accent)]">•</span>
+                <a href="/en/privacy" class="hover:text-[var(--theme-accent)] transition-colors font-light underline decoration-1 underline-offset-2">
+                  Privacy Policy
+                </a>
+              </div>
             </div>
             
             <!-- Final tagline with elegant typography -->
-            <p class="text-xs text-[#888] font-light italic">
-              ― 心に残る旅の記録を、世界へ ―
+            <p class="text-xs text-[#888] font-light italic px-4 max-w-md mx-auto leading-relaxed">
+              {lang === 'ja' && '― 心に残る旅の記録を、世界へ ―'}
+              {lang === 'en' && '― Sharing unforgettable travel memories with the world ―'}
+              {lang === 'es' && '― Compartiendo memorias de viaje inolvidables con el mundo ―'}
+              {lang === 'fr' && '― Partager des souvenirs de voyage inoubliables avec le monde ―'}
+              {lang === 'de' && '― Unvergessliche Reiseerinnerungen mit der Welt teilen ―'}
+              {lang === 'it' && '― Condividere ricordi di viaggio indimenticabili con il mondo ―'}
+              {lang === 'pt-br' && '― Compartilhando memórias de viagem inesquecíveis com o mundo ―'}
+              {lang === 'ru' && '― Делимся незабываемыми воспоминаниями о путешествиях с миром ―'}
+              {lang === 'ko' && '― 잊을 수 없는 여행의 기억을 세계와 함께 ―'}
+              {lang === 'zh-cn' && '― 与世界分享难忘的旅行回忆 ―'}
+              {lang === 'zh-tw' && '― 與世界分享難忘的旅行回憶 ―'}
+              {lang === 'ar' && '― مشاركة ذكريات سفر لا تُنسى مع العالم ―'}
+              {lang === 'tr' && '― Unutulmaz seyahat anılarını dünyayla paylaşmak ―'}
+              {lang === 'th' && '― แบ่งปันความทรงจำการเดินทางที่น่าจดจำกับโลก ―'}
+              {lang === 'nl' && '― Onvergetelijke reisherinneringen delen met de wereld ―'}
+              {lang === 'pl' && '― Dzielenie się niezapomnianymi wspomnieniami z podróży ze światem ―'}
+              {lang === 'sv' && '― Dela oförglömliga reseminnen med världen ―'}
+              {lang === 'da' && '― Deling af uforglemmelige rejseminder med verden ―'}
+              {lang === 'fi' && '― Jakamassa unohtumattomia matkamuistoja maailman kanssa ―'}
+              {lang === 'id' && '― Berbagi kenangan perjalanan yang tak terlupakan dengan dunia ―'}
             </p>
           </div>
         </div>
