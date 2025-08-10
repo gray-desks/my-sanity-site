@@ -135,10 +135,10 @@ const currentPath = Astro.url.pathname
         </a>
 
         <!-- Speech bubble (placed below the avatar) -->
-        <div class="absolute left-1/2 top-full -translate-x-1/2 mt-2 bg-white/95 backdrop-blur-sm rounded-2xl px-3 py-1.5 shadow-lg border border-[var(--theme-accent)]/20 hidden lg:block z-10">
-          <span class="text-xs text-gray-700 font-medium whitespace-nowrap">和の音楽を体験</span>
-          <!-- Upward pointing pointer at top-center -->
-          <div class="absolute left-1/2 -top-1 -translate-x-1/2 w-0 h-0 border-x-4 border-x-transparent border-b-4 border-b-white/95"></div>
+        <div class="absolute right-0 top-full mt-2 max-w-[180px] w-max bg-white/95 backdrop-blur-sm rounded-2xl px-3 py-1.5 shadow-lg border border-[var(--theme-accent)]/20 hidden md:block z-10">
+          <span class="text-xs text-gray-700 font-medium text-center block leading-tight">{getUILabel(lang, 'musicExperience')}</span>
+          <!-- Upward pointing pointer positioned relative to avatar -->
+          <div class="absolute right-8 -top-1 w-0 h-0 border-x-4 border-x-transparent border-b-4 border-b-white/95"></div>
         </div>
       </div>
     </div>

@@ -185,6 +185,7 @@ export const UI_LABELS = {
     reset: 'リセット',
     noArticlesTitle: 'まだ記事がありません',
     noArticlesSubtitle: '管理システムで最初の記事を作成してください',
+    musicExperience: '和の音楽を体験',
   },
   en: {
     readMore: 'Read More',
@@ -216,6 +217,7 @@ export const UI_LABELS = {
     reset: 'Reset',
     noArticlesTitle: 'No articles yet',
     noArticlesSubtitle: 'Please create the first article in Sanity Studio',
+    musicExperience: 'Traditional Music',
   },
   'zh-cn': {
     readMore: '阅读更多',
@@ -247,6 +249,7 @@ export const UI_LABELS = {
     reset: '重置',
     noArticlesTitle: '暂无文章',
     noArticlesSubtitle: '请在 Sanity Studio 中创建您的第一篇文章',
+    musicExperience: '体验传统音乐',
   },
   'zh-tw': {
     readMore: '閱讀更多',
@@ -278,6 +281,7 @@ export const UI_LABELS = {
     reset: '重置',
     noArticlesTitle: '暫無文章',
     noArticlesSubtitle: '請在 Sanity Studio 中創建您的第一篇文章',
+    musicExperience: '體驗傳統音樂',
   },
   ko: {
     readMore: '더 읽기',
@@ -309,6 +313,7 @@ export const UI_LABELS = {
     reset: '초기화',
     noArticlesTitle: '아직 기사가 없습니다',
     noArticlesSubtitle: '관리 시스템에서 첫 번째 기사를 작성하세요',
+    musicExperience: '전통음악 체험',
   },
   th: {
     readMore: 'อ่านเพิ่มเติม',
@@ -340,6 +345,7 @@ export const UI_LABELS = {
     reset: 'รีเซ็ต',
     noArticlesTitle: 'ยังไม่มีบทความ',
     noArticlesSubtitle: 'กรุณาสร้างบทความแรกในระบบจัดการ',
+    musicExperience: 'ดนตรีดั้งเดิม',
   },
   id: {
     readMore: 'Baca selengkapnya',
@@ -371,6 +377,7 @@ export const UI_LABELS = {
     reset: 'Atur Ulang',
     noArticlesTitle: 'Belum ada artikel',
     noArticlesSubtitle: 'Silakan buat artikel pertama di sistem manajemen',
+    musicExperience: 'Musik Tradisional',
   },
 
   // 残りのDeepL対応言語
@@ -404,6 +411,7 @@ export const UI_LABELS = {
     reset: 'Réinitialiser',
     noArticlesTitle: 'Aucun article encore',
     noArticlesSubtitle: 'Veuillez créer le premier article dans Sanity Studio',
+    musicExperience: 'Musique Traditionnelle',
   },
   de: {
     readMore: 'Mehr lesen',
@@ -435,6 +443,7 @@ export const UI_LABELS = {
     reset: 'Zurücksetzen',
     noArticlesTitle: 'Noch keine Artikel',
     noArticlesSubtitle: 'Bitte erstellen Sie den ersten Artikel in Sanity Studio',
+    musicExperience: 'Traditionelle Musik',
   },
   es: {
     readMore: 'Leer más',
@@ -466,6 +475,7 @@ export const UI_LABELS = {
     reset: 'Restablecer',
     noArticlesTitle: 'Aún no hay artículos',
     noArticlesSubtitle: 'Por favor crea el primer artículo en Sanity Studio',
+    musicExperience: 'Música Tradicional',
   },
   it: {
     readMore: 'Leggi di più',
@@ -497,6 +507,7 @@ export const UI_LABELS = {
     reset: 'Reimposta',
     noArticlesTitle: 'Nessun articolo ancora',
     noArticlesSubtitle: 'Per favore crea il primo articolo nel sistema di gestione',
+    musicExperience: 'Musica Tradizionale',
   },
   pt: {
     readMore: 'Ler mais',
@@ -528,6 +539,7 @@ export const UI_LABELS = {
     reset: 'Redefinir',
     noArticlesTitle: 'Ainda não há artigos',
     noArticlesSubtitle: 'Por favor crie o primeiro artigo no sistema de gestão',
+    musicExperience: 'Música Tradicional',
   },
   ru: {
     readMore: 'Читать далее',
@@ -559,6 +571,7 @@ export const UI_LABELS = {
     reset: 'Сброс',
     noArticlesTitle: 'Пока нет статей',
     noArticlesSubtitle: 'Пожалуйста, создайте первую статью в Sanity Studio',
+    musicExperience: 'Традиционная музыка',
   },
   ar: {
     readMore: 'اقرأ المزيد',
@@ -590,6 +603,7 @@ export const UI_LABELS = {
     reset: 'إعادة تعيين',
     noArticlesTitle: 'لا توجد مقالات بعد',
     noArticlesSubtitle: 'يرجى إنشاء المقال الأول في Sanity Studio',
+    musicExperience: 'موسيقى تقليدية',
   },
   // New DeepL supported languages (basic labels)
   nl: {
@@ -622,6 +636,7 @@ export const UI_LABELS = {
     reset: 'Reset',
     noArticlesTitle: 'Nog geen artikelen',
     noArticlesSubtitle: 'Maak het eerste artikel aan in Sanity Studio',
+    musicExperience: 'Traditionele Muziek',
   },
   pl: {
     readMore: 'Czytaj więcej',
@@ -653,6 +668,7 @@ export const UI_LABELS = {
     reset: 'Resetuj',
     noArticlesTitle: 'Nie ma jeszcze artykułów',
     noArticlesSubtitle: 'Utwórz pierwszy artykuł w Sanity Studio',
+    musicExperience: 'Tradycyjna Muzyka',
   },
   sv: {
     readMore: 'Läs mer',
@@ -684,6 +700,7 @@ export const UI_LABELS = {
     reset: 'Återställ',
     noArticlesTitle: 'Inga artiklar än',
     noArticlesSubtitle: 'Skapa den första artikeln i Sanity Studio',
+    musicExperience: 'Traditionell Musik',
   },
   da: {
     readMore: 'Læs mere',
@@ -715,6 +732,7 @@ export const UI_LABELS = {
     reset: 'Nulstil',
     noArticlesTitle: 'Ingen artikler endnu',
     noArticlesSubtitle: 'Opret den første artikel i Sanity Studio',
+    musicExperience: 'Traditionel Musik',
   },
   fi: {
     readMore: 'Lue lisää',
@@ -746,6 +764,7 @@ export const UI_LABELS = {
     reset: 'Nollaa',
     noArticlesTitle: 'Ei vielä artikkeleita',
     noArticlesSubtitle: 'Luo ensimmäinen artikkeli Sanity Studiossa',
+    musicExperience: 'Perinteinen Musiikki',
   },
   tr: {
     readMore: 'Daha fazla oku',
@@ -777,6 +796,7 @@ export const UI_LABELS = {
     reset: 'Sıfırla',
     noArticlesTitle: 'Henüz makale yok',
     noArticlesSubtitle: 'Lütfen Sanity Studio\'da ilk makaleyi oluşturun',
+    musicExperience: 'Geleneksel Müzik',
   },
   'pt-br': {
     readMore: 'Leia mais',
@@ -808,6 +828,7 @@ export const UI_LABELS = {
     reset: 'Redefinir',
     noArticlesTitle: 'Ainda não há artigos',
     noArticlesSubtitle: 'Por favor crie o primeiro artigo no sistema de gerenciamento',
+    musicExperience: 'Música Tradicional',
   },
 } as const
 
