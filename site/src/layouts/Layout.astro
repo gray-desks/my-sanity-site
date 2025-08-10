@@ -111,6 +111,38 @@ const currentPath = Astro.url.pathname
       </main>
     </div>
 
+    <!-- Global floating assistant (moved from Hero) -->
+    <div class="fixed bottom-6 lg:bottom-20 right-6 z-40 hidden lg:block pointer-events-auto">
+      <div class="relative group">
+        <!-- Soft glow -->
+        <div class="absolute inset-0 rounded-full bg-[var(--theme-accent)]/12 blur-2xl scale-125 opacity-60 transition-all duration-300 group-hover:opacity-80"></div>
+
+        <!-- Character link -->
+        <a
+          href="https://project-shuka.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="relative block rounded-full overflow-hidden shadow-xl ring-1 ring-black/10 hover:ring-[var(--theme-accent)]/30 transition-all duration-300 hover:-translate-y-0.5"
+          aria-label="Visit Project Shuka website (opens in new tab)"
+          title="秀歌プロジェクトのサイトを開く"
+        >
+          <img
+            src="/shuuka.png"
+            alt="秀歌 - Travel companion character"
+            class="w-20 h-20 md:w-24 md:h-24 object-cover rounded-full"
+            loading="lazy"
+          />
+        </a>
+
+        <!-- Speech bubble (placed below the avatar) -->
+        <div class="absolute left-1/2 top-full -translate-x-1/2 mt-2 bg-white/95 backdrop-blur-sm rounded-2xl px-3 py-1.5 shadow-lg border border-[var(--theme-accent)]/20 hidden lg:block z-10">
+          <span class="text-xs text-gray-700 font-medium whitespace-nowrap">和の音楽を体験</span>
+          <!-- Upward pointing pointer at top-center -->
+          <div class="absolute left-1/2 -top-1 -translate-x-1/2 w-0 h-0 border-x-4 border-x-transparent border-b-4 border-b-white/95"></div>
+        </div>
+      </div>
+    </div>
+
     <!-- Enhanced Japanese-style footer with luxury gradient -->
     <footer class="relative mt-16 bg-gradient-to-br from-[#2F455C] via-[#1a2332] via-[#0f1419] to-[#000000] border-t-2 border-[#C5A572]/30 overflow-hidden">
       <!-- Luxury gold leaf pattern background -->
@@ -393,6 +425,14 @@ const currentPath = Astro.url.pathname
         text-rendering: optimizeLegibility;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
+      }
+
+      /* Reduce motion for floating assistant */
+      @media (prefers-reduced-motion: reduce) {
+        .group * {
+          transition: none !important;
+          animation: none !important;
+        }
       }
     </style>
     
