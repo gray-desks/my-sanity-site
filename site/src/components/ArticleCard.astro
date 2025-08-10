@@ -73,6 +73,19 @@ const typeConfig = {
 const config = typeConfig[article.type as keyof typeof typeConfig] || typeConfig.note
 const typeLabel = config.label[lang as keyof typeof config.label] || config.label.ja
 
+// Tag color variable mapping (ensure 'food' maps to '--tag-gourmet')
+const tagVarMap: Record<string, string> = {
+  spot: '--tag-spot',
+  food: '--tag-gourmet',
+  transport: '--tag-transport',
+  hotel: '--tag-hotel',
+  note: '--tag-note',
+  event: '--tag-event'
+}
+const tagVar = tagVarMap[article.type] || '--tag-note'
+// Inline style leveraging CSS color-mix when available; falls back to solid color
+const badgeStyle = `background: var(${tagVar}); border-color: color-mix(in srgb, var(${tagVar}) 70%, white 30%);`
+
 // 多言語対応URL生成
 const articleUrl = lang === 'ja' 
   ? `/article/${article._id}` 
@@ -99,10 +112,14 @@ const articleUrl = lang === 'ja'
         loading="lazy"
         decoding="async"
       />
-      <!-- Optional Type Label with theme color -->
+      <!-- Type Badge (refined) -->
       {config.emoji && (
-        <div class="absolute top-2 left-2 px-2 py-0.5 rounded-full text-[11px] text-white font-medium" style={`background: var(--tag-${article.type})`}>
-          {config.emoji} {typeLabel}
+        <div 
+          class="absolute top-2 left-2 inline-flex items-center gap-1 pl-2 pr-2.5 py-1 rounded-full text-[11px] text-white font-medium shadow-[0_2px_8px_rgba(0,0,0,0.18)] ring-1 ring-white/40 backdrop-blur-[2px]"
+          style={badgeStyle}
+        >
+          <span class="-ml-0.5 drop-shadow-[0_1px_0_rgba(0,0,0,0.25)]">{config.emoji}</span>
+          <span class="tracking-wide">{typeLabel}</span>
         </div>
       )}
     </div>
