@@ -111,34 +111,63 @@ const currentPath = Astro.url.pathname
       </main>
     </div>
 
-    <!-- Enhanced Japanese-style footer -->
-    <footer class="relative mt-16 bg-gradient-to-b from-[#f8f6f3] via-[#f5f3f0] to-[#f0ede8] border-t-2 border-[var(--theme-accent)]/20 overflow-hidden">
-      <!-- Traditional Japanese cloud pattern background -->
-      <div class="absolute inset-0 opacity-[0.08]">
-        <svg class="w-full h-full" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200">
-          <pattern id="kumo-pattern" patternUnits="userSpaceOnUse" width="400" height="200">
-            <!-- Traditional cloud shapes (kumo) -->
-            <g fill="var(--theme-accent)">
-              <!-- Main cloud -->
-              <ellipse cx="100" cy="80" rx="60" ry="20" opacity="0.6"/>
-              <ellipse cx="80" cy="75" rx="40" ry="15" opacity="0.7"/>
-              <ellipse cx="120" cy="85" rx="35" ry="12" opacity="0.8"/>
+    <!-- Enhanced Japanese-style footer with luxury gradient -->
+    <footer class="relative mt-16 bg-gradient-to-br from-[#2F455C] via-[#1a2332] via-[#0f1419] to-[#000000] border-t-2 border-[#C5A572]/30 overflow-hidden">
+      <!-- Luxury gold leaf pattern background -->
+      <div class="absolute inset-0 opacity-[0.12]">
+        <svg class="w-full h-full" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400">
+          <defs>
+            <!-- Gold gradient for luxury effect -->
+            <linearGradient id="gold-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#FFD700;stop-opacity:0.9"/>
+              <stop offset="30%" style="stop-color:#FFA500;stop-opacity:0.7"/>
+              <stop offset="70%" style="stop-color:#B8860B;stop-opacity:0.5"/>
+              <stop offset="100%" style="stop-color:#DAA520;stop-opacity:0.8"/>
+            </linearGradient>
+            
+            <!-- Subtle shimmer effect -->
+            <radialGradient id="shimmer" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" style="stop-color:#FFFFFF;stop-opacity:0.3"/>
+              <stop offset="100%" style="stop-color:#C5A572;stop-opacity:0.1"/>
+            </radialGradient>
+          </defs>
+          
+          <pattern id="kinpun-pattern" patternUnits="userSpaceOnUse" width="600" height="400">
+            <!-- Traditional gold leaf scattered pattern -->
+            <g fill="url(#gold-gradient)" stroke="url(#shimmer)" stroke-width="0.5">
+              <!-- Large gold leaf clusters -->
+              <ellipse cx="150" cy="120" rx="40" ry="12" opacity="0.8" transform="rotate(15 150 120)"/>
+              <ellipse cx="130" cy="125" rx="25" ry="8" opacity="0.9" transform="rotate(-10 130 125)"/>
+              <ellipse cx="170" cy="115" rx="30" ry="10" opacity="0.7" transform="rotate(25 170 115)"/>
               
-              <!-- Secondary clouds -->
-              <ellipse cx="250" cy="60" rx="45" ry="15" opacity="0.5"/>
-              <ellipse cx="280" cy="65" rx="30" ry="10" opacity="0.6"/>
+              <!-- Medium scattered leaves -->
+              <ellipse cx="350" cy="200" rx="35" ry="10" opacity="0.6" transform="rotate(-20 350 200)"/>
+              <ellipse cx="380" cy="195" rx="20" ry="6" opacity="0.8" transform="rotate(30 380 195)"/>
               
-              <ellipse cx="350" cy="120" rx="50" ry="18" opacity="0.4"/>
-              <ellipse cx="380" cy="125" rx="25" ry="8" opacity="0.7"/>
+              <ellipse cx="450" cy="80" rx="28" ry="9" opacity="0.7" transform="rotate(45 450 80)"/>
+              <ellipse cx="480" cy="75" rx="15" ry="5" opacity="0.9" transform="rotate(-15 480 75)"/>
+              
+              <!-- Small delicate touches -->
+              <ellipse cx="80" cy="300" rx="20" ry="6" opacity="0.5" transform="rotate(60 80 300)"/>
+              <ellipse cx="520" cy="320" rx="18" ry="5" opacity="0.6" transform="rotate(-30 520 320)"/>
+              
+              <!-- Floating particles -->
+              <circle cx="200" cy="50" r="3" opacity="0.8"/>
+              <circle cx="400" cy="350" r="2" opacity="0.9"/>
+              <circle cx="100" cy="180" r="2.5" opacity="0.7"/>
+              <circle cx="500" cy="250" r="2" opacity="0.6"/>
             </g>
           </pattern>
-          <rect width="100%" height="100%" fill="url(#kumo-pattern)"/>
+          <rect width="100%" height="100%" fill="url(#kinpun-pattern)"/>
         </svg>
       </div>
       
-      <!-- Decorative top border with traditional pattern -->
-      <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[var(--theme-accent)] to-transparent"></div>
-      <div class="absolute top-1 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[var(--theme-accent)]/40 to-transparent"></div>
+      <!-- Subtle moonlight overlay -->
+      <div class="absolute top-0 left-1/3 w-96 h-96 bg-gradient-radial from-[#C5A572]/10 via-transparent to-transparent rounded-full blur-3xl pointer-events-none"></div>
+      
+      <!-- Decorative top border with gold accent -->
+      <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#C5A572] to-transparent"></div>
+      <div class="absolute top-1 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#FFD700]/60 to-transparent"></div>
       
       <div class="relative max-w-6xl mx-auto px-6 py-12">
         <!-- Main content centered and simplified -->
@@ -152,18 +181,18 @@ const currentPath = Astro.url.pathname
               <Logo size={64} kanji="旅" withBadge={true} ariaLabel={getUILabel(lang, 'siteTitle')} class="mr-2" />
               
               <div class="space-y-1 text-center">
-                <h2 class="text-2xl font-bold text-[#2d3748] font-serif tracking-wide">
+                <h2 class="text-2xl font-bold text-[#F5F3F0] font-serif tracking-wide drop-shadow-sm">
                   {getUILabel(lang, 'siteTitle')}
                 </h2>
-                <p class="text-sm text-[#666] leading-relaxed font-light">
+                <p class="text-sm text-[#C5A572] leading-relaxed font-light">
                   {getUILabel(lang, 'siteDescription')}
                 </p>
               </div>
             </div>
             
-            <!-- Japanese-style description -->
-            <div class="bg-white/50 backdrop-blur-sm rounded-lg p-6 border border-[var(--theme-accent)]/10 shadow-sm">
-              <p class="text-[#4a5568] leading-relaxed text-sm mb-6 font-light text-center">
+            <!-- Japanese-style description with luxury styling -->
+            <div class="bg-black/20 backdrop-blur-sm rounded-lg p-6 border border-[#C5A572]/30 shadow-2xl">
+              <p class="text-[#E2D7C5] leading-relaxed text-sm mb-6 font-light text-center drop-shadow-sm">
                 {lang === 'ja' && (
                   <>
                     日本全国の美しい風景、伝統文化、美食体験を世界20言語で発信。
@@ -187,11 +216,11 @@ const currentPath = Astro.url.pathname
                 )}
               </p>
               
-              <!-- Stats with Japanese design -->
+              <!-- Stats with luxury design -->
               <div class="grid grid-cols-2 gap-4 max-w-sm mx-auto mb-6">
-                <div class="text-center p-3 bg-gradient-to-b from-white to-[#fafafa] rounded-lg border border-gray-200/50">
-                  <div class="text-lg font-bold text-[var(--theme-accent)] font-serif">20+</div>
-                  <div class="text-xs text-gray-500 font-light">
+                <div class="text-center p-3 bg-gradient-to-b from-[#C5A572]/20 to-[#2F455C]/30 rounded-lg border border-[#FFD700]/20 backdrop-blur-sm">
+                  <div class="text-lg font-bold text-[#FFD700] font-serif drop-shadow-sm">20+</div>
+                  <div class="text-xs text-[#C5A572] font-light">
                     {lang === 'ja' && '言語'}
                     {lang === 'en' && 'Languages'}
                     {lang === 'es' && 'Idiomas'}
@@ -214,9 +243,9 @@ const currentPath = Astro.url.pathname
                     {lang === 'id' && 'Bahasa'}
                   </div>
                 </div>
-                <div class="text-center p-3 bg-gradient-to-b from-white to-[#fafafa] rounded-lg border border-gray-200/50">
-                  <div class="text-lg font-bold text-[var(--theme-accent)] font-serif">∞</div>
-                  <div class="text-xs text-gray-500 font-light">
+                <div class="text-center p-3 bg-gradient-to-b from-[#C5A572]/20 to-[#2F455C]/30 rounded-lg border border-[#FFD700]/20 backdrop-blur-sm">
+                  <div class="text-lg font-bold text-[#FFD700] font-serif drop-shadow-sm">∞</div>
+                  <div class="text-xs text-[#C5A572] font-light">
                     {lang === 'ja' && '体験'}
                     {lang === 'en' && 'Experiences'}
                     {lang === 'es' && 'Experiencias'}
@@ -245,7 +274,7 @@ const currentPath = Astro.url.pathname
               <div class="flex justify-center gap-4">
                 <button 
                   disabled
-                  class="w-10 h-10 bg-gradient-to-b from-white to-[#fafafa] rounded-full border border-gray-200/50 flex items-center justify-center text-gray-300 cursor-not-allowed"
+                  class="w-10 h-10 bg-gradient-to-b from-[#C5A572]/30 to-[#2F455C]/40 rounded-full border border-[#FFD700]/30 flex items-center justify-center text-[#C5A572]/50 cursor-not-allowed backdrop-blur-sm"
                   title="X (Twitter) - 準備中"
                   aria-label="X (Twitter) - 準備中"
                 >
@@ -255,7 +284,7 @@ const currentPath = Astro.url.pathname
                 </button>
                 <button 
                   disabled
-                  class="w-10 h-10 bg-gradient-to-b from-white to-[#fafafa] rounded-full border border-gray-200/50 flex items-center justify-center text-gray-300 cursor-not-allowed"
+                  class="w-10 h-10 bg-gradient-to-b from-[#C5A572]/30 to-[#2F455C]/40 rounded-full border border-[#FFD700]/30 flex items-center justify-center text-[#C5A572]/50 cursor-not-allowed backdrop-blur-sm"
                   title="Instagram - 準備中"
                   aria-label="Instagram - 準備中"
                 >
@@ -265,7 +294,7 @@ const currentPath = Astro.url.pathname
                 </button>
                 <button 
                   disabled
-                  class="w-10 h-10 bg-gradient-to-b from-white to-[#fafafa] rounded-full border border-gray-200/50 flex items-center justify-center text-gray-300 cursor-not-allowed"
+                  class="w-10 h-10 bg-gradient-to-b from-[#C5A572]/30 to-[#2F455C]/40 rounded-full border border-[#FFD700]/30 flex items-center justify-center text-[#C5A572]/50 cursor-not-allowed backdrop-blur-sm"
                   title="YouTube - 準備中"
                   aria-label="YouTube - 準備中"
                 >
@@ -278,33 +307,33 @@ const currentPath = Astro.url.pathname
           </div>
         </div>
         
-        <!-- Bottom section with traditional separator -->
-        <div class="border-t border-[var(--theme-accent)]/20 pt-6 mt-8">
+        <!-- Bottom section with luxury separator -->
+        <div class="border-t border-[#C5A572]/40 pt-6 mt-8">
           <!-- Decorative separator -->
           <div class="flex items-center justify-center mb-6">
-            <div class="flex-1 h-px bg-gradient-to-r from-transparent via-[var(--theme-accent)]/20 to-[var(--theme-accent)]/20"></div>
-            <div class="px-4 text-[var(--theme-accent)] text-sm">❀</div>
-            <div class="flex-1 h-px bg-gradient-to-l from-transparent via-[var(--theme-accent)]/20 to-[var(--theme-accent)]/20"></div>
+            <div class="flex-1 h-px bg-gradient-to-r from-transparent via-[#FFD700]/30 to-[#C5A572]/40"></div>
+            <div class="px-4 text-[#FFD700] text-sm drop-shadow-sm">❀</div>
+            <div class="flex-1 h-px bg-gradient-to-l from-transparent via-[#FFD700]/30 to-[#C5A572]/40"></div>
           </div>
           
           <!-- Copyright and links -->
           <div class="text-center space-y-4">
-            <div class="flex flex-col sm:flex-row sm:flex-wrap justify-center items-center gap-2 sm:gap-3 text-xs text-[#666]">
+            <div class="flex flex-col sm:flex-row sm:flex-wrap justify-center items-center gap-2 sm:gap-3 text-xs text-[#C5A572]">
               <span class="font-light">&copy; 2025 {getUILabel(lang, 'siteTitle')}</span>
               <div class="flex items-center gap-3">
-                <span class="text-[var(--theme-accent)] hidden sm:inline">•</span>
-                <a href="/privacy" class="hover:text-[var(--theme-accent)] transition-colors font-light underline decoration-1 underline-offset-2">
+                <span class="text-[#FFD700] hidden sm:inline">•</span>
+                <a href="/privacy" class="hover:text-[#FFD700] transition-colors font-light underline decoration-1 underline-offset-2">
                   プライバシーポリシー
                 </a>
-                <span class="text-[var(--theme-accent)]">•</span>
-                <a href="/en/privacy" class="hover:text-[var(--theme-accent)] transition-colors font-light underline decoration-1 underline-offset-2">
+                <span class="text-[#FFD700]">•</span>
+                <a href="/en/privacy" class="hover:text-[#FFD700] transition-colors font-light underline decoration-1 underline-offset-2">
                   Privacy Policy
                 </a>
               </div>
             </div>
             
             <!-- Final tagline with elegant typography -->
-            <p class="text-xs text-[#888] font-light italic px-4 max-w-md mx-auto leading-relaxed">
+            <p class="text-xs text-[#C5A572]/80 font-light italic px-4 max-w-md mx-auto leading-relaxed drop-shadow-sm">
               {lang === 'ja' && '― 心に残る旅の記録を、世界へ ―'}
               {lang === 'en' && '― Sharing unforgettable travel memories with the world ―'}
               {lang === 'es' && '― Compartiendo memorias de viaje inolvidables con el mundo ―'}
@@ -330,8 +359,8 @@ const currentPath = Astro.url.pathname
         </div>
       </div>
       
-      <!-- Subtle bottom gradient -->
-      <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[var(--theme-accent)]/10 to-transparent"></div>
+      <!-- Luxury bottom accent -->
+      <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#FFD700]/20 to-transparent"></div>
     </footer>
 
     <!-- Professional animations and interactions -->

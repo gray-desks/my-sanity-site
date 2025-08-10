@@ -31,6 +31,7 @@ export default {
         'gradient-sunset': 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
         'gradient-ocean': 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
         'gradient-card': 'linear-gradient(145deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.6) 100%)',
+        'gradient-radial': 'radial-gradient(circle, var(--tw-gradient-stops))',
         'radial-highlight': 'radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 70%)',
         'mesh-gradient': 'conic-gradient(from 0deg at 50% 50%, #0ea5e9, #10b981, #f97316, #a855f7, #0ea5e9)',
       },
