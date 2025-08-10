@@ -63,13 +63,13 @@ const structuredData = {
 
   <!-- Top Ad - ヒーローの下に配置 (only on first page) -->
   {currentPage === 1 && (
-    <div class="max-w-4xl mx-auto px-4 pt-4">
+    <div class="max-w-4xl lg:max-w-7xl mx-auto px-4 pt-2">
       <AdSlot
         slotId={ADS_SLOTS.HOME_HERO}
         format="horizontal" 
         reserveHeight={120}
         label={lang === 'en' ? 'Advertisement' : lang === 'zh-cn' ? '广告' : lang === 'zh-tw' ? '廣告' : lang === 'ko' ? '광고' : '広告'}
-        class="mb-8"
+        class="mb-6"
       />
     </div>
   )}

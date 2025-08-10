@@ -77,8 +77,8 @@ const config = typeConfig[article.type as keyof typeof typeConfig] || typeConfig
           <!-- Tags and Date -->
           <div class="mb-8 pb-6 border-b border-gray-200">
             <div class="flex flex-wrap items-center gap-4">
-              <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold bg-gray-100 text-gray-700">
-                <span class="mr-2">{config.emoji}</span>
+              <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-2xl text-sm font-medium bg-white/90 text-ink ring-1 ring-[var(--theme-accent)]/10 border border-[var(--theme-accent)]/10 backdrop-blur-sm shadow-sm">
+                <span class="-ml-0.5 mr-1.5 drop-shadow-[0_1px_0_rgba(0,0,0,0.25)]">{config.emoji}</span>
                 {config.label}
               </span>
               {article.placeName && (
@@ -125,7 +125,7 @@ const config = typeConfig[article.type as keyof typeof typeConfig] || typeConfig
             <a 
               href="/" 
               onclick="event.preventDefault(); if (history.length > 1) { history.back(); } else { location.href='/' }" 
-              class="inline-flex items-center px-6 py-3 rounded-full bg-brand-600 text-white font-semibold hover:bg-brand-700 transition-colors"
+              class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/90 text-ink ring-1 ring-[var(--theme-accent)]/15 border border-[var(--theme-accent)]/15 backdrop-blur-sm shadow-sm hover:bg-white hover:ring-[var(--theme-accent)]/25 transition-colors"
             >
               ← 記事一覧に戻る
             </a>

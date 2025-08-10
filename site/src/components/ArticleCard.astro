@@ -84,7 +84,7 @@ const tagVarMap: Record<string, string> = {
 }
 const tagVar = tagVarMap[article.type] || '--tag-note'
 // Inline style leveraging CSS color-mix when available; falls back to solid color
-const badgeStyle = `background: var(${tagVar}); border-color: color-mix(in srgb, var(${tagVar}) 70%, white 30%);`
+const badgeStyle = `background: color-mix(in srgb, var(${tagVar}) 80%, white 20%); border-color: color-mix(in srgb, var(${tagVar}) 65%, white 35%); box-shadow: 0 3px 8px color-mix(in srgb, var(${tagVar}) 18%, transparent);`
 
 // 多言語対応URL生成
 const articleUrl = lang === 'ja' 
@@ -94,7 +94,7 @@ const articleUrl = lang === 'ja'
 
 <a 
   href={articleUrl} 
-  class="block mb-4 bg-white rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.08)] hover:opacity-95 hover:shadow-[0_2px_6px_rgba(0,0,0,0.12)] active:opacity-90 transition-all duration-300 overflow-hidden group border border-neutral-100 relative article-card"
+  class="block mb-4 bg-white rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.08)] hover:shadow-[0_8px_25px_rgba(0,0,0,0.15)] hover:scale-[1.02] hover:-translate-y-1 active:scale-[0.98] active:translate-y-0 transition-all duration-500 ease-out overflow-hidden group border border-neutral-100 relative article-card"
   data-article
   data-title={article.title}
   data-type={article.type}
@@ -108,14 +108,14 @@ const articleUrl = lang === 'ja'
       <img 
         src={`${article.coverImage.asset.url}?w=600&h=338&fit=crop&auto=format`}
         alt={`${article.placeName || ''} ${article.title}`.trim()}
-        class="w-full h-full object-cover"
+        class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
         loading="lazy"
         decoding="async"
       />
       <!-- Type Badge (refined) -->
       {config.emoji && (
         <div 
-          class="absolute top-2 left-2 inline-flex items-center gap-1 pl-2 pr-2.5 py-1 rounded-full text-[11px] text-white font-medium shadow-[0_2px_8px_rgba(0,0,0,0.18)] ring-1 ring-white/40 backdrop-blur-[2px]"
+          class="absolute top-2 left-2 inline-flex items-center gap-1 pl-2 pr-2.5 py-1 rounded-2xl text-[10px] text-white/95 font-medium ring-1 ring-white/40 backdrop-blur-[1px] opacity-90 transition-opacity duration-300 group-hover:opacity-100"
           style={badgeStyle}
         >
           <span class="-ml-0.5 drop-shadow-[0_1px_0_rgba(0,0,0,0.25)]">{config.emoji}</span>
@@ -127,7 +127,7 @@ const articleUrl = lang === 'ja'
   
   <div class="p-4">
     <!-- Title (2 lines max) -->
-    <h3 class="line-clamp-2 text-[17px] font-semibold leading-snug text-gray-900 mb-2">
+    <h3 class="line-clamp-2 text-[17px] font-semibold leading-snug text-gray-900 mb-2 transition-colors duration-300 group-hover:text-brand-600">
       {article.title}
     </h3>
     
@@ -140,7 +140,7 @@ const articleUrl = lang === 'ja'
               <img 
                 src={`${image.asset.url}?w=56&h=56&fit=crop&auto=format`}
                 alt=""
-                class="w-14 h-14 object-cover rounded-xl flex-shrink-0 ring-2 ring-white/50 shadow-lg hover:ring-brand-400 hover:scale-110 transition-all duration-300 hover:shadow-xl"
+                class="w-14 h-14 object-cover rounded-xl flex-shrink-0 ring-2 ring-white/50 shadow-lg hover:ring-brand-400 hover:scale-110 transition-all duration-300 hover:shadow-xl group-hover:animate-pulse"
                 loading="lazy"
                 decoding="async"
                 style={`--animation-delay: ${index * 100}ms; animation-delay: var(--animation-delay);`}

@@ -174,8 +174,9 @@ const config = typeConfig[article.type as keyof typeof typeConfig] || typeConfig
           <!-- Navigation -->
           <div class="mt-12 text-center">
             <a 
-              href={getLocalizedPath('/', lang)} 
-              class="inline-flex items-center px-6 py-3 rounded-full bg-brand-600 text-white font-semibold hover:bg-brand-700 transition-colors"
+              href={getLocalizedPath('/', lang)}
+              onclick={`event.preventDefault(); if (history.length > 1) { history.back(); } else { location.href='${getLocalizedPath('/', lang)}' }`}
+              class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/90 text-ink ring-1 ring-[var(--theme-accent)]/15 border border-[var(--theme-accent)]/15 backdrop-blur-sm shadow-sm hover:bg-white hover:ring-[var(--theme-accent)]/25 transition-colors"
             >
               ← {getUILabel(lang, 'backToHome')}
             </a>
