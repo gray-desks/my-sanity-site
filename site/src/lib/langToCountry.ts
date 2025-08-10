@@ -5,20 +5,20 @@ const langToCountryMap = {
   'zh-tw': 'TW',
   ko: 'KR',
   th: 'TH',
-  vi: 'VN',
   id: 'ID',
-  ms: 'MY',
-  tl: 'PH',
   fr: 'FR',
   de: 'DE',
   es: 'ES',
   it: 'IT',
-  pt: 'PT',
   'pt-br': 'BR',
   ru: 'RU',
   ar: 'SA',
-  hi: 'IN',
-  tr: 'TR'
+  tr: 'TR',
+  nl: 'NL',
+  pl: 'PL',
+  sv: 'SE',
+  da: 'DK',
+  fi: 'FI'
 } as const;
 
 export type SupportedLanguage = keyof typeof langToCountryMap;
