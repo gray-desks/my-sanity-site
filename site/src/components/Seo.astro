@@ -1,6 +1,7 @@
 ---
 import { SITE_URL, SITE_TITLE } from '../lib/env';
-import { getHreflangCode } from '../lib/getSupportedLangs';
+import { getHreflangCode, getLangIds } from '../lib/getSupportedLangs';
+import HreflangLinks from './HreflangLinks.astro';
 
 export interface Props {
   frontmatter?: {
@@ -125,10 +126,14 @@ const generateJsonLd = () => {
 };
 
 const jsonLd = generateJsonLd();
+const alternateOgLocales = getLangIds().filter((l) => l !== lang).map((l) => getOgLocale(l));
 ---
 
 <!-- Canonical URL -->
 <link rel="canonical" href={canonicalURL} />
+
+<!-- Hreflang alternates -->
+<HreflangLinks currentPath={cleanPathname || '/'} />
 
 <!-- Open Graph Meta Tags -->
 <meta property="og:title" content={seoTitle} />
@@ -137,6 +142,9 @@ const jsonLd = generateJsonLd();
 <meta property="og:url" content={canonicalURL} />
 <meta property="og:image" content={ogImageUrl} />
 <meta property="og:locale" content={getOgLocale(lang)} />
+{alternateOgLocales.map((loc) => (
+  <meta property="og:locale:alternate" content={loc} />
+))}
 <meta property="og:site_name" content={SITE_TITLE} />
 
 <!-- Twitter Card Meta Tags -->
