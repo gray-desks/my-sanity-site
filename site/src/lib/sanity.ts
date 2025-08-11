@@ -324,43 +324,29 @@ export async function getEnabledLanguageArticleSlugs(): Promise<{slug: string, t
   return allSlugs.filter(item => enabledLangCodes.includes(item.lang))
 }
 
-// 記事の統計情報取得（将来の多言語展開用）
+// 記事の統計情報取得（言語・種類の分布）
 export async function getArticleStats(): Promise<{
   totalArticles: number
   articlesByLanguage: Record<string, number>
   articlesByType: Record<string, number>
 }> {
+  // 必要最小限のフィールドのみ取得
   const query = `
-    {
-      "totalArticles": count(*[_type == "article"]),
-      "articlesByLanguage": *[_type == "article"] | group_by(coalesce(lang, "ja")) {
-        "lang": @[0].lang || "ja",
-        "count": length(@)
-      },
-      "articlesByType": *[_type == "article"] | group_by(type) {
-        "type": @[0].type,
-        "count": length(@)
-      }
+    *[_type == "article"]{
+      "lang": coalesce(lang, "ja"),
+      "type": coalesce(type, "unknown")
     }
   `
-  
-  const result = await client.fetch(query)
-  
-  // 結果を整形
+  const items: { lang: string; type: string }[] = await client.fetch(query)
+
+  const totalArticles = items.length
   const articlesByLanguage: Record<string, number> = {}
   const articlesByType: Record<string, number> = {}
-  
-  result.articlesByLanguage.forEach((item: any) => {
-    articlesByLanguage[item.lang] = item.count
-  })
-  
-  result.articlesByType.forEach((item: any) => {
-    articlesByType[item.type] = item.count
-  })
-  
-  return {
-    totalArticles: result.totalArticles,
-    articlesByLanguage,
-    articlesByType
+
+  for (const it of items) {
+    articlesByLanguage[it.lang] = (articlesByLanguage[it.lang] ?? 0) + 1
+    articlesByType[it.type] = (articlesByType[it.type] ?? 0) + 1
   }
+
+  return { totalArticles, articlesByLanguage, articlesByType }
 }

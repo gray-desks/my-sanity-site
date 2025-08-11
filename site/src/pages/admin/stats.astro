@@ -1,0 +1,117 @@
+---
+export const prerender = false;
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import { getArticleStats } from '../../lib/sanity';
+
+const stats = await getArticleStats();
+const languages = Object.entries(stats.articlesByLanguage).sort((a, b) => b[1] - a[1]);
+const types = Object.entries(stats.articlesByType).sort((a, b) => b[1] - a[1]);
+---
+
+<AdminLayout title="統計">
+  <!-- Page header -->
+  <div class="mb-8">
+    <h1 class="text-2xl font-bold text-gray-900">統計</h1>
+    <p class="mt-1 text-sm text-gray-500">記事数や閲覧状況などのサイト統計を確認できます。</p>
+  </div>
+
+  <!-- Stat cards -->
+  <div class="grid grid-cols-1 gap-6 md:grid-cols-2 mb-8">
+    <!-- Total Articles -->
+    <div class="bg-white overflow-hidden shadow-sm rounded-lg border border-gray-200">
+      <div class="p-5">
+        <div class="flex items-center">
+          <div class="flex-shrink-0">
+            <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+              <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+              </svg>
+            </div>
+          </div>
+          <div class="ml-5 w-0 flex-1">
+            <dl>
+              <dt class="text-sm font-medium text-gray-500 truncate">記事数</dt>
+              <dd class="text-lg font-semibold text-gray-900">{stats.totalArticles}</dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Monthly Views (placeholder) -->
+    <div class="bg-white overflow-hidden shadow-sm rounded-lg border border-gray-200">
+      <div class="p-5">
+        <div class="flex items-center">
+          <div class="flex-shrink-0">
+            <div class="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center">
+              <svg class="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+              </svg>
+            </div>
+          </div>
+          <div class="ml-5 w-0 flex-1">
+            <dl>
+              <dt class="text-sm font-medium text-gray-500 truncate">月間PV</dt>
+              <dd class="text-lg font-semibold text-gray-900">12.4K</dd>
+            </dl>
+            <p class="mt-2 text-xs text-gray-500">Google Analytics連携で自動化可能です。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Breakdown sections -->
+  <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+    <!-- Articles by Language -->
+    <div class="bg-white shadow-sm rounded-lg border border-gray-200">
+      <div class="p-6">
+        <h2 class="text-base font-semibold text-gray-900 mb-4">言語別記事数</h2>
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">言語</th>
+                <th class="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">記事数</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-100">
+              {languages.map(([lang, count]) => (
+                <tr>
+                  <td class="px-4 py-2 text-sm text-gray-700">{lang}</td>
+                  <td class="px-4 py-2 text-sm text-gray-900 text-right">{count as number}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Articles by Type -->
+    <div class="bg-white shadow-sm rounded-lg border border-gray-200">
+      <div class="p-6">
+        <h2 class="text-base font-semibold text-gray-900 mb-4">種類別記事数</h2>
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">種類</th>
+                <th class="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">記事数</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-100">
+              {types.map(([type, count]) => (
+                <tr>
+                  <td class="px-4 py-2 text-sm text-gray-700">{type}</td>
+                  <td class="px-4 py-2 text-sm text-gray-900 text-right">{count as number}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</AdminLayout>
