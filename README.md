@@ -77,6 +77,11 @@ cp .env.example .env
 - `PUBLIC_SANITY_PROJECT_ID`: Sanity プロジェクト ID
 - `PUBLIC_SITE_URL`: **必須** Vercelデプロイ先のURL (例: `https://your-site.vercel.app`)
 - `REVALIDATE_SECRET`: ISR 用の秘密キー (ランダムな文字列)
+- `PUBLIC_SITE_TITLE`: サイトタイトル（デフォルトは `旅ログ - 日本全国の旅記録`）
+- `PUBLIC_SITE_DESCRIPTION`: サイト説明（SEOデフォルトに使用）
+- `VERCEL_DEPLOY_HOOK_URL`: 管理画面からの手動デプロイ用フックURL（任意）
+- `ADMIN_USER` / `ADMIN_PASS`: 管理画面ログイン用（本番のみ有効。開発はバイパス）
+- `OG_IMAGE_VERSION`: 既定OGP画像のキャッシュバスター（置換時にバージョン更新）
 
 ### 3. 開発サーバー起動
 
@@ -104,6 +109,9 @@ npm run dev
    - `PUBLIC_SANITY_DATASET` (例: `production`)
    - `PUBLIC_SITE_URL` (デプロイ先のURL)
    - `REVALIDATE_SECRET` (ISR用)
+   - `PUBLIC_SITE_TITLE` / `PUBLIC_SITE_DESCRIPTION`
+   - `VERCEL_DEPLOY_HOOK_URL`（任意。管理UIからデプロイ実行に使用）
+   - `ADMIN_USER` / `ADMIN_PASS`（本番管理画面ログイン用）
    - その他、アフィリエイトやAdSenseのID
 
 3. **ビルド設定 (Vercel)**
@@ -120,6 +128,25 @@ Sanityでコンテンツを更新した際に、Vercel上のサイトを自動�
    - URL: `https://<YOUR_SITE_URL>/api/revalidate`
    - Secret: `REVALIDATE_SECRET` と同じ値
    - Trigger on: `Create`, `Update`, `Delete`
+
+### 管理画面からの手動デプロイ
+
+`/admin` ナビにある「反映（デプロイ）」ボタンで Vercel の Deploy Hook を叩けます。
+
+- エンドポイント: `POST /api/admin/deploy/vercel`
+- 必要変数: `VERCEL_DEPLOY_HOOK_URL`
+- 開発環境ではログイン不要、本番では `ADMIN_USER` / `ADMIN_PASS` が必要
+
+### OGP画像の生成とキャッシュバスター
+
+既定のOGP画像は `site/scripts/generate-og.js` で生成します。
+
+```bash
+cd site
+npm run generate-og
+```
+
+画像を置き換えた際は `OG_IMAGE_VERSION` をインクリメントしてSNSのキャッシュ更新を促してください。
 
 ## 📊 運用
 

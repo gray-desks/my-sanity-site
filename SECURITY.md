@@ -38,37 +38,44 @@ site/service-account-key.json
 # site/.env ファイルを作成（Gitに含まれません）
 cp site/.env.example site/.env
 
-# 実際の認証情報を設定（例）
-GOOGLE_CLIENT_ID=your-google-client-id.apps.googleusercontent.com
-GOOGLE_CLIENT_SECRET=your-google-client-secret
-GOOGLE_PHOTOS_ALBUM_ID=your-album-id
+# 主な変数例（必要に応じて設定）
+PUBLIC_SANITY_PROJECT_ID=your-sanity-project-id
+PUBLIC_SANITY_DATASET=production
+PUBLIC_SITE_URL=http://localhost:4321
+PUBLIC_SITE_TITLE=旅ログ - 日本全国の旅記録
+PUBLIC_SITE_DESCRIPTION=日本全国の旅ログを多言語で発信するブログ。
+REVALIDATE_SECRET=your-revalidate-secret
+VERCEL_DEPLOY_HOOK_URL=https://api.vercel.com/v1/integrations/deploy/...
+ADMIN_USER=admin
+ADMIN_PASS=your-secure-password
+PUBLIC_ADSENSE_CLIENT_ID=ca-pub-xxxxxxxxxxxxxxxx
+PUBLIC_BOOKING_AFFILIATE_ID=xxxxxx
+OG_IMAGE_VERSION=v4
 ```
 
 #### 本番環境（Vercel）
 1. Vercel Dashboard → プロジェクト → Settings → Environment Variables
 2. 以下の変数を追加：
    ```
-   GOOGLE_CLIENT_ID
-   GOOGLE_CLIENT_SECRET
-   GOOGLE_PHOTOS_ALBUM_ID
+   PUBLIC_SANITY_PROJECT_ID
+   PUBLIC_SANITY_DATASET
+   PUBLIC_SITE_URL
+   PUBLIC_SITE_TITLE
+   PUBLIC_SITE_DESCRIPTION
+   REVALIDATE_SECRET
+   VERCEL_DEPLOY_HOOK_URL (任意)
    ADMIN_USER
    ADMIN_PASS
+   PUBLIC_ADSENSE_CLIENT_ID (任意)
+   PUBLIC_BOOKING_AFFILIATE_ID (任意)
+   OG_IMAGE_VERSION (任意)
    ```
 
-### 2. Service Account の安全な使用
+### 2. 廃止済み機能に関する注意
 
-#### サービスアカウントキーの作成
-1. Google Cloud Console → IAM と管理 → サービスアカウント
-2. 新しいサービスアカウントを作成
-3. Photos Library API の読み取り権限を付与
-4. JSON キーをダウンロード
-5. `site/service-account-key.json` として保存
-
-#### Vercel での設定
-```bash
-# JSON ファイル全体を環境変数として設定
-GOOGLE_SERVICE_ACCOUNT_KEY='{"type":"service_account","project_id":"..."}'
-```
+本プロジェクトでは Google Photos 連携は削除済みです。
+- Google Photos に関する環境変数やサービスアカウント設定は不要です。
+- 旧ドキュメントの記載は参照しないでください。
 
 ## 🔍 セキュリティチェックリスト
 
