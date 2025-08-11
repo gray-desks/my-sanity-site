@@ -48,9 +48,6 @@ const {
                 <a href="/admin" class="border-red-500 text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
                   記事作成
                 </a>
-                <a href="/admin/content" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
-                  コンテンツ
-                </a>
                 <a href="/admin/analytics" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
                   分析
                 </a>
@@ -72,6 +69,19 @@ const {
                 </a>
               </div>
               
+              <!-- Sanity Studio (desktop) -->
+              <div class="hidden sm:block">
+                <a href="https://travel-blog-jp.sanity.studio"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   class="inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-all duration-200">
+                  <svg class="w-4 h-4 mr-1.5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                  </svg>
+                  Sanity Studioを開く
+                </a>
+              </div>
+              
               <!-- Mobile blog access -->
               <div class="sm:hidden">
                 <a href="/" 
@@ -85,6 +95,19 @@ const {
                 </a>
               </div>
 
+              <!-- Sanity Studio (mobile) -->
+              <div class="sm:hidden">
+                <a href="https://travel-blog-jp.sanity.studio" 
+                   target="_blank" 
+                   rel="noopener noreferrer"
+                   class="inline-flex items-center justify-center w-8 h-8 rounded-md text-gray-500 hover:text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-red-500 transition-colors"
+                   title="Sanity Studioを開く">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                  </svg>
+                </a>
+              </div>
+ 
               <!-- Divider -->
               <div class="hidden sm:block w-px h-6 bg-gray-300" aria-hidden="true"></div>
               
