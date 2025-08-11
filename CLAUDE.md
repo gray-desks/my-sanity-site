@@ -1,6 +1,6 @@
 # CLAUDE.md
 > Guidance for Claude Code when working with **旅ログ – Japan Travel Journal** repository  
-> Last update : 2025-08-06 (v0.2.2 Schema Synchronization)
+> Last update : 2025-08-12 (docs cleanup: remove content/ & CLI)
 
 ---
 
@@ -83,10 +83,9 @@ bash
 npm run dev                # localhost:3333
 npm run deploy:studio
 
-# === Article Auto-Post CLI ===
-npm run post content/drafts/my-article.md   # 単一ファイル
-npm run post content/drafts/**/*.md         # バッチ投稿
-# オプション: --type <schema> --json --dry-run
+# === Admin (Manual Post) ===
+# 記事作成は Sanity Studio または サイトの管理画面（/admin）から手動で行います。
+# ローカルの content/ ディレクトリや自動投稿CLIは廃止しました。
 
 # === Astro Frontend ===
 cd site && npm run dev      # localhost:4321
@@ -97,13 +96,12 @@ npm run build && cd site && npm run build
 
 ---
 
-### 4-1 コンテンツ保管場所
+### 4-1 コンテンツ運用方針（更新）
 
-| 状態 | パス例 | 備考 |
-|------|--------|------|
-| 下書き | `content/drafts/{slug}.md` | PR ベースで管理 |
-| 公開済 | `content/published/{YYYY}/{MM}-{slug}.md` | 自動／手動で移動 |
-| 画像 | `content/images/{slug}/...` | CLI 画像アップロード機能で参照 |
+- 記事データは Sanity Studio 上で作成・編集・公開します。
+- 画像は Sanity の image フィールド（`coverImage`/`gallery`）で管理します。
+- 追加の静的アセットが必要な場合は `site/public/` 配下に配置します（例: `site/public/og/`）。
+- 旧来の `content/` ディレクトリ運用と CLI ワークフローは撤廃しました。
 5. 開発ガイドライン
 5-1 Schema 変更手順
 /schemas/article.js を編集。
@@ -132,13 +130,19 @@ Lighthouse CI	LCP / CLS / a11y スコア
 ESLint + Prettier	ルート & site 両方
 
 7. 環境変数（site/.env）
-PUBLIC_SANITY_PROJECT_ID = fcz6on8p
-
-PUBLIC_BOOKING_AFFILIATE_ID
-
-PUBLIC_ADSENSE_CLIENT_ID
-
-REVALIDATE_SECRET
+PUBLIC_SANITY_PROJECT_ID=fcz6on8p
+PUBLIC_SANITY_DATASET=production
+PUBLIC_SANITY_API_VERSION=2024-01-01
+PUBLIC_SITE_URL=https://my-sanity-site.vercel.app
+PUBLIC_SITE_TITLE=旅ログ - 日本全国の旅記録
+PUBLIC_SITE_DESCRIPTION=日本全国の旅ログを多言語で発信するブログ。各地の魅力を写真と文章でお届けします。
+PUBLIC_BOOKING_AFFILIATE_ID=your-booking-affiliate-id
+PUBLIC_ADSENSE_CLIENT_ID=ca-pub-your-adsense-id
+REVALIDATE_SECRET=your-secure-random-32char-string
+VERCEL_DEPLOY_HOOK_URL=your-vercel-deploy-hook-id
+ADMIN_USER=admin
+ADMIN_PASS=change-me
+OG_IMAGE_VERSION=v4
 
 8. 典型タスク
 やりたいこと	手順

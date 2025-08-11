@@ -2,11 +2,11 @@
 import {createClient} from '@sanity/client'
 
 const client = createClient({
-  projectId: 'fcz6on8p',
-  dataset: 'production',
-  token: process.env.SANITY_TOKEN,
-  apiVersion: '2023-08-01',
-  useCdn: false
+  projectId: process.env.PUBLIC_SANITY_PROJECT_ID || 'fcz6on8p',
+  dataset: process.env.PUBLIC_SANITY_DATASET || 'production',
+  token: process.env.SANITY_WRITE_TOKEN,
+  apiVersion: process.env.PUBLIC_SANITY_API_VERSION || '2024-01-01',
+  useCdn: false,
 })
 
 const articles = [
@@ -16,6 +16,7 @@ const articles = [
     title: '浅草寺で朝散歩',
     slug: { current: 'asakusa-morning', _type: 'slug' },
     type: 'spot',
+    prefecture: '東京都',
     lang: 'ja',
     publishedAt: new Date().toISOString(),
     placeName: '浅草寺',
@@ -26,7 +27,7 @@ const articles = [
     },
     // coverImage will be added later via Studio
     gallery: [],
-    body: [
+    content: [
       {
         _type: 'block',
         _key: 'block1',
@@ -56,6 +57,7 @@ const articles = [
     title: 'Senso-ji Morning Walk',
     slug: { current: 'asakusa-morning', _type: 'slug' },
     type: 'spot',
+    prefecture: '東京都',
     lang: 'en',
     publishedAt: new Date().toISOString(),
     placeName: 'Senso-ji Temple',
@@ -66,7 +68,7 @@ const articles = [
     },
     // coverImage will be added later via Studio
     gallery: [],
-    body: [
+    content: [
       {
         _type: 'block',
         _key: 'block1',
@@ -96,6 +98,7 @@ const articles = [
     title: '銀座の寿司ランチ',
     slug: { current: 'ginza-sushi', _type: 'slug' },
     type: 'food',
+    prefecture: '東京都',
     lang: 'ja',
     publishedAt: new Date().toISOString(),
     placeName: '銀座',
@@ -106,7 +109,7 @@ const articles = [
     },
     // coverImage will be added later via Studio
     gallery: [],
-    body: [
+    content: [
       {
         _type: 'block',
         _key: 'block1',
@@ -136,6 +139,7 @@ const articles = [
     title: 'Sushi Lunch in Ginza',
     slug: { current: 'ginza-sushi', _type: 'slug' },
     type: 'food',
+    prefecture: '東京都',
     lang: 'en',
     publishedAt: new Date().toISOString(),
     placeName: 'Ginza',
@@ -146,7 +150,7 @@ const articles = [
     },
     // coverImage will be added later via Studio
     gallery: [],
-    body: [
+    content: [
       {
         _type: 'block',
         _key: 'block1',
