@@ -6,8 +6,8 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-// Language configurations - Import from central config
-import { supportedLanguages } from '../../supportedLanguages.js';
+// Generate only Japanese OGP assets per project preference
+const languages = ['ja'];
 
 // OG Image dimensions
 const OG_WIDTH = 1200;
@@ -284,28 +284,28 @@ async function generateOgImages() {
     `;
   };
 
-  for (const lang of supportedLanguages.filter(l => l.id === 'ja')) {
-    const title = langTitles[lang.id] || langTitles['en'];
-    const rectOut = join(ogDir, `default-${lang.id}.webp`);
-    const squareOut = join(ogDir, `default-square-${lang.id}.webp`);
+  for (const langId of languages) {
+    const title = langTitles[langId] || langTitles['ja'];
+    const rectOut = join(ogDir, `default-${langId}.webp`);
+    const squareOut = join(ogDir, `default-square-${langId}.webp`);
 
     try {
       // Rectangular 1200x630
-      const rectBuffer = await sharp(Buffer.from(rectSvg(title, DOMAIN_TEXT, lang.id)))
+      const rectBuffer = await sharp(Buffer.from(rectSvg(title, DOMAIN_TEXT, langId)))
         .webp({ quality: 85 })
         .toBuffer();
       writeFileSync(rectOut, rectBuffer);
-      console.log(`✅ Generated: default-${lang.id}.webp`);
+      console.log(`✅ Generated: default-${langId}.webp`);
 
       // Square 800x800 for compact Twitter card
-      const squareBuffer = await sharp(Buffer.from(squareSvg(title, DOMAIN_TEXT, lang.id)))
+      const squareBuffer = await sharp(Buffer.from(squareSvg(title, DOMAIN_TEXT, langId)))
         .webp({ quality: 85 })
         .toBuffer();
       writeFileSync(squareOut, squareBuffer);
-      console.log(`✅ Generated: default-square-${lang.id}.webp`);
+      console.log(`✅ Generated: default-square-${langId}.webp`);
 
     } catch (error) {
-      console.error(`❌ Failed to generate OG images for ${lang.id}:`, error);
+      console.error(`❌ Failed to generate OG images for ${langId}:`, error);
     }
   }
 

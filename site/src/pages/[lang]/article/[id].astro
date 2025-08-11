@@ -7,6 +7,8 @@ import { getArticleById, client, type Article } from '../../../lib/sanity'
 import { ENABLED_LANGUAGES, getLocalizedPath, getUILabel, getDateLocale } from '../../../lib/i18n'
 import { ADS_SLOTS } from '../../../config/ads'
 
+export const prerender = true
+
 export async function getStaticPaths() {
   const paths = []
 
