@@ -133,6 +133,11 @@
   text-rendering: optimizeLegibility;
 }
 
+/* Prevent scroll anchoring from adjusting viewport and causing jumps during load */
+html, body {
+  overflow-anchor: none;
+}
+
 /* Reduce layout shifts */
 img, video {
   height: auto;

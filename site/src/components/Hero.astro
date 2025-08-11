@@ -13,7 +13,7 @@ const subtitle = getUILabel(lang, 'heroSubtitle')
 const ctaText = getUILabel(lang, 'readStories')
 ---
 
-<section class="relative overflow-hidden min-h-[38vh] md:min-h-[52vh] flex items-start justify-center bg-white pt-8 pb-6 md:pt-24 md:pb-24">
+<section class="relative overflow-hidden hero-minh flex items-start justify-center bg-white pt-8 pb-6 md:pt-24 md:pb-24">
   <div class="absolute top-1/2 left-1/2 transform -translate-x-[62%] -translate-y-1/2 pointer-events-none hinomaru-container">
     <div class="w-full h-full rounded-full hinomaru-circle"></div>
   </div>
@@ -28,15 +28,15 @@ const ctaText = getUILabel(lang, 'readStories')
 
   <!-- Content with entrance animations -->
   <div class="relative max-w-5xl mx-auto px-4 text-center z-10 mt-6 md:mt-12">
-    <h1 class="text-4xl md:text-6xl font-semibold tracking-wide text-gray-900 mb-4 drop-shadow-sm hero-title animate-fade-in-up">
+    <h1 class="text-4xl md:text-6xl font-semibold tracking-wide text-gray-900 mb-4 drop-shadow-sm hero-title">
       {title}
     </h1>
-    <p class="mt-2 text-base md:text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed drop-shadow-sm hero-subtitle animate-fade-in-up-delay mb-4 md:mb-16">
+    <p class="mt-2 text-base md:text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed drop-shadow-sm hero-subtitle mb-4 md:mb-16">
       {subtitle}
     </p>
     
     <!-- Search Filter with proper spacing -->
-    <div class="relative z-20 animate-fade-in-up-delay-2">
+    <div class="relative z-20">
       <div class="max-w-4xl mx-auto">
         <SearchFilter lang={lang} />
       </div>
@@ -45,6 +45,10 @@ const ctaText = getUILabel(lang, 'readStories')
 </section>
 
 <style>
+  /* Use svh to avoid mobile address bar resize causing jumps */
+  .hero-minh { min-height: 38svh; }
+  @media (min-width: 768px) { .hero-minh { min-height: 52svh; } }
+
   /* Responsive Hinomaru container */
   .hinomaru-container {
     width: 95vw;
@@ -60,6 +64,8 @@ const ctaText = getUILabel(lang, 'readStories')
     filter: blur(0.5px);
     opacity: 0.75;
   }
+
+  /* Removed on-load fade-ups to avoid jank */
 
   @media (prefers-reduced-motion: reduce) {
     * {

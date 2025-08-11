@@ -60,6 +60,10 @@ const config = typeConfig[article.type as keyof typeof typeConfig] || typeConfig
                 src={`${article.coverImage.asset.url}?w=1200&h=600&fit=crop&auto=format`}
                 alt={article.title}
                 class="w-full h-96 object-cover cursor-pointer"
+                width="1200"
+                height="600"
+                decoding="async"
+                fetchpriority="high"
                 id="cover-image"
                 data-lightbox-url={`${article.coverImage.asset.url}?auto=format`}
               />

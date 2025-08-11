@@ -1,5 +1,5 @@
 ---
-import '../styles/global.css'
+ import '../styles/global.css'
 import Navbar from '../components/Navbar.astro'
 import Logo from '../components/ui/Logo.astro'
 import HreflangLinks from '../components/HreflangLinks.astro'
@@ -40,6 +40,34 @@ const currentPath = Astro.url.pathname
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <title>{title}</title>
     
+    <!-- Prevent browser auto scroll restoration causing jumps -->
+    <script is:inline>
+      try { history.scrollRestoration = 'manual' } catch {}
+    </script>
+    <!-- Guard against unexpected jump-to-top on load -->
+    <script is:inline>
+      (function() {
+        let lastX = window.scrollX || 0;
+        let lastY = window.scrollY || 0;
+        const update = () => { lastX = window.scrollX; lastY = window.scrollY; };
+        window.addEventListener('scroll', update, { passive: true });
+        const restoreIfJumped = () => {
+          // If browser jumped to top while user had scrolled, snap back instantly
+          if (lastY > 50 && window.scrollY < lastY - 30) {
+            window.scrollTo(lastX, lastY);
+          }
+        };
+        window.addEventListener('load', () => {
+          // Run multiple times to outlast late scripts/layout
+          restoreIfJumped();
+          setTimeout(restoreIfJumped, 50);
+          setTimeout(restoreIfJumped, 150);
+          setTimeout(restoreIfJumped, 300);
+        });
+        window.addEventListener('pageshow', restoreIfJumped);
+      })();
+    </script>
+    
     <!-- Comprehensive SEO: Canonical, OG, JSON-LD -->
     <Seo 
       frontmatter={frontmatter} 
@@ -56,14 +84,28 @@ const currentPath = Astro.url.pathname
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@400;700&family=Shippori+Mincho:wght@400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- Google AdSense -->
-    {import.meta.env.PUBLIC_ADSENSE_CLIENT_ID && (
-      <script 
-        is:inline 
-        async 
-        src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${import.meta.env.PUBLIC_ADSENSE_CLIENT_ID}`}
-        crossorigin="anonymous"
-      ></script>
+    <!-- Google AdSense: defer loading to idle, and only in production to avoid dev jank -->
+    {import.meta.env.PUBLIC_ADSENSE_CLIENT_ID && !import.meta.env.DEV && (
+      <>
+        <link rel="preconnect" href="https://pagead2.googlesyndication.com" crossorigin>
+        <link rel="preconnect" href="https://googleads.g.doubleclick.net" crossorigin>
+        <script is:inline>
+          (function(){
+            const load = () => {
+              var s = document.createElement('script');
+              s.async = true;
+              s.crossOrigin = 'anonymous';
+              s.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${import.meta.env.PUBLIC_ADSENSE_CLIENT_ID}`
+              document.head.appendChild(s);
+            };
+            if ('requestIdleCallback' in window) {
+              requestIdleCallback(load, { timeout: 2000 });
+            } else {
+              window.addEventListener('load', () => setTimeout(load, 300));
+            }
+          })();
+        </script>
+      </>
     )}
   </head>
   <body 
@@ -137,11 +179,11 @@ const currentPath = Astro.url.pathname
         <!-- Ripple effects container (outside the link) -->
         <div class="absolute inset-0 pointer-events-none">
           <!-- First ripple wave - water-like blue -->
-          <div class="absolute inset-0 rounded-full border-4 border-blue-400/60 opacity-0 group-hover:opacity-100 animate-ripple-1 transition-opacity duration-300"></div>
+          <div class="absolute inset-0 rounded-full border-4 border-blue-400/60 opacity-0 group-hover:opacity-100 animate-ripple-1 transition-opacity duration-300 ripple-layer"></div>
           <!-- Second ripple wave -->
-          <div class="absolute inset-0 rounded-full border-2 border-blue-300/50 opacity-0 group-hover:opacity-100 animate-ripple-2 transition-opacity duration-300"></div>
+          <div class="absolute inset-0 rounded-full border-2 border-blue-300/50 opacity-0 group-hover:opacity-100 animate-ripple-2 transition-opacity duration-300 ripple-layer"></div>
           <!-- Third ripple wave -->
-          <div class="absolute inset-0 rounded-full border-2 border-blue-200/40 opacity-0 group-hover:opacity-100 animate-ripple-3 transition-opacity duration-300"></div>
+          <div class="absolute inset-0 rounded-full border-2 border-blue-200/40 opacity-0 group-hover:opacity-100 animate-ripple-3 transition-opacity duration-300 ripple-layer"></div>
         </div>
 
         <!-- Character link -->
@@ -607,10 +649,8 @@ const currentPath = Astro.url.pathname
         animation: ripple-3 2s ease-out 0.6s infinite;
       }
       
-      /* Smooth scrolling */
-      html {
-        scroll-behavior: smooth;
-      }
+      /* Disable global smooth scrolling to avoid animated jumps on load/restore */
+      html { scroll-behavior: auto; }
       
       /* Professional typography */
       body {
@@ -626,8 +666,13 @@ const currentPath = Astro.url.pathname
           animation: none !important;
         }
       }
+
+      /* Hint compositor for ripple layers */
+      .ripple-layer { will-change: transform, opacity; }
     </style>
     
+    
+
     <!-- Vercel Analytics & Speed Insights -->
     <script>
       // Vercel Analytics
