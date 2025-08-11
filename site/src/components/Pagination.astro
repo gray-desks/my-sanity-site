@@ -60,9 +60,9 @@ const prevUrl = currentPage > 1 ? getPageUrl(currentPage - 1) : null
 const nextUrl = currentPage < totalPages ? getPageUrl(currentPage + 1) : null
 
 // Labels
-const prevLabel = getUILabel(lang, 'prevPage') || (lang === 'en' ? 'Previous' : '前のページ')
-const nextLabel = getUILabel(lang, 'nextPage') || (lang === 'en' ? 'Next' : '次のページ')
-const pageLabel = (lang === 'en' ? 'Page' : 'ページ')
+const prevLabel = getUILabel(lang, 'prevPage')
+const nextLabel = getUILabel(lang, 'nextPage')
+const pageLabel = getUILabel(lang, 'page')
 ---
 
 {totalPages > 1 && (
@@ -144,8 +144,8 @@ const pageLabel = (lang === 'en' ? 'Page' : 'ページ')
   <!-- Screen reader summary -->
   <div class="sr-only" aria-live="polite">
     {lang === 'en' 
-      ? `Page ${currentPage} of ${totalPages}` 
-      : `${totalPages}ページ中 ${currentPage}ページ目`
+      ? `${getUILabel(lang, 'page')} ${currentPage} ${getUILabel(lang, 'pageOf')} ${totalPages}` 
+      : `${totalPages}${getUILabel(lang, 'pageOf')} ${currentPage}${getUILabel(lang, 'pageNumber')}`
     }
   </div>
 )}

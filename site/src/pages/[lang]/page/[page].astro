@@ -58,14 +58,14 @@ try {
 }
 
 // SEO and meta information
-const pageLabel = lang === 'en' ? 'Page' : 'ページ'
+const pageLabel = getUILabel(lang, 'page')
 const pageTitle = lang === 'en' 
-  ? `Page ${currentPage} | ${getUILabel(lang, 'siteTitle')}` 
+  ? `${getUILabel(lang, 'page')} ${currentPage} | ${getUILabel(lang, 'siteTitle')}` 
   : `${pageLabel} ${currentPage} | ${getUILabel(lang, 'siteTitle')}`
 
 const pageDescription = lang === 'en'
-  ? `${getUILabel(lang, 'siteDescription')} (Page ${currentPage} of ${totalPages})`
-  : `${getUILabel(lang, 'siteDescription')} (${currentPage}/${totalPages}ページ目)`
+  ? `${getUILabel(lang, 'siteDescription')} (${getUILabel(lang, 'page')} ${currentPage} ${getUILabel(lang, 'pageOf')} ${totalPages})`
+  : `${getUILabel(lang, 'siteDescription')} (${currentPage}/${totalPages}${getUILabel(lang, 'pageNumber')})`
 
 const canonicalUrl = `${Astro.site?.toString() || ''}${lang}/page/${currentPage}`
 

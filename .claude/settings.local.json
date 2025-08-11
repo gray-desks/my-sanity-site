@@ -77,7 +77,8 @@
       "WebFetch(domain:localhost)",
       "mcp__serena__think_about_collected_information",
       "Bash(cp:*)",
-      "mcp__serena__think_about_whether_you_are_done"
+      "mcp__serena__think_about_whether_you_are_done",
+      "WebFetch(domain:www.japantravellog.com)"
     ],
     "deny": []
   }

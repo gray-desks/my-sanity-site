@@ -52,7 +52,7 @@ const afterAd = insertAdAfterIndex >= 0 ? value.slice(insertAdAfterIndex + 1) : 
       slotId={ADS_SLOTS.POST_INARTICLE_1}
       format="in-article"
       reserveHeight={250}
-      label={lang === 'en' ? 'Advertisement' : lang === 'zh-cn' ? '广告' : lang === 'zh-tw' ? '廣告' : lang === 'ko' ? '광고' : '广告'}
+      label={getUILabel(lang, 'advertisement')}
       class="my-8"
     />
   )}

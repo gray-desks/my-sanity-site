@@ -17,11 +17,7 @@ const {
   class: className = ''
 } = Astro.props
 
-const adLabel = lang === 'en' ? 'Advertisement' : 
-               lang === 'zh-cn' ? '广告' :
-               lang === 'zh-tw' ? '廣告' :
-               lang === 'ko' ? '광고' :
-               '広告'
+const adLabel = getUILabel(lang, 'advertisement')
 ---
 
 <div class={`rounded-xl border border-dashed p-3 mb-4 bg-[var(--theme-accent-fade)] border-[var(--theme-accent)]/20 ${className}`}>

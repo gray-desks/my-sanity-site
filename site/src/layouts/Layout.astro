@@ -142,7 +142,7 @@ const currentPath = Astro.url.pathname
       href="#main-content" 
       class="sr-only focus:not-sr-only absolute top-4 left-4 z-[100] px-4 py-2 bg-[var(--theme-accent)] text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--theme-accent)] focus:ring-offset-2"
     >
-      {lang === 'en' ? 'Skip to main content' : 'メインコンテンツへスキップ'}
+      {getUILabel(lang, 'skipToContent')}
     </a>
 
     <Navbar lang={lang} />
@@ -305,25 +305,7 @@ const currentPath = Astro.url.pathname
             <!-- Japanese-style description with luxury styling -->
             <div class="bg-black/20 backdrop-blur-sm rounded-lg p-6 border border-[#C5A572]/30 shadow-2xl">
               <p class="text-[#E2D7C5] leading-relaxed text-sm mb-6 font-light text-center drop-shadow-sm">
-                {lang === 'ja' ? (
-                  <>
-                    日本全国の美しい風景、伝統文化、美食体験を世界20言語で発信。
-                    <br class="hidden sm:block"/>
-                    一期一会の旅の記録をお届けします。
-                  </>
-                ) : lang === 'en' ? (
-                  <>
-                    Sharing Japan's beautiful landscapes, traditional culture, and culinary experiences in 20 languages worldwide.
-                    <br class="hidden sm:block"/>
-                    Delivering unforgettable travel memories from across Japan.
-                  </>
-                ) : (
-                  <>
-                    日本全国の美しい風景、伝統文化、美食体験を世界20言語で発信。
-                    <br class="hidden sm:block"/>
-                    一期一会の旅の記録をお届けします。
-                  </>
-                )}
+                {getUILabel(lang, 'footerDescription')}
               </p>
               
               <!-- Stats with luxury design -->
@@ -406,26 +388,7 @@ const currentPath = Astro.url.pathname
             
             <!-- Final tagline with elegant typography -->
             <p class="text-xs text-[#C5A572]/80 font-light italic px-4 max-w-md mx-auto leading-relaxed drop-shadow-sm">
-              {lang === 'ja' && '― 心に残る旅の記録を、世界へ ―'}
-              {lang === 'en' && '― Sharing unforgettable travel memories with the world ―'}
-              {lang === 'es' && '― Compartiendo memorias de viaje inolvidables con el mundo ―'}
-              {lang === 'fr' && '― Partager des souvenirs de voyage inoubliables avec le monde ―'}
-              {lang === 'de' && '― Unvergessliche Reiseerinnerungen mit der Welt teilen ―'}
-              {lang === 'it' && '― Condividere ricordi di viaggio indimenticabili con il mondo ―'}
-              {lang === 'pt-br' && '― Compartilhando memórias de viagem inesquecíveis com o mundo ―'}
-              {lang === 'ru' && '― Делимся незабываемыми воспоминаниями о путешествиях с миром ―'}
-              {lang === 'ko' && '― 잊을 수 없는 여행의 기억을 세계와 함께 ―'}
-              {lang === 'zh-cn' && '― 与世界分享难忘的旅行回忆 ―'}
-              {lang === 'zh-tw' && '― 與世界分享難忘的旅行回憶 ―'}
-              {lang === 'ar' && '― مشاركة ذكريات سفر لا تُنسى مع العالم ―'}
-              {lang === 'tr' && '― Unutulmaz seyahat anılarını dünyayla paylaşmak ―'}
-              {lang === 'th' && '― แบ่งปันความทรงจำการเดินทางที่น่าจดจำกับโลก ―'}
-              {lang === 'nl' && '― Onvergetelijke reisherinneringen delen met de wereld ―'}
-              {lang === 'pl' && '― Dzielenie się niezapomnianymi wspomnieniami z podróży ze światem ―'}
-              {lang === 'sv' && '― Dela oförglömliga reseminnen med världen ―'}
-              {lang === 'da' && '― Deling af uforglemmelige rejseminder med verden ―'}
-              {lang === 'fi' && '― Jakamassa unohtumattomia matkamuistoja maailman kanssa ―'}
-              {lang === 'id' && '― Berbagi kenangan perjalanan yang tak terlupakan dengan dunia ―'}
+              {getUILabel(lang, 'footerTagline')}
             </p>
           </div>
         </div>

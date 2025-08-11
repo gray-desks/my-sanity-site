@@ -68,7 +68,7 @@ const structuredData = {
         slotId={ADS_SLOTS.HOME_HERO}
         format="horizontal" 
         reserveHeight={120}
-        label={lang === 'en' ? 'Advertisement' : lang === 'zh-cn' ? '广告' : lang === 'zh-tw' ? '廣告' : lang === 'ko' ? '광고' : '広告'}
+        label={getUILabel(lang, 'advertisement')}
         class="mb-6"
       />
     </div>
@@ -83,8 +83,8 @@ const structuredData = {
         </h1>
         <p class="text-lg text-secondary mb-2">
           {lang === 'en' 
-            ? `Page ${currentPage} of ${totalPages}` 
-            : `${totalPages}ページ中 ${currentPage}ページ目`
+            ? `${getUILabel(lang, 'page')} ${currentPage} ${getUILabel(lang, 'pageOf')} ${totalPages}` 
+            : `${totalPages}${getUILabel(lang, 'pageOf')} ${currentPage}${getUILabel(lang, 'pageNumber')}`
           }
         </p>
         <p class="text-secondary">
@@ -103,13 +103,13 @@ const structuredData = {
           <div class="text-6xl mb-4">📝</div>
           <p class="text-gray-500 text-xl mb-2">
             {currentPage > 1 
-              ? (lang === 'en' ? 'No articles on this page' : 'このページに記事はありません')
+              ? getUILabel(lang, 'noArticlesOnPage')
               : getUILabel(lang, 'noArticlesTitle')
             }
           </p>
           <p class="text-gray-400">
             {currentPage > 1 
-              ? (lang === 'en' ? 'Please try a different page' : '他のページをご確認ください')
+              ? getUILabel(lang, 'tryDifferentPage')
               : getUILabel(lang, 'noArticlesSubtitle')
             }
           </p>
@@ -139,7 +139,7 @@ const structuredData = {
       slotId={ADS_SLOTS.HOME_FOOTER}
       format="horizontal"
       reserveHeight={120}
-      label={lang === 'en' ? 'Advertisement' : lang === 'zh-cn' ? '广告' : lang === 'zh-tw' ? '廣告' : lang === 'ko' ? '광고' : '広告'}
+      label={getUILabel(lang, 'advertisement')}
       class="mt-16"
     />
   </div>

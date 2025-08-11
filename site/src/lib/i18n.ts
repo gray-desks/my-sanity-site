@@ -106,6 +106,35 @@ export function getHreflangCode(langId: string): string {
   return hreflangMap[langId] || langId
 }
 
+// 言語別のロケール取得
+export function getDateLocale(langId: string): string {
+  const localeMap: Record<string, string> = {
+    'ja': 'ja-JP',
+    'en': 'en-US',
+    'zh-cn': 'zh-CN',
+    'zh-tw': 'zh-TW',
+    'ko': 'ko-KR',
+    'fr': 'fr-FR',
+    'de': 'de-DE',
+    'es': 'es-ES',
+    'it': 'it-IT',
+    'pt': 'pt-PT',
+    'pt-br': 'pt-BR',
+    'ru': 'ru-RU',
+    'ar': 'ar-SA',
+    'tr': 'tr-TR',
+    'th': 'th-TH',
+    'nl': 'nl-NL',
+    'pl': 'pl-PL',
+    'sv': 'sv-SE',
+    'da': 'da-DK',
+    'fi': 'fi-FI',
+    'id': 'id-ID',
+  }
+  
+  return localeMap[langId] || 'en-US'
+}
+
 // フォント設定（言語別）
 export const LANGUAGE_FONTS = {
   // Latin scripts
@@ -192,6 +221,18 @@ export const UI_LABELS = {
     noArticlesTitle: 'まだ記事がありません',
     noArticlesSubtitle: '管理システムで最初の記事を作成してください',
     musicExperience: '和の音楽を体験',
+    advertisement: '広告',
+    pageOf: 'ページ中',
+    pageNumber: 'ページ目',
+    noArticlesOnPage: 'このページに記事はありません',
+    tryDifferentPage: '他のページをご確認ください',
+    noContent: 'コンテンツがありません。',
+    skipToContent: 'メインコンテンツへスキップ',
+    prevPage: '前のページ',
+    nextPage: '次のページ',
+    page: 'ページ',
+    footerDescription: '日本全国の美しい風景、伝統文化、美食体験を世界20言語で発信。一期一会の旅の記録をお届けします。',
+    footerTagline: '― 心に残る旅の記録を、世界へ ―',
   },
   en: {
     readMore: 'Read More',
@@ -230,6 +271,18 @@ export const UI_LABELS = {
     noArticlesTitle: 'No articles yet',
     noArticlesSubtitle: 'Please create the first article in Sanity Studio',
     musicExperience: 'Traditional Music',
+    advertisement: 'Advertisement',
+    pageOf: 'of',
+    pageNumber: '',
+    noArticlesOnPage: 'No articles on this page',
+    tryDifferentPage: 'Please try a different page',
+    noContent: 'No content available.',
+    skipToContent: 'Skip to main content',
+    prevPage: 'Previous',
+    nextPage: 'Next',
+    page: 'Page',
+    footerDescription: 'Sharing Japan\'s beautiful landscapes, traditional culture, and culinary experiences in 20 languages worldwide. Delivering unforgettable travel memories from across Japan.',
+    footerTagline: '― Sharing unforgettable travel memories with the world ―',
   },
   'zh-cn': {
     readMore: '阅读更多',
@@ -268,6 +321,18 @@ export const UI_LABELS = {
     noArticlesTitle: '暂无文章',
     noArticlesSubtitle: '请在 Sanity Studio 中创建您的第一篇文章',
     musicExperience: '体验传统音乐',
+    advertisement: '广告',
+    pageOf: '页，共',
+    pageNumber: '页',
+    noArticlesOnPage: '此页面没有文章',
+    tryDifferentPage: '请尝试其他页面',
+    noContent: '没有可用内容。',
+    skipToContent: '跳到主要内容',
+    prevPage: '上一页',
+    nextPage: '下一页',
+    page: '页面',
+    footerDescription: '以20种语言分享日本美丽的风景、传统文化和美食体验。传递来自日本各地难忘的旅行回忆。',
+    footerTagline: '― 与世界分享难忘的旅行回忆 ―',
   },
   'zh-tw': {
     readMore: '閱讀更多',
@@ -344,6 +409,18 @@ export const UI_LABELS = {
     noArticlesTitle: '아직 기사가 없습니다',
     noArticlesSubtitle: '관리 시스템에서 첫 번째 기사를 작성하세요',
     musicExperience: '전통음악 체험',
+    advertisement: '광고',
+    pageOf: ' 중',
+    pageNumber: '페이지',
+    noArticlesOnPage: '이 페이지에는 기사가 없습니다',
+    tryDifferentPage: '다른 페이지를 확인해 주세요',
+    noContent: '사용할 수 있는 콘텐츠가 없습니다.',
+    skipToContent: '메인 콘텐츠로 건너뛰기',
+    prevPage: '이전',
+    nextPage: '다음',
+    page: '페이지',
+    footerDescription: '일본의 아름다운 풍경, 전통문화, 미식 체험을 20개 언어로 전 세계에 공유합니다. 일본 전국의 잊을 수 없는 여행 추억을 전해드립니다.',
+    footerTagline: '― 잊을 수 없는 여행의 기억을 세계와 함께 ―',
   },
   th: {
     readMore: 'อ่านเพิ่มเติม',
