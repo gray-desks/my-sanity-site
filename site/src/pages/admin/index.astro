@@ -232,7 +232,7 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
           let errorDetails = '';
           
           if (result && typeof result === 'object') {
-            if (result.code === 'MISSING_SANITY_TOKEN' || result.code === 'SANITY_AUTH_ERROR') {
+            if (result.code === 'MISSING_SANITY_WRITE_TOKEN' || result.code === 'SANITY_AUTH_ERROR') {
               errorMessage = '🔐 認証エラー';
               errorDetails = result.details || 'Sanity書き込み権限が設定されていません';
             } else if (result.code === 'VALIDATION_ERROR') {

@@ -12,7 +12,6 @@
     "deploy": "sanity deploy",
     "deploy:studio": "sanity deploy",
     "deploy-graphql": "sanity graphql deploy",
-    "post": "npx tsx scripts/post.ts",
     "lint": "eslint scripts/**/*.ts --fix",
     "typecheck": "tsc --noEmit",
     "test": "vitest",

@@ -42,7 +42,7 @@ export const POST: APIRoute = async ({ request }) => {
       return new Response(JSON.stringify({ 
         error: 'サーバー設定エラー',
         details: 'Sanity書き込みトークンが設定されていません。環境変数SANITY_WRITE_TOKENを設定してください。',
-        code: 'MISSING_SANITY_TOKEN'
+        code: 'MISSING_SANITY_WRITE_TOKEN'
       }), {
         status: 500,
         headers: { 'Content-Type': 'application/json' }
