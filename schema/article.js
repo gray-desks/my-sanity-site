@@ -2,6 +2,18 @@
 import { defineType, defineField } from 'sanity'
 import { supportedLanguages } from '../supportedLanguages.js'
 
+// Fallback: ensure these languages are always present in the dropdown even if
+// Studio picks up a stale supportedLanguages during deploy/cache.
+const REQUIRED_LANG_IDS = ['fi', 'da', 'sv', 'pl', 'nl']
+const uniqueLangIds = Array.from(new Set([
+  ...supportedLanguages.map(l => l.id),
+  ...REQUIRED_LANG_IDS,
+]))
+const languageOptions = uniqueLangIds.map((id) => {
+  const hit = supportedLanguages.find(l => l.id === id)
+  return { title: hit?.title || id, value: id }
+})
+
 export default defineType({
   name: 'article',
   title: 'Article',
@@ -42,7 +54,7 @@ export default defineType({
       title: 'Language',
       type: 'string',
       options: {
-        list: supportedLanguages.map(({id, title}) => ({title, value: id})),
+        list: languageOptions,
         layout: 'dropdown'
       },
       validation: Rule => Rule.required(),

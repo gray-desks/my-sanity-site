@@ -36,7 +36,7 @@
     "remark": "^15.0.1",
     "remark-parse": "^11.0.0",
     "remark-rehype": "^11.1.2",
-    "sanity": "^4.1.1",
+    "sanity": "^4.3.0",
     "styled-components": "^6.1.18"
   },
   "devDependencies": {

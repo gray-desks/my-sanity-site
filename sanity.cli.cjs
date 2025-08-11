@@ -1,7 +1,7 @@
-export default {
+module.exports = {
   api: {
     projectId: 'fcz6on8p',
-    dataset: 'production'
+    dataset: 'production',
   },
   /**
    * Enable auto-updates for studios.
@@ -9,4 +9,4 @@ export default {
    */
   autoUpdates: true,
   studioHost: 'travel-blog-jp',
-}
+};
