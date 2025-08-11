@@ -50,12 +50,12 @@ const canonicalURL = lang === 'ja'
 const DEFAULT_OG_VERSION = import.meta.env.OG_IMAGE_VERSION ?? 'v4';
 const ogImageUrl = seoImage
   ? (seoImage.startsWith('http') ? seoImage : new URL(seoImage, SITE_URL).toString())
-  : new URL(`/og/default-ja.webp?${DEFAULT_OG_VERSION}`, SITE_URL).toString();
+  : new URL(`/og/default-ja.webp?v=${DEFAULT_OG_VERSION}`, SITE_URL).toString();
 
 // Twitter image handling (compact card prefers a square image)
 const twitterImageUrl = seoImage
   ? (seoImage.startsWith('http') ? seoImage : new URL(seoImage, SITE_URL).toString())
-  : new URL(`/og/default-square-ja.webp?${DEFAULT_OG_VERSION}`, SITE_URL).toString();
+  : new URL(`/og/default-square-ja.webp?v=${DEFAULT_OG_VERSION}`, SITE_URL).toString();
 
 // Locale mapping for og:locale
 const getOgLocale = (langCode: string): string => {
