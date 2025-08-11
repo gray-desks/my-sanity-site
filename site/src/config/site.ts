@@ -3,6 +3,8 @@
  * ページネーション、表示件数、SEO関連の設定を管理
  */
 
+import { SITE_TITLE, SITE_DESCRIPTION } from '../lib/env';
+
 // ページネーション設定
 export const PAGE_SIZE = 12; // 1ページあたりの記事表示数
 
@@ -12,8 +14,8 @@ export const SITE_CONFIG = {
   articlesPerPage: PAGE_SIZE,
   
   // SEO設定
-  defaultTitle: '旅ログ - 日本全国の旅記録',
-  defaultDescription: '日本全国の旅ログを多言語で発信するブログ。各地の魅力を写真と文章でお届けします。',
+  defaultTitle: SITE_TITLE,
+  defaultDescription: SITE_DESCRIPTION,
   
   // 多言語設定
   defaultLanguage: 'ja',

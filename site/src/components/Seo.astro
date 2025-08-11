@@ -1,5 +1,5 @@
 ---
-import { SITE_URL, SITE_TITLE } from '../lib/env';
+import { SITE_URL, SITE_TITLE, SITE_DESCRIPTION, OG_IMAGE_VERSION } from '../lib/env';
 import { getHreflangCode, getLangIds } from '../lib/getSupportedLangs';
 import HreflangLinks from './HreflangLinks.astro';
 
@@ -33,7 +33,7 @@ const {
 
 // SEO values with fallbacks
 const seoTitle = frontmatter.seo?.title || frontmatter.title || SITE_TITLE;
-const seoDescription = frontmatter.seo?.description || frontmatter.description || '日本全国の旅ログを多言語で発信するブログ。各地の魅力を写真と文章でお届けします。';
+const seoDescription = frontmatter.seo?.description || frontmatter.description || SITE_DESCRIPTION;
 const seoImage = frontmatter.seo?.image || frontmatter.heroImage || frontmatter.coverImage;
 const seoType = frontmatter.seo?.type || (pageType === 'article' ? 'article' : 'website');
 
@@ -48,7 +48,7 @@ const canonicalURL = lang === 'ja'
 // To prevent social platforms from caching outdated images, we append a simple
 // cache-busting query parameter (version). Update `OG_IMAGE_VERSION` in your
 // environment variables whenever the default OG images are replaced.
-const DEFAULT_OG_VERSION = import.meta.env.OG_IMAGE_VERSION ?? 'v4';
+const DEFAULT_OG_VERSION = OG_IMAGE_VERSION;
 const ogImageUrl = seoImage
   ? (seoImage.startsWith('http') ? seoImage : new URL(seoImage, SITE_URL).toString())
   : new URL(`/og/default-ja.webp?v=${DEFAULT_OG_VERSION}`, SITE_URL).toString();
