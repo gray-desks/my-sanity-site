@@ -42,7 +42,8 @@ export default defineType({
       title: 'Language',
       type: 'string',
       options: {
-        list: supportedLanguages.map(({id, title}) => ({title, value: id}))
+        list: supportedLanguages.map(({id, title}) => ({title, value: id})),
+        layout: 'dropdown'
       },
       validation: Rule => Rule.required(),
       initialValue: 'ja', // Default to Japanese
