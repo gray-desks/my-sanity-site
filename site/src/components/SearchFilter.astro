@@ -41,7 +41,7 @@ const prefectures = [
           id="search-input"
           placeholder={searchPlaceholder}
           class="search-field w-full h-12 pl-10 pr-4 text-sm placeholder:text-neutral-400 text-ink bg-white/95 border border-neutral-200 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-[var(--theme-accent)] focus:border-transparent transition-all duration-200"
-          aria-label="検索キーワード入力"
+          aria-label={getUILabel(lang, 'searchKeyword')}
         />
         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
           <svg class="h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -54,7 +54,7 @@ const prefectures = [
       <button
         id="search-button"
         class="cta-search h-12 px-5 bg-[var(--theme-accent)] text-white font-semibold rounded-xl shadow-md hover:bg-[var(--theme-accent)]/90 focus:outline-none focus:ring-2 focus:ring-[var(--theme-accent)] transition-all duration-200 hover:-translate-y-0.5"
-        aria-label="検索実行"
+        aria-label={getUILabel(lang, 'search')}
       >
         <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
@@ -66,11 +66,11 @@ const prefectures = [
     <div class="relative">
       <!-- Filter Toggle Chip -->
       <div class="flex items-center justify-between mb-2">
-        <span class="text-xs text-neutral-500">フィルター</span>
+        <span class="text-xs text-neutral-500">{getUILabel(lang, 'filters')}</span>
         <button
           id="filter-toggle"
           class="inline-flex items-center gap-1 px-3 py-1 text-xs font-medium bg-[var(--theme-accent-weak)] text-[var(--theme-ink-strong)] rounded-full hover:brightness-95 transition-all"
-          aria-label="フィルター切り替え"
+          aria-label={getUILabel(lang, 'toggleFilters')}
         >
           <svg class="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path>
@@ -128,7 +128,7 @@ const prefectures = [
           id="search-input-desktop"
           placeholder={searchPlaceholder}
           class="search-field w-full pl-12 pr-4 py-3 text-ink bg-white/95 border border-neutral-200 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-[var(--theme-accent)] focus:border-transparent transition-all duration-200"
-          aria-label="検索キーワード入力"
+          aria-label={getUILabel(lang, 'searchKeyword')}
         />
         <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
           <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -76,7 +76,8 @@
       "Bash(timeout 30s npm test:*)",
       "WebFetch(domain:localhost)",
       "mcp__serena__think_about_collected_information",
-      "Bash(cp:*)"
+      "Bash(cp:*)",
+      "mcp__serena__think_about_whether_you_are_done"
     ],
     "deny": []
   }
