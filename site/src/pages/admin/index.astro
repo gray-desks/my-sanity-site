@@ -26,8 +26,7 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
             rows="20" 
             required
             placeholder="例:&#10;title: 浅草寺の朝の風景&#10;type: spot&#10;prefecture: 東京都&#10;tags: [寺院, 朝活, 観光]&#10;placeName: 浅草寺&#10;content: |&#10;  # 浅草寺の朝の風景&#10;&#10;  早朝の浅草寺は観光客も少なく、静寂に包まれた神聖な雰囲気を味わうことができます。&#10;&#10;  ## アクセス&#10;  - 最寄り駅: 浅草駅&#10;  - 徒歩5分&#10;&#10;  ## 見どころ&#10;  - 雷門&#10;  - 仲見世通り&#10;  - 本堂"
-            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 font-mono text-sm resize-vertical">
-          </textarea>
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 font-mono text-sm resize-vertical"></textarea>
         </div>
         
         <div class="flex justify-end space-x-3">
@@ -141,70 +140,6 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
           <div class="text-xs text-gray-500 flex items-center">
             <div class="w-2 h-2 bg-green-400 rounded-full mr-2"></div>
             本番環境で利用可能
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Photo Management -->
-    <div class="bg-white shadow-sm rounded-lg border border-gray-200">
-      <div class="p-6">
-        <div class="flex items-center mb-4">
-          <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-            <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-            </svg>
-          </div>
-          <div class="ml-4">
-            <h3 class="text-lg font-semibold text-gray-900">写真管理</h3>
-            <p class="text-sm text-gray-500">Google Photosから写真を取得</p>
-          </div>
-        </div>
-        
-        <div class="space-y-3">
-          <a href="/admin/photos"
-             class="w-full flex justify-center items-center px-4 py-3 border border-gray-300 text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">
-            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-            </svg>
-            写真管理へ
-          </a>
-          
-          <div class="text-xs text-gray-500 flex items-center">
-            <div class="w-2 h-2 bg-blue-400 rounded-full mr-2"></div>
-            Google Photos連携
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Recent Activity -->
-  <div class="bg-white shadow-sm rounded-lg border border-gray-200">
-    <div class="px-6 py-4 border-b border-gray-200">
-      <h3 class="text-lg font-semibold text-gray-900">最近のアクティビティ</h3>
-    </div>
-    <div class="p-6">
-      <div class="space-y-4">
-        <div class="flex items-center space-x-3">
-          <div class="w-2 h-2 bg-blue-400 rounded-full"></div>
-          <div class="flex-1">
-            <p class="text-sm text-gray-900">新しい記事「浅草寺の朝の風景」が公開されました</p>
-            <p class="text-xs text-gray-500">2時間前</p>
-          </div>
-        </div>
-        <div class="flex items-center space-x-3">
-          <div class="w-2 h-2 bg-green-400 rounded-full"></div>
-          <div class="flex-1">
-            <p class="text-sm text-gray-900">英語・中国語翻訳が完了しました</p>
-            <p class="text-xs text-gray-500">5時間前</p>
-          </div>
-        </div>
-        <div class="flex items-center space-x-3">
-          <div class="w-2 h-2 bg-yellow-400 rounded-full"></div>
-          <div class="flex-1">
-            <p class="text-sm text-gray-900">15枚の新しい写真がアップロードされました</p>
-            <p class="text-xs text-gray-500">1日前</p>
           </div>
         </div>
       </div>

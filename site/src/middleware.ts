@@ -4,6 +4,12 @@ export const onRequest = defineMiddleware(async (ctx, next) => {
   const { request } = ctx;
   if (!request.url.includes('/admin')) return next();
   
+  // In local development, bypass authentication for admin pages
+  // This allows accessing the admin UI without login when running `astro dev`.
+  if (import.meta.env.DEV) {
+    return next();
+  }
+  
   // Allow access to login page
   if (request.url.includes('/admin/login')) return next();
 
