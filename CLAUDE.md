@@ -7,7 +7,6 @@
 ## 0. TL;DR ― ルール 3 行まとめ
 1. **データモデルは `article` １本**。Trip は存在しない。  
 2. **Astro / Tailwind v3 / Sanity / Vercel** ― 技術スタックは固定。  
-3. n8n 連携・多言語（20 言語）を前提としつつ「まずはシンプルに」。
 
 ---
 
@@ -15,7 +14,6 @@
 | 項目 | 内容 |
 |------|------|
 | **名称** | 🗾 旅ログ – Japan Travel Journal |
-| **目的** | 最低限の収益 × ほぼゼロ運用コスト（n8n 自動投稿） |
 | **CMS / Studio** | Sanity v4 （`travel-blog-jp.sanity.studio`） |
 | **フロント** | Astro 5 + Tailwind CSS 3 （`site/`） |
 | **ホスティング** | Vercel Hobby (`https://my-sanity-site.vercel.app`) |
@@ -117,7 +115,6 @@ site/src/lib/sanity.ts の型・GROQ を更新。
 npx sanity deploy → npm run deploy:studio.
 
 5-2 多言語ワークフロー
-JA をマスター。n8n が翻訳→article コピー。
 
 URL 例：/en/spot/kiyomizu-dera/。
 
@@ -146,7 +143,6 @@ REVALIDATE_SECRET
 8. 典型タスク
 やりたいこと	手順
 新しい記事を手動で追加	Studio → New Article → 必須フィールド入力 → Publish
-記事を翻訳	n8n Cron → DeepL → Sanity mutate (lang=xx)
 スタイル調整	tailwind.config.mjs に theme.extend 追加 → global.css 反映
 デバッグ ISR	GET /api/revalidate?secret=… → Vercel Logs
 
@@ -170,7 +166,6 @@ v1.0	20 言語フル自動翻訳 + マップ埋込
 ## 🌍 多言語対応方針（2025-08-10 更新）
 
 ### DeepL API 対応20言語への統一
-**背景**: n8n翻訳パイプラインでDeepL API未対応言語によるエラーが発生していたため、対応言語のみに統一。
 
 #### ✅ 採用言語（20言語）
 **原文**: 日本語（ja）`isDefault: true`
@@ -219,7 +214,6 @@ v1.0	20 言語フル自動翻訳 + マップ埋込
 #### 📊 移行結果
 - JA/EN 一覧ページ: Article 対応完了
 - 詳細ページ: Gallery + アフィリエイト表示
-- 20言語設定: 準備完了（n8n 翻訳待ち）
 - サンプルデータ: 4記事作成完了（浅草寺・銀座寿司 JA/EN）
 - ルート生成: `/spot/asakusa-morning`, `/food/ginza-sushi` 正常
 
@@ -253,7 +247,7 @@ PUBLIC_ADSENSE_CLIENT_ID=ca-pub-your-adsense-id
 
 # === ISR Automation ===
 REVALIDATE_SECRET=your-secure-random-32char-string
-VERCEL_DEPLOY_HOOK=your-vercel-deploy-hook-id
+VERCEL_DEPLOY_HOOK_URL=your-vercel-deploy-hook-id
 ```
 
 ##### Sanity Webhook 設定
