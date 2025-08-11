@@ -1,5 +1,6 @@
 ---
 import { getLangIds, getHreflangCode } from '../lib/getSupportedLangs';
+import { SITE_URL } from '../lib/env';
 
 export interface Props {
   currentPath: string;
@@ -7,8 +8,8 @@ export interface Props {
 
 const { currentPath } = Astro.props;
 
-// Get site URL from environment (with fallback)
-const siteUrl = import.meta.env.PUBLIC_SITE_URL || 'https://my-sanity-site.vercel.app';
+// Use unified SITE_URL from env helper
+const siteUrl = SITE_URL;
 
 // Get all supported language IDs
 const langIds = getLangIds();
