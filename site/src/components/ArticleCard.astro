@@ -240,7 +240,7 @@ const articleUrl = lang === 'ja'
     {article.gallery && article.gallery.length > 0 && (
       <div class="mb-4">
         <div class="flex gap-3 overflow-x-auto pb-2">
-          {article.gallery.slice(0, 5).map((image, index) => (
+          {article.gallery.slice(0, 4).map((image, index) => (
             <div class="relative group/gallery">
               <img 
                 src={`${image.asset.url}?w=56&h=56&fit=crop&auto=format`}
@@ -253,10 +253,10 @@ const articleUrl = lang === 'ja'
               <div class="absolute inset-0 bg-gradient-to-t from-brand-500/20 to-transparent opacity-0 group-hover/gallery:opacity-100 transition-opacity duration-300 rounded-xl"></div>
             </div>
           ))}
-          {article.gallery.length > 5 && (
+          {article.gallery.length > 4 && (
             <div class="relative group/gallery">
               <div class="w-14 h-14 rounded-xl flex-shrink-0 ring-2 ring-white/50 shadow-lg bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center hover:ring-brand-400 hover:scale-110 transition-all duration-300 hover:shadow-xl">
-                <span class="text-xs text-gray-600 font-medium">+{article.gallery.length - 5}</span>
+                <span class="text-xs text-gray-600 font-medium">+{article.gallery.length - 4}</span>
               </div>
               <div class="absolute inset-0 bg-gradient-to-t from-brand-500/20 to-transparent opacity-0 group-hover/gallery:opacity-100 transition-opacity duration-300 rounded-xl"></div>
             </div>

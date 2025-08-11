@@ -106,13 +106,15 @@ const imageUrls = images.map(img => `${img.asset?.url}?auto=format`)
         </>
       )}
       
-      <!-- Lightbox main image -->
-      <img 
-        id={`${galleryId}-lightbox-image`}
-        src={`${images[0]?.asset?.url}?auto=format`}
-        alt=""
-        class="max-w-full max-h-full object-contain cursor-pointer"
-      />
+      <!-- Lightbox main image (fixed frame) -->
+      <div class="lightbox-frame">
+        <img 
+          id={`${galleryId}-lightbox-image`}
+          src={`${images[0]?.asset?.url}?auto=format`}
+          alt=""
+          class="w-full h-full object-contain cursor-pointer"
+        />
+      </div>
       
       <!-- Image counter in lightbox -->
       {images.length > 1 && (
@@ -131,6 +133,7 @@ const imageUrls = images.map(img => `${img.asset?.url}?auto=format`)
       this.galleryId = container.dataset.galleryId
       this.images = this.getImageUrls()
       this.currentIndex = 0
+      this._transitionTimer = null
       
       this.mainImage = document.getElementById(`${this.galleryId}-main`)
       this.counter = document.getElementById(`${this.galleryId}-counter`)
@@ -222,28 +225,50 @@ const imageUrls = images.map(img => `${img.asset?.url}?auto=format`)
     }
     
     prev() {
+      if (!this.images?.length) return
       this.currentIndex = this.currentIndex > 0 ? this.currentIndex - 1 : this.images.length - 1
       this.updateDisplay()
     }
     
     next() {
+      if (!this.images?.length) return
       this.currentIndex = this.currentIndex < this.images.length - 1 ? this.currentIndex + 1 : 0
       this.updateDisplay()
     }
     
     goTo(index) {
-      this.currentIndex = index
+      if (!this.images?.length) return
+      const safeIndex = Math.max(0, Math.min(index, this.images.length - 1))
+      this.currentIndex = safeIndex
       this.updateDisplay()
     }
     
     updateDisplay() {
-      // Update main image
+      if (!this.mainImage || !this.images?.length) return
+      // Clear any pending transition to avoid race conditions on rapid clicks
+      if (this._transitionTimer) {
+        clearTimeout(this._transitionTimer)
+        this._transitionTimer = null
+      }
+      // Fade out
       this.mainImage.style.opacity = '0'
-      
-      setTimeout(() => {
-        this.mainImage.src = this.images[this.currentIndex]
+      const nextUrl = this.images[this.currentIndex]
+      // Preload the next image, then swap for smoothness and correctness
+      const img = new Image()
+      img.onload = () => {
+        this._transitionTimer = setTimeout(() => {
+          this.mainImage.src = nextUrl
+          this.mainImage.style.opacity = '1'
+          this._transitionTimer = null
+        }, 100)
+      }
+      img.onerror = () => {
+        // If preload fails, still attempt swap to avoid being stuck
+        this.mainImage.src = nextUrl
         this.mainImage.style.opacity = '1'
-      }, 150)
+      }
+      img.decoding = 'async'
+      img.src = nextUrl
       
       // Update counter
       if (this.counter) {
@@ -282,12 +307,14 @@ const imageUrls = images.map(img => `${img.asset?.url}?auto=format`)
     }
     
     prevLightbox() {
+      if (!this.images?.length) return
       this.currentIndex = this.currentIndex > 0 ? this.currentIndex - 1 : this.images.length - 1
       this.updateLightboxDisplay()
       this.updateDisplay()
     }
     
     nextLightbox() {
+      if (!this.images?.length) return
       this.currentIndex = this.currentIndex < this.images.length - 1 ? this.currentIndex + 1 : 0
       this.updateLightboxDisplay()
       this.updateDisplay()
@@ -380,8 +407,6 @@ const imageUrls = images.map(img => `${img.asset?.url}?auto=format`)
   }
   
   .lightbox-overlay img {
-    max-height: 90vh;
-    max-width: 90vw;
     object-fit: contain;
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
   }
@@ -394,5 +419,14 @@ const imageUrls = images.map(img => `${img.asset?.url}?auto=format`)
   .lightbox-overlay button:focus {
     outline: 2px solid white;
     outline-offset: 2px;
+  }
+
+  /* Fixed-size frame for lightbox to avoid layout jumping by source size */
+  .lightbox-frame {
+    width: min(90vw, 1200px);
+    height: min(80vh, 800px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 </style>

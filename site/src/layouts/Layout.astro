@@ -114,31 +114,69 @@ const currentPath = Astro.url.pathname
     <!-- Global floating assistant (moved from Hero) -->
     <div class="fixed bottom-6 lg:bottom-20 right-6 z-40 hidden lg:block pointer-events-auto">
       <div class="relative group">
-        <!-- Soft glow -->
-        <div class="absolute inset-0 rounded-full bg-[var(--theme-accent)]/12 blur-2xl scale-125 opacity-60 transition-all duration-300 group-hover:opacity-80"></div>
+        <!-- Musical notes animation container -->
+        <div class="absolute inset-0 pointer-events-none overflow-visible">
+
+          <!-- Musical note 3 -->
+          <div class="absolute top-1 -right-6 opacity-0 group-hover:opacity-100 transition-opacity duration-1400 animate-elegant-float-3">
+            <svg class="w-5 h-5 text-[var(--theme-accent)] drop-shadow-md" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+            </svg>
+          </div>
+          <!-- Musical note 4 -->
+          <div class="absolute -top-8 left-4 opacity-0 group-hover:opacity-100 transition-opacity duration-1600 animate-elegant-float-4">
+            <svg class="w-6 h-6 text-[var(--theme-accent)] drop-shadow-md" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Soft glow with music-themed animation -->
+        <div class="absolute inset-0 rounded-full bg-[var(--theme-accent)]/12 blur-2xl scale-125 opacity-60 transition-all duration-300 group-hover:opacity-80 group-hover:scale-150"></div>
+
+        <!-- Ripple effects container (outside the link) -->
+        <div class="absolute inset-0 pointer-events-none">
+          <!-- First ripple wave - water-like blue -->
+          <div class="absolute inset-0 rounded-full border-4 border-blue-400/60 opacity-0 group-hover:opacity-100 animate-ripple-1 transition-opacity duration-300"></div>
+          <!-- Second ripple wave -->
+          <div class="absolute inset-0 rounded-full border-2 border-blue-300/50 opacity-0 group-hover:opacity-100 animate-ripple-2 transition-opacity duration-300"></div>
+          <!-- Third ripple wave -->
+          <div class="absolute inset-0 rounded-full border-2 border-blue-200/40 opacity-0 group-hover:opacity-100 animate-ripple-3 transition-opacity duration-300"></div>
+        </div>
 
         <!-- Character link -->
         <a
           href="https://project-shuka.com"
           target="_blank"
           rel="noopener noreferrer"
-          class="relative block rounded-full overflow-hidden shadow-xl ring-1 ring-black/10 hover:ring-[var(--theme-accent)]/30 transition-all duration-300 hover:-translate-y-0.5"
+          class="relative block rounded-full overflow-hidden shadow-xl ring-1 ring-black/10 hover:ring-[var(--theme-accent)]/30 transition-all duration-700 hover:-translate-y-0.5 group-hover:animate-elegant-gentle-bounce"
           aria-label="Visit Project Shuka website (opens in new tab)"
           title="秀歌プロジェクトのサイトを開く"
         >
           <img
             src="/shuuka.png"
             alt="秀歌 - Travel companion character"
-            class="w-20 h-20 md:w-24 md:h-24 object-cover rounded-full"
+            class="w-20 h-20 md:w-24 md:h-24 object-cover rounded-full transition-all duration-500 group-hover:scale-110 group-hover:brightness-110"
             loading="lazy"
           />
         </a>
 
-        <!-- Speech bubble (placed below the avatar) -->
-        <div class="absolute right-0 top-full mt-2 max-w-[180px] w-max bg-white/95 backdrop-blur-sm rounded-2xl px-3 py-1.5 shadow-lg border border-[var(--theme-accent)]/20 hidden md:block z-10">
-          <span class="text-xs text-gray-700 font-medium text-center block leading-tight">{getUILabel(lang, 'musicExperience')}</span>
+        <!-- Speech bubble with elegant animation (placed below the avatar) -->
+        <div class="absolute right-0 top-full mt-2 max-w-[180px] w-max bg-white/95 backdrop-blur-sm rounded-2xl px-3 py-1.5 shadow-lg border border-[var(--theme-accent)]/20 hidden md:block z-10 group-hover:animate-elegant-gentle-bubble transition-all duration-700 group-hover:shadow-xl group-hover:border-[var(--theme-accent)]/30">
+          <span class="text-xs text-gray-700 font-medium text-center block leading-tight transition-colors duration-300 group-hover:text-[var(--theme-accent)]">{getUILabel(lang, 'musicExperience')}</span>
           <!-- Upward pointing pointer positioned relative to avatar -->
-          <div class="absolute right-8 -top-1 w-0 h-0 border-x-4 border-x-transparent border-b-4 border-b-white/95"></div>
+          <div class="absolute right-8 -top-1 w-0 h-0 border-x-4 border-x-transparent border-b-4 border-b-white/95 transition-colors duration-300 group-hover:border-b-white/100"></div>
+          
+          <!-- Musical sparkles around the bubble -->
+          <div class="absolute -top-1 -left-1 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
+            <div class="w-1 h-1 bg-[var(--theme-accent)] rounded-full animate-ping"></div>
+          </div>
+          <div class="absolute -bottom-1 -right-1 opacity-0 group-hover:opacity-100 transition-opacity duration-1000">
+            <div class="w-1.5 h-1.5 bg-[var(--theme-accent)] rounded-full animate-ping" style="animation-delay: 0.5s;"></div>
+          </div>
+          <div class="absolute top-1/2 -left-2 opacity-0 group-hover:opacity-100 transition-opacity duration-900">
+            <div class="w-1 h-1 bg-[var(--theme-accent)] rounded-full animate-ping" style="animation-delay: 0.3s;"></div>
+          </div>
         </div>
       </div>
     </div>
@@ -407,12 +445,166 @@ const currentPath = Astro.url.pathname
         to { transform: rotate(360deg); }
       }
       
+      /* Musical note floating animations */
+      @keyframes elegant-float-1 {
+        0%, 100% { 
+          transform: translateY(0px) rotate(0deg); 
+          opacity: 0.4;
+        }
+        50% { 
+          transform: translateY(-12px) rotate(2deg); 
+          opacity: 0.8;
+        }
+      }
+
+      @keyframes elegant-float-2 {
+        0%, 100% { 
+          transform: translateY(0px) scale(1); 
+          opacity: 0.3;
+        }
+        50% { 
+          transform: translateY(-8px) scale(1.05); 
+          opacity: 0.7;
+        }
+      }
+
+      @keyframes elegant-float-3 {
+        0%, 100% { 
+          transform: translateY(0px) translateX(0px); 
+          opacity: 0.35;
+        }
+        50% { 
+          transform: translateY(-10px) translateX(-2px); 
+          opacity: 0.75;
+        }
+      }
+
+      @keyframes elegant-float-4 {
+        0%, 100% { 
+          transform: translateY(0px) scale(1); 
+          opacity: 0.25;
+        }
+        50% { 
+          transform: translateY(-15px) scale(1.08); 
+          opacity: 0.6;
+        }
+      }
+
+      @keyframes elegant-gentle-bounce {
+        0%, 100% {
+          transform: translateY(0) scale(1);
+        }
+        50% {
+          transform: translateY(-3px) scale(1.02);
+        }
+      }
+
+      /* Musical wave pulse */
+      @keyframes musical-pulse {
+        0% {
+          transform: scale(1);
+          opacity: 0.6;
+        }
+        50% {
+          transform: scale(1.2);
+          opacity: 0.3;
+        }
+        100% {
+          transform: scale(1.4);
+          opacity: 0;
+        }
+      }
+      
       .animate-pulse-slow {
         animation: pulse-slow 8s ease-in-out infinite;
       }
       
       .animate-spin-slow {
         animation: spin-slow 60s linear infinite;
+      }
+
+      .animate-elegant-float-1 {
+        animation: elegant-float-1 4s ease-in-out infinite;
+      }
+
+      .animate-elegant-float-2 {
+        animation: elegant-float-2 3.5s ease-in-out infinite 0.5s;
+      }
+
+      .animate-elegant-float-3 {
+        animation: elegant-float-3 5s ease-in-out infinite 1s;
+      }
+
+      .animate-elegant-float-4 {
+        animation: elegant-float-4 4.5s ease-in-out infinite 1.5s;
+      }
+
+      .animate-elegant-gentle-bounce {
+        animation: elegant-gentle-bounce 3s ease-in-out infinite;
+      }
+
+      /* Ripple animations */
+      @keyframes ripple-1 {
+        0% {
+          transform: scale(1);
+          opacity: 0.8;
+        }
+        100% {
+          transform: scale(2);
+          opacity: 0;
+        }
+      }
+
+      @keyframes ripple-2 {
+        0% {
+          transform: scale(1);
+          opacity: 0.6;
+        }
+        100% {
+          transform: scale(2.2);
+          opacity: 0;
+        }
+      }
+
+      @keyframes ripple-3 {
+        0% {
+          transform: scale(1);
+          opacity: 0.4;
+        }
+        100% {
+          transform: scale(2.4);
+          opacity: 0;
+        }
+      }
+
+      /* Musical bubble animation */
+      @keyframes elegant-gentle-bubble {
+        0%, 100% {
+          transform: translateY(0px) scale(1);
+        }
+        50% {
+          transform: translateY(-2px) scale(1.01);
+        }
+      }
+
+      .animate-elegant-gentle-bubble {
+        animation: elegant-gentle-bubble 2.5s ease-in-out infinite;
+      }
+
+      /* Ripple animations: off by default, enabled only on hover */
+      .animate-ripple-1,
+      .animate-ripple-2,
+      .animate-ripple-3 {
+        animation: none;
+      }
+      .group:hover .animate-ripple-1 {
+        animation: ripple-1 2s ease-out infinite;
+      }
+      .group:hover .animate-ripple-2 {
+        animation: ripple-2 2s ease-out 0.3s infinite;
+      }
+      .group:hover .animate-ripple-3 {
+        animation: ripple-3 2s ease-out 0.6s infinite;
       }
       
       /* Smooth scrolling */
