@@ -2,7 +2,7 @@
  * Environment variables and site configuration
  */
 
-export const SITE_URL = import.meta.env.PUBLIC_SITE_URL || 'https://my-sanity-site.vercel.app';
+export const SITE_URL = import.meta.env.PUBLIC_SITE_URL || 'https://www.japantravellog.com';
 export const SITE_TITLE = import.meta.env.PUBLIC_SITE_TITLE || '旅ログ - 日本全国の旅記録';
 
 // Sanity configuration
