@@ -59,6 +59,16 @@ const {
             
             <!-- Right side -->
             <div class="flex items-center space-x-4">
+              <!-- Deploy Trigger Button -->
+              <div class="hidden sm:block">
+                <button id="btn-deploy" type="button"
+                        class="inline-flex items-center px-3 py-1.5 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-60">
+                  <svg class="w-4 h-4 mr-1.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                  反映（デプロイ）
+                </button>
+              </div>
               <!-- Blog Access Button -->
               <div class="hidden sm:block">
                 <a href="/" 
@@ -119,6 +129,29 @@ const {
       <main class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
         <slot />
       </main>
+
+      <script type="module" is:inline>
+        const btn = document.getElementById('btn-deploy')
+        if (btn) {
+          btn.addEventListener('click', async () => {
+            btn.disabled = true
+            const prev = btn.textContent || ''
+            btn.textContent = 'デプロイ中...'
+            try {
+              const res = await fetch('/api/admin/deploy/vercel', { method: 'POST' })
+              if (!res.ok) throw new Error('failed')
+              const data = await res.json().catch(() => ({}))
+              alert('デプロイをトリガーしました。数十秒後に反映されます。')
+            } catch (e) {
+              console.error(e)
+              alert('デプロイのトリガーに失敗しました。時間をおいて再度お試しください。')
+            } finally {
+              btn.disabled = false
+              btn.textContent = prev
+            }
+          })
+        }
+      </script>
     </div>
 
     <!-- Admin-specific styles -->
