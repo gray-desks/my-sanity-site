@@ -1,6 +1,7 @@
 ---
 import { getUILabel, DEFAULT_LANGUAGE } from '../lib/i18n'
 import { getPrefecturesForLanguage } from '../lib/prefectures'
+import { getAvailablePrefectures } from '../lib/sanity'
 
 export interface Props {
   lang?: string
@@ -21,11 +22,18 @@ const articleTypes = [
   { value: 'note', label: getUILabel(lang, 'note') }
 ]
 
-// 全47都道府県の定義（多言語対応）
+// 記事が存在する都道府県のみ取得（多言語対応）
+const availablePrefectureCodes = await getAvailablePrefectures(lang)
 const allPrefectures = getPrefecturesForLanguage(lang)
+
+// 記事が存在する都道府県のみをフィルタリング
+const availablePrefectures = allPrefectures.filter(p => 
+  availablePrefectureCodes.includes(p.code)
+)
+
 const prefectures = [
   { code: '', name: getUILabel(lang, 'allPrefectures') },
-  ...allPrefectures.map(p => ({ code: p.code, name: p.name }))
+  ...availablePrefectures.map(p => ({ code: p.code, name: p.name }))
 ]
 ---
 

@@ -354,3 +354,27 @@ export async function getArticleStats(): Promise<{
 
   return { totalArticles, articlesByLanguage, articlesByType, articlesByPrefecture }
 }
+
+// 記事が存在する都道府県のリストを取得（言語別）
+export async function getAvailablePrefectures(lang = DEFAULT_LANGUAGE): Promise<string[]> {
+  const query = `
+    *[_type == "article" 
+      && (lang == $lang || (!defined(lang) && $lang == "ja"))
+      && defined(prefecture)
+      && prefecture != ""
+    ] {
+      "prefecture": coalesce(prefecture, "")
+    }
+  `
+  const items: { prefecture: string }[] = await client.fetch(query, { lang })
+  
+  // 重複を除去して都道府県リストを作成
+  const prefectureSet = new Set<string>()
+  items.forEach(item => {
+    if (item.prefecture && item.prefecture !== "未設定") {
+      prefectureSet.add(item.prefecture)
+    }
+  })
+  
+  return Array.from(prefectureSet).sort()
+}
