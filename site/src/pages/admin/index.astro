@@ -5,28 +5,28 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
 
 <AdminLayout title="記事作成">
   <!-- Page header -->
-  <div class="mb-8">
+  <div class="mb-4 sm:mb-8">
     <h1 class="text-2xl font-bold text-gray-900">記事作成</h1>
     <p class="mt-1 text-sm text-gray-500">ChatGPTで生成した記事をペーストして投稿できます</p>
   </div>
 
   <!-- Article Creation Form -->
   <div class="bg-white shadow-sm rounded-lg border border-gray-200 mb-8">
-    <div class="p-6">
+    <div class="p-4 sm:p-6">
       <form id="article-form" class="space-y-6">
         <div>
-          <label for="article-content" class="block text-sm font-medium text-gray-700 mb-2">
+          <label for="article-content" class="hidden sm:block text-sm font-medium text-gray-700 mb-2">
             記事内容をここにペーストしてください
           </label>
-          <div class="text-xs text-gray-500 mb-3">
+          <div class="hidden sm:block text-xs text-gray-500 mb-3">
             ChatGPTで生成した記事をそのままコピー&ペーストしてください（YAML形式のメタデータも含めて）
           </div>
           <textarea 
             id="article-content" 
-            rows="20" 
             required
+            aria-label="記事内容"
             placeholder="例:&#10;title: 浅草寺の朝の風景&#10;type: spot&#10;prefecture: 東京都&#10;tags: [寺院, 朝活, 観光]&#10;placeName: 浅草寺&#10;content: |&#10;  # 浅草寺の朝の風景&#10;&#10;  早朝の浅草寺は観光客も少なく、静寂に包まれた神聖な雰囲気を味わうことができます。&#10;&#10;  ## アクセス&#10;  - 最寄り駅: 浅草駅&#10;  - 徒歩5分&#10;&#10;  ## 見どころ&#10;  - 雷門&#10;  - 仲見世通り&#10;  - 本堂"
-            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 font-mono text-sm resize-vertical"></textarea>
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 font-mono text-sm resize-vertical h-56 sm:h-96"></textarea>
         </div>
         
         <div class="flex justify-end space-x-3">
