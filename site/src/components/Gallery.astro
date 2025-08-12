@@ -134,6 +134,7 @@ const imageUrls = images.map(img => `${img.asset?.url}?auto=format`)
       this.images = this.getImageUrls()
       this.currentIndex = 0
       this._transitionTimer = null
+      this._preloadedImages = new Map() // Cache for preloaded images
       
       this.mainImage = document.getElementById(`${this.galleryId}-main`)
       this.counter = document.getElementById(`${this.galleryId}-counter`)
@@ -147,12 +148,30 @@ const imageUrls = images.map(img => `${img.asset?.url}?auto=format`)
       
       this.bindEvents()
       this.setupIntersectionObserver()
+      this.preloadAllImages() // Preload all images for faster switching
     }
     
     getImageUrls() {
       // Get image URLs from data attribute set by Astro
       const imageUrls = this.container.dataset.imageUrls
       return imageUrls ? JSON.parse(imageUrls) : []
+    }
+    
+    preloadAllImages() {
+      // Preload all images for faster switching
+      this.images.forEach((url, index) => {
+        if (!this._preloadedImages.has(url)) {
+          const img = new Image()
+          img.decoding = 'async'
+          img.onload = () => {
+            this._preloadedImages.set(url, img)
+          }
+          img.onerror = () => {
+            console.warn(`Failed to preload image: ${url}`)
+          }
+          img.src = url
+        }
+      })
     }
     
     bindEvents() {
@@ -250,25 +269,37 @@ const imageUrls = images.map(img => `${img.asset?.url}?auto=format`)
         clearTimeout(this._transitionTimer)
         this._transitionTimer = null
       }
-      // Fade out
-      this.mainImage.style.opacity = '0'
+      
       const nextUrl = this.images[this.currentIndex]
-      // Preload the next image, then swap for smoothness and correctness
-      const img = new Image()
-      img.onload = () => {
+      
+      // Check if image is already preloaded
+      if (this._preloadedImages.has(nextUrl)) {
+        // Image is already loaded, switch immediately
+        this.mainImage.style.opacity = '0'
         this._transitionTimer = setTimeout(() => {
           this.mainImage.src = nextUrl
           this.mainImage.style.opacity = '1'
           this._transitionTimer = null
-        }, 100)
+        }, 50) // Reduced fade time for preloaded images
+      } else {
+        // Fallback: load on demand (should rarely happen with preloading)
+        this.mainImage.style.opacity = '0'
+        const img = new Image()
+        img.onload = () => {
+          this._preloadedImages.set(nextUrl, img)
+          this._transitionTimer = setTimeout(() => {
+            this.mainImage.src = nextUrl
+            this.mainImage.style.opacity = '1'
+            this._transitionTimer = null
+          }, 100)
+        }
+        img.onerror = () => {
+          this.mainImage.src = nextUrl
+          this.mainImage.style.opacity = '1'
+        }
+        img.decoding = 'async'
+        img.src = nextUrl
       }
-      img.onerror = () => {
-        // If preload fails, still attempt swap to avoid being stuck
-        this.mainImage.src = nextUrl
-        this.mainImage.style.opacity = '1'
-      }
-      img.decoding = 'async'
-      img.src = nextUrl
       
       // Update counter
       if (this.counter) {
@@ -344,7 +375,7 @@ const imageUrls = images.map(img => `${img.asset?.url}?auto=format`)
   }
   
   .gallery-main img {
-    transition: opacity 0.3s ease;
+    transition: opacity 0.15s ease-out;
     object-fit: contain;
     background-color: #f8fafc;
   }
