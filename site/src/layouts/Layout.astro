@@ -5,6 +5,7 @@ import Logo from '../components/ui/Logo.astro'
 import HreflangLinks from '../components/HreflangLinks.astro'
 import Seo from '../components/Seo.astro'
 import { isRTL, getFontFamily, getUILabel, getLocalizedPath, DEFAULT_LANGUAGE } from '../lib/i18n'
+import { GA_MEASUREMENT_ID } from '../lib/env'
 
 export interface Props {
   title: string
@@ -78,6 +79,14 @@ const currentPath = Astro.url.pathname
     
     <!-- Hreflang links for 20 languages + x-default -->
     <HreflangLinks currentPath={currentPath} />
+
+    <!-- Google Analytics: load only in production -->
+    {GA_MEASUREMENT_ID && !import.meta.env.DEV && (
+      <>
+        <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}></script>
+        <script is:inline set:html={`window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', '${GA_MEASUREMENT_ID}');`}></script>
+      </>
+    )}
     
     <!-- Multi-language Font Loading -->
     <link rel="preconnect" href="https://fonts.googleapis.com">

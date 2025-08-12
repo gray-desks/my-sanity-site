@@ -18,6 +18,9 @@ export const SANITY_API_VERSION = import.meta.env.PUBLIC_SANITY_API_VERSION || '
 export const BOOKING_AFFILIATE_ID = import.meta.env.PUBLIC_BOOKING_AFFILIATE_ID;
 export const ADSENSE_CLIENT_ID = import.meta.env.PUBLIC_ADSENSE_CLIENT_ID;
 
+// Analytics
+export const GA_MEASUREMENT_ID = import.meta.env.PUBLIC_GA_MEASUREMENT_ID || 'G-JY45KB4MTV';
+
 // Revalidation
 export const REVALIDATE_SECRET = import.meta.env.REVALIDATE_SECRET;
 
