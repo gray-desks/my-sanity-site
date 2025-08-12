@@ -6,6 +6,7 @@ import { getArticleStats } from '../../lib/sanity';
 const stats = await getArticleStats();
 const languages = Object.entries(stats.articlesByLanguage).sort((a, b) => b[1] - a[1]);
 const types = Object.entries(stats.articlesByType).sort((a, b) => b[1] - a[1]);
+const prefectures = Object.entries(stats.articlesByPrefecture).sort((a, b) => b[1] - a[1]);
 ---
 
 <AdminLayout title="統計">
@@ -63,7 +64,7 @@ const types = Object.entries(stats.articlesByType).sort((a, b) => b[1] - a[1]);
   </div>
 
   <!-- Breakdown sections -->
-  <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+  <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
     <!-- Articles by Language -->
     <div class="bg-white shadow-sm rounded-lg border border-gray-200">
       <div class="p-6">
@@ -105,6 +106,31 @@ const types = Object.entries(stats.articlesByType).sort((a, b) => b[1] - a[1]);
               {types.map(([type, count]) => (
                 <tr>
                   <td class="px-4 py-2 text-sm text-gray-700">{type}</td>
+                  <td class="px-4 py-2 text-sm text-gray-900 text-right">{count as number}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Articles by Prefecture -->
+    <div class="bg-white shadow-sm rounded-lg border border-gray-200">
+      <div class="p-6">
+        <h2 class="text-base font-semibold text-gray-900 mb-4">都道府県別記事数</h2>
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">都道府県</th>
+                <th class="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">記事数</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-100">
+              {prefectures.map(([prefecture, count]) => (
+                <tr>
+                  <td class="px-4 py-2 text-sm text-gray-700">{prefecture}</td>
                   <td class="px-4 py-2 text-sm text-gray-900 text-right">{count as number}</td>
                 </tr>
               ))}
