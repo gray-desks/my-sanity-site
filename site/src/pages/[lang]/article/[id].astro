@@ -55,7 +55,7 @@ const config = typeConfig[article.type as keyof typeof typeConfig] || typeConfig
   {article.coverImage?.asset?.url && (
     <picture class="block md:hidden -mx-4 sm:-mx-6 mb-4">
       <img 
-        src={`${article.coverImage.asset.url}?w=1200&h=600&fit=crop&auto=format`}
+        src={`${article.coverImage.asset.url}?w=1200&h=675&fit=crop&auto=format`}
         alt={article.title}
         class="w-full aspect-video object-cover rounded-none cursor-pointer"
         id="cover-image-mobile"

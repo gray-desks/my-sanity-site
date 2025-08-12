@@ -36,6 +36,19 @@ const config = typeConfig[article.type as keyof typeof typeConfig] || typeConfig
   title={article.title} 
   description={article.bodyText?.slice(0, 160) || `${article.title}の記事です。`}
 >
+  <!-- Hero Image (Mobile Full-bleed, 16:9 to match cards) -->
+  {article.coverImage?.asset?.url && (
+    <picture class="block md:hidden -mx-4 sm:-mx-6 mb-4">
+      <img 
+        src={`${article.coverImage.asset.url}?w=1200&h=675&fit=crop&auto=format`}
+        alt={article.title}
+        class="w-full aspect-video object-cover rounded-none cursor-pointer"
+        id="cover-image-mobile"
+        data-lightbox-url={`${article.coverImage.asset.url}?auto=format`}
+        loading="eager"
+      />
+    </picture>
+  )}
   <!-- Mobile wrapper with padding -->
   <div class="px-4 md:px-0">
     <div class="max-w-7xl mx-auto md:px-4 py-8">
@@ -46,7 +59,7 @@ const config = typeConfig[article.type as keyof typeof typeConfig] || typeConfig
           <div class="md:p-8">
           <!-- Cover Image (最上部) -->
           {article.coverImage?.asset?.url && (
-            <div class="mb-8 md:rounded-2xl overflow-hidden md:shadow-lg">
+            <div class="mb-8 md:rounded-2xl overflow-hidden md:shadow-lg hidden md:block">
               <img 
                 src={`${article.coverImage.asset.url}?w=1200&h=600&fit=crop&auto=format`}
                 alt={article.title}
