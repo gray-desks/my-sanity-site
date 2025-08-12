@@ -33,14 +33,14 @@ const {
       <!-- Top Navigation -->
       <nav class="bg-white shadow-sm border-b border-gray-200">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div class="flex h-16 justify-between">
-            <div class="flex">
+          <div class="flex h-16 items-center justify-between">
+            <div class="flex min-w-0 items-center">
               <!-- Logo -->
               <div class="flex flex-shrink-0 items-center">
                 <div class="w-8 h-8 bg-red-600 rounded-lg flex items-center justify-center">
                   <span class="text-white font-bold text-sm">旅</span>
                 </div>
-                <span class="ml-3 text-xl font-semibold text-gray-900">管理画面</span>
+                <span class="ml-3 text-xl font-semibold text-gray-900 truncate max-w-[40vw] sm:max-w-none">管理画面</span>
               </div>
               
               <!-- Navigation Links -->
@@ -58,9 +58,9 @@ const {
             </div>
             
             <!-- Right side -->
-            <div class="flex items-center space-x-4">
-              <!-- Deploy Trigger Button -->
-              <div class="hidden sm:block">
+            <div class="flex items-center space-x-3">
+              <!-- Desktop actions -->
+              <div class="hidden sm:flex sm:items-center sm:space-x-3">
                 <button id="btn-deploy" type="button"
                         class="inline-flex items-center px-3 py-1.5 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-60">
                   <svg class="w-4 h-4 mr-1.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -68,9 +68,6 @@ const {
                   </svg>
                   反映（デプロイ）
                 </button>
-              </div>
-              <!-- Blog Access Button -->
-              <div class="hidden sm:block">
                 <a href="/" 
                    target="_blank" 
                    rel="noopener noreferrer"
@@ -80,10 +77,6 @@ const {
                   </svg>
                   ブログを開く
                 </a>
-              </div>
-              
-              <!-- Sanity Studio (desktop) -->
-              <div class="hidden sm:block">
                 <a href="https://travel-blog-jp.sanity.studio"
                    target="_blank"
                    rel="noopener noreferrer"
@@ -94,33 +87,38 @@ const {
                   Sanity Studioを開く
                 </a>
               </div>
-              
-              <!-- Mobile blog access -->
-              <div class="sm:hidden">
-                <a href="/" 
-                   target="_blank" 
-                   rel="noopener noreferrer"
-                   class="inline-flex items-center justify-center w-8 h-8 rounded-md text-gray-500 hover:text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-red-500 transition-colors"
-                   title="ブログを開く">
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
-                  </svg>
-                </a>
-              </div>
 
-              <!-- Sanity Studio (mobile) -->
+              <!-- Mobile menu button -->
               <div class="sm:hidden">
-                <a href="https://travel-blog-jp.sanity.studio" 
-                   target="_blank" 
-                   rel="noopener noreferrer"
-                   class="inline-flex items-center justify-center w-8 h-8 rounded-md text-gray-500 hover:text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-red-500 transition-colors"
-                   title="Sanity Studioを開く">
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                <button id="mobile-menu-button" type="button" aria-controls="mobile-menu" aria-expanded="false"
+                        class="inline-flex items-center justify-center rounded-md p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-red-500"
+                        title="メニュー">
+                  <svg id="icon-menu" class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                   </svg>
-                </a>
+                  <svg id="icon-close" class="h-6 w-6 hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
               </div>
             </div>
+          </div>
+        </div>
+
+        <!-- Mobile menu panel -->
+        <div id="mobile-menu" class="sm:hidden hidden border-t border-gray-200 bg-white" role="menu" aria-labelledby="mobile-menu-button">
+          <div class="space-y-1 px-4 py-3">
+            <a href="/admin" class="block rounded-md px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-50" role="menuitem">記事作成</a>
+            <a href="/admin/articles" class="block rounded-md px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-50" role="menuitem">記事管理</a>
+            <a href="/admin/stats" class="block rounded-md px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-50" role="menuitem">統計</a>
+            <a href="/" target="_blank" rel="noopener noreferrer" class="block rounded-md px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-50" role="menuitem">ブログを開く</a>
+            <a href="https://travel-blog-jp.sanity.studio" target="_blank" rel="noopener noreferrer" class="block rounded-md px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-50" role="menuitem">Sanity Studioを開く</a>
+            <button id="btn-deploy-mobile" type="button" class="w-full inline-flex items-center justify-center rounded-md px-3 py-2 text-base font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-60" role="menuitem">
+              <svg class="w-5 h-5 mr-2 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+              反映（デプロイ）
+            </button>
           </div>
         </div>
       </nav>
@@ -131,6 +129,7 @@ const {
       </main>
 
       <script type="module" is:inline>
+        // Desktop deploy button
         const btn = document.getElementById('btn-deploy')
         if (btn) {
           btn.addEventListener('click', async () => {
@@ -140,7 +139,7 @@ const {
             try {
               const res = await fetch('/api/admin/deploy/vercel', { method: 'POST' })
               if (!res.ok) throw new Error('failed')
-              const data = await res.json().catch(() => ({}))
+              await res.json().catch(() => ({}))
               alert('デプロイをトリガーしました。数十秒後に反映されます。')
             } catch (e) {
               console.error(e)
@@ -148,6 +147,42 @@ const {
             } finally {
               btn.disabled = false
               btn.textContent = prev
+            }
+          })
+        }
+
+        // Mobile menu toggle
+        const menuBtn = document.getElementById('mobile-menu-button')
+        const menu = document.getElementById('mobile-menu')
+        const iconMenu = document.getElementById('icon-menu')
+        const iconClose = document.getElementById('icon-close')
+        if (menuBtn && menu && iconMenu && iconClose) {
+          menuBtn.addEventListener('click', () => {
+            const open = menu.classList.toggle('hidden') === false
+            menuBtn.setAttribute('aria-expanded', String(open))
+            iconMenu.classList.toggle('hidden', open)
+            iconClose.classList.toggle('hidden', !open)
+          })
+        }
+
+        // Mobile deploy button
+        const btnMobile = document.getElementById('btn-deploy-mobile')
+        if (btnMobile) {
+          btnMobile.addEventListener('click', async () => {
+            btnMobile.disabled = true
+            const prev = btnMobile.textContent || ''
+            btnMobile.textContent = 'デプロイ中...'
+            try {
+              const res = await fetch('/api/admin/deploy/vercel', { method: 'POST' })
+              if (!res.ok) throw new Error('failed')
+              await res.json().catch(() => ({}))
+              alert('デプロイをトリガーしました。数十秒後に反映されます。')
+            } catch (e) {
+              console.error(e)
+              alert('デプロイのトリガーに失敗しました。時間をおいて再度お試しください。')
+            } finally {
+              btnMobile.disabled = false
+              btnMobile.textContent = prev
             }
           })
         }
