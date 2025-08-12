@@ -6,17 +6,6 @@ import PortableTextWithAds from '../../components/PortableTextWithAds.astro'
 import { getArticleById, client, type Article } from '../../lib/sanity'
 import { ADS_SLOTS } from '../../config/ads'
 
-export const prerender = true
-
-export async function getStaticPaths() {
-  // 全記事のIDを取得して静的パスを生成
-  const articles = await client.fetch(`*[_type == "article"]{ _id }`)
-  
-  return articles.map((article: { _id: string }) => ({
-    params: { id: article._id }
-  }))
-}
-
 const { id } = Astro.params
 const article: Article | null = await getArticleById(id!)
 

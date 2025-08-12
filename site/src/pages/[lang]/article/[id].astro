@@ -7,29 +7,7 @@ import { getArticleById, client, type Article } from '../../../lib/sanity'
 import { ENABLED_LANGUAGES, getLocalizedPath, getUILabel, getDateLocale } from '../../../lib/i18n'
 import { ADS_SLOTS } from '../../../config/ads'
 
-export const prerender = true
-
-export async function getStaticPaths() {
-  const paths = []
-
-  // 各言語ごとに、その言語の記事のみでパスを生成
-  for (const { id: langId } of ENABLED_LANGUAGES.filter(l => l.id !== 'ja')) {
-    const langFilter = langId === 'ja' ? '(!defined(lang) || lang == "ja")' : `lang == "${langId}"`
-    const articles = await client.fetch(`*[_type == "article" && ${langFilter}]{ _id }`)
-
-    for (const article of articles) {
-      // 日本語はルートに言語コードを含めない
-      paths.push({
-        params: {
-          lang: langId === 'ja' ? undefined : langId,
-          id: article._id
-        }
-      })
-    }
-  }
-
-  return paths
-}
+ 
 
 const { lang, id } = Astro.params
 const article: Article | null = await getArticleById(id!)
