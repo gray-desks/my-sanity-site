@@ -74,7 +74,8 @@
       "mcp__serena__think_about_collected_information",
       "Bash(cp:*)",
       "mcp__serena__think_about_whether_you_are_done",
-      "WebFetch(domain:www.japantravellog.com)"
+      "WebFetch(domain:www.japantravellog.com)",
+      "mcp__serena__find_referencing_symbols"
     ],
     "deny": []
   }
