@@ -11,6 +11,9 @@ const { lang = DEFAULT_LANGUAGE } = Astro.props
 
 // プレースホルダーテキストの定義 (i18n対応)
 const searchPlaceholder = getUILabel(lang, 'searchPlaceholder')
+// クライアントで使用する文言をサーバ側で先に確定（ブラウザで getUILabel を呼ばない）
+const noResultsTitle = getUILabel(lang, 'noArticlesTitle')
+const noResultsSubtitle = getUILabel(lang, 'noArticlesSubtitle')
 
 // 記事タイプの定義
 const articleTypes = [
@@ -240,6 +243,10 @@ const prefectures = [
 
 <script>
   const FILTER_STORAGE_KEY = 'blogFilterState';
+  // サーバ側の lang と文言をクライアントにインライン受け渡し（i18n一貫性）
+  const CURRENT_LANG = {JSON.stringify(lang)};
+  const NO_RESULTS_TITLE = {JSON.stringify(noResultsTitle)};
+  const NO_RESULTS_SUBTITLE = {JSON.stringify(noResultsSubtitle)};
   
   // Singleton instance to prevent multiple initializations
   let searchFilterInstance = null;
@@ -289,9 +296,6 @@ const prefectures = [
       this.loadState()
       // 復元した状態でフィルタリングを実行
       this.filterArticles()
-      
-      // ページネーション情報の表示更新
-      this.updatePageInfo()
       
       // Store singleton instance
       searchFilterInstance = this;
@@ -538,10 +542,7 @@ const prefectures = [
       // ページネーション対応: 現在ページの記事数情報を表示
       const pageInfoEl = document.getElementById('page-info')
       if (pageInfoEl) {
-        const currentLang = document.documentElement.lang || 'ja'
-        const infoText = currentLang === 'en' 
-          ? `Showing ${this.totalArticles} articles on this page`
-          : `このページに${this.totalArticles}件の記事があります`
+        const infoText = `${this.totalArticles} articles on this page`
         pageInfoEl.textContent = infoText
       }
     }
@@ -554,11 +555,8 @@ const prefectures = [
           noResultsEl = document.createElement('div')
           noResultsEl.id = 'no-results-message'
           noResultsEl.className = 'text-center py-16 bg-white rounded-2xl shadow-lg border border-gray-100'
-          const noResultsTitle = getUILabel(document.documentElement.lang || 'ja', 'noArticlesTitle')
-          
-          const noResultsSubtitle = getUILabel(document.documentElement.lang || 'ja', 'noArticlesSubtitle')
-          
-          const currentLang = document.documentElement.lang || 'ja'
+          const noResultsTitle = NO_RESULTS_TITLE
+          const noResultsSubtitle = NO_RESULTS_SUBTITLE
           
           noResultsEl.innerHTML = `
             <div class="text-6xl mb-4">🔍</div>
