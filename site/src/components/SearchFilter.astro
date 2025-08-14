@@ -40,7 +40,13 @@ const prefectures = [
 ]
 ---
 
-<div class="search-card rounded-2xl border border-[var(--theme-accent)]/15 bg-white/95 backdrop-blur-sm shadow-lg ring-1 ring-[var(--theme-accent)]/5 px-3 py-3 md:px-4 md:py-4 mb-8">
+<div
+  id="search-filter"
+  class="search-card rounded-2xl border border-[var(--theme-accent)]/15 bg-white/95 backdrop-blur-sm shadow-lg ring-1 ring-[var(--theme-accent)]/5 px-3 py-3 md:px-4 md:py-4 mb-8"
+  data-lang={lang}
+  data-no-results-title={noResultsTitle}
+  data-no-results-subtitle={noResultsSubtitle}
+>
   <!-- Mobile: 2-tier layout -->
   <div class="block md:hidden space-y-3">
     <!-- Tier 1: Search + Button -->
@@ -243,10 +249,8 @@ const prefectures = [
 
 <script>
   const FILTER_STORAGE_KEY = 'blogFilterState';
-  // サーバ側の lang と文言をクライアントにインライン受け渡し（i18n一貫性）
-  const CURRENT_LANG = {JSON.stringify(lang)};
-  const NO_RESULTS_TITLE = {JSON.stringify(noResultsTitle)};
-  const NO_RESULTS_SUBTITLE = {JSON.stringify(noResultsSubtitle)};
+  // ルート要素から i18n 文言を取得（サーバ決定値を data-* で受け渡し）
+  const ROOT_EL = document.getElementById('search-filter') as HTMLElement | null;
   
   // Singleton instance to prevent multiple initializations
   let searchFilterInstance = null;
@@ -555,8 +559,8 @@ const prefectures = [
           noResultsEl = document.createElement('div')
           noResultsEl.id = 'no-results-message'
           noResultsEl.className = 'text-center py-16 bg-white rounded-2xl shadow-lg border border-gray-100'
-          const noResultsTitle = NO_RESULTS_TITLE
-          const noResultsSubtitle = NO_RESULTS_SUBTITLE
+          const noResultsTitle = ROOT_EL?.dataset.noResultsTitle || ''
+          const noResultsSubtitle = ROOT_EL?.dataset.noResultsSubtitle || ''
           
           noResultsEl.innerHTML = `
             <div class="text-6xl mb-4">🔍</div>
