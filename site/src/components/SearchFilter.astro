@@ -240,8 +240,17 @@ const prefectures = [
 
 <script>
   const FILTER_STORAGE_KEY = 'blogFilterState';
+  
+  // Singleton instance to prevent multiple initializations
+  let searchFilterInstance = null;
+  
   class SearchFilter {
     constructor() {
+      // Prevent multiple instances
+      if (searchFilterInstance) {
+        return searchFilterInstance;
+      }
+      
       // Mobile elements
       this.searchInput = document.getElementById('search-input') as HTMLInputElement
       this.typeFilter = document.getElementById('type-filter') as HTMLSelectElement
@@ -265,6 +274,9 @@ const prefectures = [
       this.articles = Array.from(document.querySelectorAll('[data-article]'))
       this.totalArticles = this.articles.length
       
+      // Flag to prevent sync loops
+      this.syncing = false
+      
       this.bindEvents()
       // セッションストレージから状態を復元
       this.loadState()
@@ -273,6 +285,9 @@ const prefectures = [
       
       // ページネーション情報の表示更新
       this.updatePageInfo()
+      
+      // Store singleton instance
+      searchFilterInstance = this;
     }
 
     bindEvents() {
@@ -320,8 +335,13 @@ const prefectures = [
     
     // Sync mobile and desktop inputs
     syncAndFilter() {
+      // Prevent infinite sync loops
+      if (this.syncing) return;
+      
+      this.syncing = true;
       this.syncInputs()
       this.filterArticles()
+      this.syncing = false;
     }
     
     syncInputs() {
@@ -508,10 +528,19 @@ const prefectures = [
     }
   }
 
-  // ページ読み込み時に初期化
-  document.addEventListener('DOMContentLoaded', () => {
-    new SearchFilter()
-  })
+  // ページ読み込み時に初期化 (DOMContentLoaded 対応)
+  function initializeSearchFilter() {
+    // Only initialize if elements exist and no instance exists yet
+    if (!searchFilterInstance && (document.getElementById('search-input') || document.getElementById('search-input-desktop'))) {
+      new SearchFilter()
+    }
+  }
+  
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeSearchFilter)
+  } else {
+    initializeSearchFilter()
+  }
 </script>
 
 <style>
