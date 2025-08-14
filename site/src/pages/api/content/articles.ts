@@ -146,7 +146,6 @@ export const POST: APIRoute = async ({ request }) => {
     return new Response(JSON.stringify({ 
       success: true,
       id: result._id,
-      message: 'Article created successfully in Sanity',
       data: {
         title,
         type,
