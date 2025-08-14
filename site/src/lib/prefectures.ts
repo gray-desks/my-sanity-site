@@ -1302,14 +1302,16 @@ export const ALL_PREFECTURES: Prefecture[] = [
 // 都道府県名を言語別に取得
 export function getPrefectureName(code: string, lang: string): string {
   const prefecture = ALL_PREFECTURES.find(p => p.code === code);
-  return prefecture?.names[lang] || prefecture?.names['ja'] || code;
+  // 言語未定義時は英語→日本語の順でフォールバック
+  return prefecture?.names[lang] || prefecture?.names['en'] || prefecture?.names['ja'] || code;
 }
 
 // 指定言語での全都道府県リストを取得
 export function getPrefecturesForLanguage(lang: string) {
   return ALL_PREFECTURES.map(prefecture => ({
     code: prefecture.code,
-    name: prefecture.names[lang] || prefecture.names['ja'],
+    // 言語未定義時は英語→日本語の順でフォールバック
+    name: prefecture.names[lang] || prefecture.names['en'] || prefecture.names['ja'],
     region: prefecture.region
   }));
 }
