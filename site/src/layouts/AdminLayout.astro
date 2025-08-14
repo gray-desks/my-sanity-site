@@ -8,6 +8,16 @@ const {
   title, 
   description = '管理画面 - 旅ログ運営システム'
 } = Astro.props
+
+// Current path and helpers for active tab state
+const pathname = Astro.url.pathname
+const normalized = pathname.endsWith('/') && pathname !== '/' ? pathname.slice(0, -1) : pathname
+const baseTab = 'inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium'
+const activeTab = 'border-red-500 text-gray-900'
+const inactiveTab = 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
+const isCreate = normalized === '/admin'
+const isArticles = normalized.startsWith('/admin/articles')
+const isStats = normalized.startsWith('/admin/stats')
 ---
 
 <!doctype html>
@@ -45,13 +55,13 @@ const {
               
               <!-- Navigation Links -->
               <div class="hidden sm:ml-8 sm:flex sm:space-x-8">
-                <a href="/admin" class="border-red-500 text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                <a href="/admin" class={`${isCreate ? activeTab : inactiveTab} ${baseTab}`} aria-current={isCreate ? 'page' : undefined}>
                   記事作成
                 </a>
-                <a href="/admin/articles" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                <a href="/admin/articles" class={`${isArticles ? activeTab : inactiveTab} ${baseTab}`} aria-current={isArticles ? 'page' : undefined}>
                   記事管理
                 </a>
-                <a href="/admin/stats" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                <a href="/admin/stats" class={`${isStats ? activeTab : inactiveTab} ${baseTab}`} aria-current={isStats ? 'page' : undefined}>
                   統計
                 </a>
               </div>
@@ -111,7 +121,7 @@ const {
             <div>
               <div class="px-3 pb-1 text-xs font-semibold text-gray-500 tracking-wider">コンテンツ</div>
               <div class="mt-1 overflow-hidden rounded-lg border border-gray-200 bg-white divide-y divide-gray-100 shadow-sm" role="group" aria-label="コンテンツ">
-                <a href="/admin" class="flex items-center gap-2 px-3 py-3 text-base font-medium text-gray-900 hover:bg-gray-50" role="menuitem">
+                <a href="/admin" class={`flex items-center gap-2 px-3 py-3 text-base font-medium ${isCreate ? 'text-gray-900 bg-gray-50' : 'text-gray-700 hover:bg-gray-50'}`} role="menuitem" aria-current={isCreate ? 'page' : undefined}>
                   <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                   記事作成
                 </a>
@@ -122,11 +132,11 @@ const {
             <div>
               <div class="px-3 pb-1 text-xs font-semibold text-gray-500 tracking-wider">管理機能</div>
               <div class="mt-1 overflow-hidden rounded-lg border border-gray-200 bg-white divide-y divide-gray-100 shadow-sm" role="group" aria-label="管理機能">
-                <a href="/admin/articles" class="flex items-center gap-2 px-3 py-3 text-base font-medium text-gray-700 hover:bg-gray-50" role="menuitem">
+                <a href="/admin/articles" class={`flex items-center gap-2 px-3 py-3 text-base font-medium ${isArticles ? 'text-gray-900 bg-gray-50' : 'text-gray-700 hover:bg-gray-50'}`} role="menuitem" aria-current={isArticles ? 'page' : undefined}>
                   <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7h18M3 12h18M3 17h18"/></svg>
                   記事管理
                 </a>
-                <a href="/admin/stats" class="flex items-center gap-2 px-3 py-3 text-base font-medium text-gray-700 hover:bg-gray-50" role="menuitem">
+                <a href="/admin/stats" class={`flex items-center gap-2 px-3 py-3 text-base font-medium ${isStats ? 'text-gray-900 bg-gray-50' : 'text-gray-700 hover:bg-gray-50'}`} role="menuitem" aria-current={isStats ? 'page' : undefined}>
                   <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19V10m-4 9V4m8 15v-6m4 6v-8"/></svg>
                   統計
                 </a>
