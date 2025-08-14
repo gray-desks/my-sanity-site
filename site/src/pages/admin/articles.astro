@@ -199,7 +199,7 @@ const title = '記事管理';
       const res = await fetch('/api/admin/articles/bulk-delete', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ids, failIfReferenced: true }),
+        body: JSON.stringify({ ids }),
       })
       if (!res.ok) throw new Error('削除に失敗しました')
       return await res.json()
@@ -240,16 +240,10 @@ const title = '記事管理';
       const ids = Array.from(state.selected)
       if (ids.length === 0) return
 
-      const ok = confirm(`選択された ${ids.length} 件を削除します。よろしいですか？\nこの操作は取り消せません。`)
+      const ok = confirm(`選択された ${ids.length} 件を削除します。よろしいですか？\n参照されているコンテンツや下書きも削除されます。この操作は取り消せません。`)
       if (!ok) return
 
       try {
-        const dry = await dryRun(ids)
-        const blocked = dry.results.filter((r) => !r.deletable)
-        if (blocked.length > 0) {
-          alert(`参照のため削除できないドキュメントがあります:\n` + blocked.map(b => `- ${b.id} (${(b.refs||[]).length} refs)`).join('\n'))
-          return
-        }
         const result = await doDelete(ids)
         const fail = result.results.filter(r => !r.ok)
         if (fail.length > 0) {
