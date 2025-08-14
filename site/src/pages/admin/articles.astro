@@ -109,6 +109,8 @@ const title = '記事管理';
       total: 0,
       items: [],
       selected: new Set(),
+      deleting: false,
+      loading: false,
     }
 
     const el = (id) => document.getElementById(id)
@@ -126,7 +128,39 @@ const title = '記事管理';
 
     function updateSelectionUI() {
       selectedCount.textContent = state.selected.size
-      el('btn-delete').disabled = state.selected.size === 0
+      el('btn-delete').disabled = state.selected.size === 0 || state.deleting
+    }
+
+    function setDeleting(flag) {
+      state.deleting = flag
+      const btnDelete = el('btn-delete')
+      btnDelete.disabled = flag || state.selected.size === 0
+      btnDelete.textContent = flag ? '削除中…' : '選択を一括削除'
+
+      // Disable other controls during deletion
+      const controls = ['btn-search', 'btn-clear', 'prev', 'next', 'check-all']
+      controls.forEach(id => {
+        const c = el(id)
+        if (c) c.disabled = flag || (id === 'prev' ? state.offset === 0 : id === 'next' ? state.offset + state.limit >= state.total : false)
+      })
+      // Disable filters
+      const inputs = ['filter-q','filter-lang','filter-type','include-drafts']
+      inputs.forEach(id => { const inp = el(id); if (inp) inp.disabled = flag })
+      // Disable row checkboxes
+      tbody.querySelectorAll('.row-check').forEach((cb) => { cb.disabled = flag })
+    }
+
+    function setLoading(flag) {
+      state.loading = flag
+      const btnSearch = el('btn-search')
+      if (btnSearch) {
+        btnSearch.disabled = flag
+        btnSearch.textContent = flag ? '検索中…' : '検索'
+      }
+      const controls = ['btn-clear', 'prev', 'next']
+      controls.forEach(id => { const c = el(id); if (c) c.disabled = flag })
+      const inputs = ['filter-q','filter-lang','filter-type','include-drafts']
+      inputs.forEach(id => { const inp = el(id); if (inp) inp.disabled = flag })
     }
 
     function renderRows(items) {
@@ -170,29 +204,23 @@ const title = '記事管理';
       if (lang) params.set('lang', lang)
       if (type) params.set('type', type)
       if (includeDrafts) params.set('includeDrafts', '1')
+      setLoading(true)
+      try {
+        const res = await fetch(`/api/admin/articles/list?${params.toString()}`)
+        if (!res.ok) throw new Error('一覧取得に失敗しました')
+        const data = await res.json()
+        state.items = data.items
+        state.total = data.total
+        renderRows(state.items)
 
-      const res = await fetch(`/api/admin/articles/list?${params.toString()}`)
-      if (!res.ok) throw new Error('一覧取得に失敗しました')
-      const data = await res.json()
-      state.items = data.items
-      state.total = data.total
-      renderRows(state.items)
-
-      const from = state.total === 0 ? 0 : state.offset + 1
-      const to = Math.min(state.offset + state.limit, state.total)
-      document.getElementById('paging-info').textContent = `${from}-${to} / ${state.total}`
-      el('prev').disabled = state.offset === 0
-      el('next').disabled = state.offset + state.limit >= state.total
-    }
-
-    async function dryRun(ids) {
-      const res = await fetch('/api/admin/articles/bulk-delete/dry-run', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ids }),
-      })
-      if (!res.ok) throw new Error('ドライランに失敗しました')
-      return await res.json()
+        const from = state.total === 0 ? 0 : state.offset + 1
+        const to = Math.min(state.offset + state.limit, state.total)
+        document.getElementById('paging-info').textContent = `${from}-${to} / ${state.total}`
+        el('prev').disabled = state.offset === 0
+        el('next').disabled = state.offset + state.limit >= state.total
+      } finally {
+        setLoading(false)
+      }
     }
 
     async function doDelete(ids) {
@@ -227,6 +255,18 @@ const title = '記事管理';
       await fetchList()
     })
 
+    // IME考慮のEnter検索
+    let composing = false
+    const qInput = el('filter-q')
+    qInput.addEventListener('compositionstart', () => { composing = true })
+    qInput.addEventListener('compositionend', () => { composing = false })
+    qInput.addEventListener('keydown', async (e) => {
+      if (e.key === 'Enter' && !composing) {
+        state.offset = 0
+        await fetchList()
+      }
+    })
+
     el('check-all').addEventListener('change', (e) => {
       const checked = e.target.checked
       state.items.forEach((it) => {
@@ -244,6 +284,7 @@ const title = '記事管理';
       if (!ok) return
 
       try {
+        setDeleting(true)
         const result = await doDelete(ids)
         const fail = result.results.filter(r => !r.ok)
         if (fail.length > 0) {
@@ -258,6 +299,8 @@ const title = '記事管理';
       } catch (e) {
         console.error(e)
         alert('削除処理でエラーが発生しました')
+      } finally {
+        setDeleting(false)
       }
     })
 

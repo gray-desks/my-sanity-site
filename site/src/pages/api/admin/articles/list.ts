@@ -18,32 +18,32 @@ export const GET: APIRoute = async ({ request }) => {
     const type = (url.searchParams.get('type') || '').trim()
     const includeDrafts = url.searchParams.get('includeDrafts') === '1'
 
-    const qPattern = q ? `*${q}*` : undefined
-    const excludeDrafts = includeDrafts ? undefined : true
+    const qPattern = q ? `*${q}*` : null
+    const excludeDrafts = includeDrafts ? null : true
 
     const totalQuery = `
       count(*[_type == "article"
-        && (!defined($lang) || lang == $lang)
-        && (!defined($type) || type == $type)
-        && (!defined($q) || title match $q)
-        && (!defined($excludeDrafts) || !(_id in path("drafts.**")))
+        && ($lang == null || lang == $lang)
+        && ($type == null || type == $type)
+        && ($q == null || title match $q)
+        && ($excludeDrafts == null || !(_id in path("drafts.**")))
       ])
     `
 
     const itemsQuery = `
       *[_type == "article"
-        && (!defined($lang) || lang == $lang)
-        && (!defined($type) || type == $type)
-        && (!defined($q) || title match $q)
-        && (!defined($excludeDrafts) || !(_id in path("drafts.**")))
+        && ($lang == null || lang == $lang)
+        && ($type == null || type == $type)
+        && ($q == null || title match $q)
+        && ($excludeDrafts == null || !(_id in path("drafts.**")))
       ] | order(publishedAt desc) [$offset...$end] {
         _id, title, lang, type, publishedAt
       }
     `
 
     const params: Record<string, any> = {
-      lang: lang || undefined,
-      type: type || undefined,
+      lang: lang || null,
+      type: type || null,
       q: qPattern,
       excludeDrafts,
       offset,
