@@ -71,12 +71,31 @@ export const POST: APIRoute = async ({ request }) => {
         await tx.commit({ visibility: 'async' })
         for (const id of chunk) results.push({ id, ok: true })
       } catch (e: any) {
-        // If transaction fails, attempt per-doc delete with best-effort
+        // If transaction fails, attempt per-doc delete with existence check
         for (const id of chunk) {
           try {
             const baseId = id.startsWith('drafts.') ? id.slice(7) : id
-            await writeClient.delete(baseId).catch(() => null)
-            await writeClient.delete(`drafts.${baseId}`).catch(() => null)
+            const publishedId = baseId
+            const draftId = `drafts.${baseId}`
+            
+            // Check existence before attempting deletion to avoid unnecessary errors
+            const [publishedDoc, draftDoc] = await Promise.all([
+              client.getDocument(publishedId).catch(() => null),
+              client.getDocument(draftId).catch(() => null)
+            ])
+            
+            const deletePromises = []
+            if (publishedDoc) {
+              deletePromises.push(writeClient.delete(publishedId))
+            }
+            if (draftDoc) {
+              deletePromises.push(writeClient.delete(draftId))
+            }
+            
+            if (deletePromises.length > 0) {
+              await Promise.all(deletePromises)
+            }
+            
             results.push({ id, ok: true })
           } catch (err: any) {
             results.push({ id, ok: false, error: err?.message || 'delete_failed' })

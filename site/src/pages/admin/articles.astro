@@ -72,6 +72,9 @@ const title = '記事管理';
       <label class="inline-flex items-center text-sm text-gray-600 gap-2">
         <input id="include-drafts" type="checkbox" class="rounded border-gray-300" /> 下書きを含める
       </label>
+      <label class="inline-flex items-center text-sm text-gray-600 gap-2">
+        <input id="fail-if-referenced" type="checkbox" class="rounded border-gray-300" checked /> 参照チェック
+      </label>
       <button id="btn-delete" class="px-4 py-2 rounded-lg text-white bg-red-600 hover:bg-red-700 text-sm disabled:opacity-50" disabled>
         選択を一括削除
       </button>
@@ -144,7 +147,7 @@ const title = '記事管理';
         if (c) c.disabled = flag || (id === 'prev' ? state.offset === 0 : id === 'next' ? state.offset + state.limit >= state.total : false)
       })
       // Disable filters
-      const inputs = ['filter-q','filter-lang','filter-type','include-drafts']
+      const inputs = ['filter-q','filter-lang','filter-type','include-drafts','fail-if-referenced']
       inputs.forEach(id => { const inp = el(id); if (inp) inp.disabled = flag })
       // Disable row checkboxes
       tbody.querySelectorAll('.row-check').forEach((cb) => { cb.disabled = flag })
@@ -159,7 +162,7 @@ const title = '記事管理';
       }
       const controls = ['btn-clear', 'prev', 'next']
       controls.forEach(id => { const c = el(id); if (c) c.disabled = flag })
-      const inputs = ['filter-q','filter-lang','filter-type','include-drafts']
+      const inputs = ['filter-q','filter-lang','filter-type','include-drafts','fail-if-referenced']
       inputs.forEach(id => { const inp = el(id); if (inp) inp.disabled = flag })
     }
 
@@ -224,10 +227,11 @@ const title = '記事管理';
     }
 
     async function doDelete(ids) {
+      const failIfReferenced = el('fail-if-referenced').checked
       const res = await fetch('/api/admin/articles/bulk-delete', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ids }),
+        body: JSON.stringify({ ids, failIfReferenced }),
       })
       if (!res.ok) throw new Error('削除に失敗しました')
       return await res.json()
@@ -280,20 +284,32 @@ const title = '記事管理';
       const ids = Array.from(state.selected)
       if (ids.length === 0) return
 
-      const ok = confirm(`選択された ${ids.length} 件を削除します。よろしいですか？\n参照されているコンテンツや下書きも削除されます。この操作は取り消せません。`)
+      // Show detailed confirmation with article information
+      const selectedItems = state.items.filter(item => ids.includes(item._id))
+      const itemList = selectedItems.map(item => 
+        `- ${item.title || '(無題)'} [${item.type || ''}] (${item.lang || 'ja'})`
+      ).join('\n')
+      
+      const confirmMessage = `以下の ${ids.length} 件を削除します。よろしいですか？\n\n${itemList}\n\n参照されているコンテンツや下書きも削除されます。この操作は取り消せません。`
+      const ok = confirm(confirmMessage)
       if (!ok) return
 
       try {
         setDeleting(true)
         const result = await doDelete(ids)
-        const fail = result.results.filter(r => !r.ok)
-        if (fail.length > 0) {
-          alert(`一部削除に失敗しました:\n` + fail.map(f => `- ${f.id}: ${f.error||'unknown'}`).join('\n'))
+        const successful = result.results.filter(r => r.ok)
+        const failed = result.results.filter(r => !r.ok)
+        
+        // Only clear successfully deleted items from selection
+        successful.forEach(r => state.selected.delete(r.id))
+        
+        if (failed.length > 0) {
+          const successMsg = successful.length > 0 ? `${successful.length}件の削除が完了しました。\n\n` : ''
+          alert(`${successMsg}${failed.length}件の削除に失敗しました:\n` + failed.map(f => `- ${f.id}: ${f.error||'unknown'}`).join('\n'))
         } else {
           alert('削除が完了しました')
         }
-        // refresh
-        state.selected.clear()
+        
         updateSelectionUI()
         await fetchList()
       } catch (e) {
