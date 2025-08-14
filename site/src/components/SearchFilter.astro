@@ -245,6 +245,10 @@ const prefectures = [
   let searchFilterInstance = null;
   
   class SearchFilter {
+    // どの入力が最後に変更されたかを保持（双方向同期の競合回避）
+    lastChanged: 'search-mobile' | 'search-desktop' | 'type-mobile' | 'type-desktop' | 'pref-mobile' | 'pref-desktop' | null
+    // IME変換中フラグ（日本語入力対応）
+    isComposing: boolean
     constructor() {
       // Prevent multiple instances
       if (searchFilterInstance) {
@@ -277,6 +281,9 @@ const prefectures = [
       // Flag to prevent sync loops
       this.syncing = false
       
+      // 初期値
+      this.lastChanged = null
+      this.isComposing = false
       this.bindEvents()
       // セッションストレージから状態を復元
       this.loadState()
@@ -295,25 +302,29 @@ const prefectures = [
       this.filterToggle?.addEventListener('click', () => this.toggleFilters())
       
       // Mobile events
-      this.searchInput?.addEventListener('input', () => this.syncAndFilter())
-      this.typeFilter?.addEventListener('change', () => this.syncAndFilter())
-      this.prefectureFilter?.addEventListener('change', () => this.syncAndFilter())
+      this.searchInput?.addEventListener('compositionstart', () => { this.isComposing = true; this.lastChanged = 'search-mobile' })
+      this.searchInput?.addEventListener('compositionend', () => { this.isComposing = false; this.lastChanged = 'search-mobile'; this.syncAndFilter() })
+      this.searchInput?.addEventListener('input', () => { this.lastChanged = 'search-mobile'; this.syncAndFilter() })
+      this.typeFilter?.addEventListener('change', () => { this.lastChanged = 'type-mobile'; this.syncAndFilter() })
+      this.prefectureFilter?.addEventListener('change', () => { this.lastChanged = 'pref-mobile'; this.syncAndFilter() })
       this.searchButton?.addEventListener('click', () => this.filterArticles())
       this.resetButton?.addEventListener('click', () => this.resetFilters())
-      this.searchInput?.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
+      this.searchInput?.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && !this.isComposing) {
           this.filterArticles()
         }
       })
       
       // Desktop events
-      this.searchInputDesktop?.addEventListener('input', () => this.syncAndFilter())
-      this.typeFilterDesktop?.addEventListener('change', () => this.syncAndFilter())
-      this.prefectureFilterDesktop?.addEventListener('change', () => this.syncAndFilter())
+      this.searchInputDesktop?.addEventListener('compositionstart', () => { this.isComposing = true; this.lastChanged = 'search-desktop' })
+      this.searchInputDesktop?.addEventListener('compositionend', () => { this.isComposing = false; this.lastChanged = 'search-desktop'; this.syncAndFilter() })
+      this.searchInputDesktop?.addEventListener('input', () => { this.lastChanged = 'search-desktop'; this.syncAndFilter() })
+      this.typeFilterDesktop?.addEventListener('change', () => { this.lastChanged = 'type-desktop'; this.syncAndFilter() })
+      this.prefectureFilterDesktop?.addEventListener('change', () => { this.lastChanged = 'pref-desktop'; this.syncAndFilter() })
       this.searchButtonDesktop?.addEventListener('click', () => this.filterArticles())
       this.resetButtonDesktop?.addEventListener('click', () => this.resetFilters())
-      this.searchInputDesktop?.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
+      this.searchInputDesktop?.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && !this.isComposing) {
           this.filterArticles()
         }
       })
@@ -337,6 +348,10 @@ const prefectures = [
     syncAndFilter() {
       // Prevent infinite sync loops
       if (this.syncing) return;
+      // 日本語IME入力中は同期・フィルタを一時停止（確定時に実行）
+      if (this.isComposing && (this.lastChanged === 'search-mobile' || this.lastChanged === 'search-desktop')) {
+        return;
+      }
       
       this.syncing = true;
       this.syncInputs()
@@ -345,31 +360,66 @@ const prefectures = [
     }
     
     syncInputs() {
-      // Sync search input
+      // Sync search input (directional)
       const mobileValue = this.searchInput?.value || ''
       const desktopValue = this.searchInputDesktop?.value || ''
-      
-      if (mobileValue !== desktopValue) {
-        if (this.searchInput) this.searchInput.value = desktopValue || mobileValue
-        if (this.searchInputDesktop) this.searchInputDesktop.value = mobileValue || desktopValue
+      let unifiedSearch = ''
+      if (this.lastChanged === 'search-desktop') {
+        unifiedSearch = desktopValue
+      } else if (this.lastChanged === 'search-mobile') {
+        unifiedSearch = mobileValue
+      } else {
+        unifiedSearch = desktopValue || mobileValue
       }
-      
-      // Sync type filter
+      if (this.lastChanged === 'search-mobile') {
+        // 入力元（モバイル）への書き戻しは避け、デスクトップのみ同期
+        if (this.searchInputDesktop) this.searchInputDesktop.value = unifiedSearch
+      } else if (this.lastChanged === 'search-desktop') {
+        // 入力元（デスクトップ）への書き戻しは避け、モバイルのみ同期
+        if (this.searchInput) this.searchInput.value = unifiedSearch
+      } else {
+        if (this.searchInput) this.searchInput.value = unifiedSearch
+        if (this.searchInputDesktop) this.searchInputDesktop.value = unifiedSearch
+      }
+
+      // Sync type filter (directional)
       const mobileType = this.typeFilter?.value || ''
       const desktopType = this.typeFilterDesktop?.value || ''
-      
-      if (mobileType !== desktopType) {
-        if (this.typeFilter) this.typeFilter.value = desktopType || mobileType
-        if (this.typeFilterDesktop) this.typeFilterDesktop.value = mobileType || desktopType
+      let unifiedType = ''
+      if (this.lastChanged === 'type-desktop') {
+        unifiedType = desktopType
+      } else if (this.lastChanged === 'type-mobile') {
+        unifiedType = mobileType
+      } else {
+        unifiedType = desktopType || mobileType
       }
-      
-      // Sync prefecture filter
+      if (this.lastChanged === 'type-mobile') {
+        if (this.typeFilterDesktop) this.typeFilterDesktop.value = unifiedType
+      } else if (this.lastChanged === 'type-desktop') {
+        if (this.typeFilter) this.typeFilter.value = unifiedType
+      } else {
+        if (this.typeFilter) this.typeFilter.value = unifiedType
+        if (this.typeFilterDesktop) this.typeFilterDesktop.value = unifiedType
+      }
+
+      // Sync prefecture filter (directional)
       const mobilePrefecture = this.prefectureFilter?.value || ''
       const desktopPrefecture = this.prefectureFilterDesktop?.value || ''
-      
-      if (mobilePrefecture !== desktopPrefecture) {
-        if (this.prefectureFilter) this.prefectureFilter.value = desktopPrefecture || mobilePrefecture
-        if (this.prefectureFilterDesktop) this.prefectureFilterDesktop.value = mobilePrefecture || desktopPrefecture
+      let unifiedPref = ''
+      if (this.lastChanged === 'pref-desktop') {
+        unifiedPref = desktopPrefecture
+      } else if (this.lastChanged === 'pref-mobile') {
+        unifiedPref = mobilePrefecture
+      } else {
+        unifiedPref = desktopPrefecture || mobilePrefecture
+      }
+      if (this.lastChanged === 'pref-mobile') {
+        if (this.prefectureFilterDesktop) this.prefectureFilterDesktop.value = unifiedPref
+      } else if (this.lastChanged === 'pref-desktop') {
+        if (this.prefectureFilter) this.prefectureFilter.value = unifiedPref
+      } else {
+        if (this.prefectureFilter) this.prefectureFilter.value = unifiedPref
+        if (this.prefectureFilterDesktop) this.prefectureFilterDesktop.value = unifiedPref
       }
     }
 
