@@ -381,6 +381,27 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
     // Minimal Markdown → Sanity Portable Text converter (headings & paragraphs)
     function markdownToPortableText(md) {
       const genKey = () => Math.random().toString(36).slice(2, 10);
+      // Inline parser: supports **bold** → marks: ['strong']
+      const parseInlineMarks = (text) => {
+        // Split by ** and alternate normal/strong spans
+        const parts = String(text).split('**');
+        const spans = [];
+        for (let i = 0; i < parts.length; i++) {
+          const chunk = parts[i];
+          if (!chunk) continue; // skip empty chunks
+          spans.push({
+            _type: 'span',
+            _key: genKey(),
+            text: chunk,
+            marks: i % 2 === 1 ? ['strong'] : []
+          });
+        }
+        // Fallback to empty normal span if nothing produced
+        if (spans.length === 0) {
+          spans.push({ _type: 'span', _key: genKey(), text: '', marks: [] });
+        }
+        return spans;
+      };
       const lines = md.split(/\r?\n/);
       const blocks = [];
       for (const rawLine of lines) {
@@ -405,9 +426,7 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
             listItem: 'bullet',
             level: 1,
             markDefs: [],
-            children: [
-              { _type: 'span', _key: genKey(), text: bulletMatch[1], marks: [] }
-            ]
+            children: parseInlineMarks(bulletMatch[1])
           });
           continue;
         } else if (numMatch) {
@@ -418,9 +437,7 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
             listItem: 'number',
             level: 1,
             markDefs: [],
-            children: [
-              { _type: 'span', _key: genKey(), text: numMatch[2], marks: [] }
-            ]
+            children: parseInlineMarks(numMatch[2])
           });
           continue;
         }
@@ -439,9 +456,7 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
             _key: genKey(),
             style: 'normal',
             markDefs: [],
-            children: [
-              { _type: 'span', _key: genKey(), text: rowText, marks: [] }
-            ]
+            children: parseInlineMarks(rowText)
           });
           continue;
         }
@@ -452,9 +467,7 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
           _key: genKey(),
           style,
           markDefs: [],
-          children: [
-            { _type: 'span', _key: genKey(), text, marks: [] }
-          ]
+          children: parseInlineMarks(text)
         });
       }
       return blocks;
