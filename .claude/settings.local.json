@@ -76,8 +76,12 @@
       "mcp__serena__think_about_whether_you_are_done",
       "WebFetch(domain:www.japantravellog.com)",
       "mcp__serena__find_referencing_symbols",
-      "Bash(npm:*)"
+      "Bash(npm:*)",
+      "mcp__ide__getDiagnostics"
     ],
-    "deny": []
+    "deny": [],
+    "additionalDirectories": [
+      "/Users/yamazaki"
+    ]
   }
 }
