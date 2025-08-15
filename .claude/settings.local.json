@@ -77,11 +77,13 @@
       "WebFetch(domain:www.japantravellog.com)",
       "mcp__serena__find_referencing_symbols",
       "Bash(npm:*)",
-      "mcp__ide__getDiagnostics"
+      "mcp__ide__getDiagnostics",
+      "Bash(git revert:*)"
     ],
     "deny": [],
     "additionalDirectories": [
       "/Users/yamazaki"
-    ]
+    ],
+    "defaultMode": "acceptEdits"
   }
 }
