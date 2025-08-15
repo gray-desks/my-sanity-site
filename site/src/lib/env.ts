@@ -25,4 +25,4 @@ export const GA_MEASUREMENT_ID = import.meta.env.PUBLIC_GA_MEASUREMENT_ID || 'G-
 export const REVALIDATE_SECRET = import.meta.env.REVALIDATE_SECRET;
 
 // OGP cache busting version
-export const OG_IMAGE_VERSION = import.meta.env.OG_IMAGE_VERSION ?? 'v5';
+export const OG_IMAGE_VERSION = import.meta.env.OG_IMAGE_VERSION ?? 'v4';

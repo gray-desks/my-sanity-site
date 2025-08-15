@@ -5,7 +5,6 @@ import AdSlot from '../../components/AdSlot.astro'
 import PortableTextWithAds from '../../components/PortableTextWithAds.astro'
 import { getArticleById, client, type Article } from '../../lib/sanity'
 import { ADS_SLOTS } from '../../config/ads'
-import { OG_IMAGE_VERSION } from '../../lib/env'
 
 const { id } = Astro.params
 const article: Article | null = await getArticleById(id!)
@@ -101,21 +100,10 @@ const config = typeConfig[article.type as keyof typeof typeConfig] || typeConfig
               )}
               <time datetime={article.publishedAt} class="flex items-center text-gray-600">
                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 002-2H5a2 2 0 002 2z"></path>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 002 2z"></path>
                 </svg>
                 <span class="ml-1">{formatDate(article.publishedAt)}</span>
               </time>
-            </div>
-            <!-- Share to Instagram Stories button -->
-            <div class="mt-6 flex justify-end">
-              <button id="share-to-ig" data-article-id={id} data-ogv={OG_IMAGE_VERSION} class="group inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/90 text-ink ring-1 ring-[var(--theme-accent)]/15 border border-[var(--theme-accent)]/15 backdrop-blur-sm shadow-sm hover:bg-white hover:ring-[var(--theme-accent)]/25 focus:outline-none focus:ring-2 focus:ring-[var(--theme-accent)]/25 focus:ring-offset-1 focus:ring-offset-white transition-colors duration-200 disabled:opacity-60" aria-label="ストーリーズにシェア">
-                <span class="inline-flex items-center justify-center w-6 h-6 rounded-lg bg-gradient-to-br from-[#f9ce34] via-[#ee2a7b] to-[#6228d7] text-white">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" class="w-4 h-4">
-                    <path d="M7.5 2.25h9A5.25 5.25 0 0 1 21.75 7.5v9a5.25 5.25 0 0 1-5.25 5.25h-9A5.25 5.25 0 0 1 2.25 16.5v-9A5.25 5.25 0 0 1 7.5 2.25Zm9 1.5h-9A3.75 3.75 0 0 0 3.75 7.5v9A3.75 3.75 0 0 0 7.5 20.25h9A3.75 3.75 0 0 0 20.25 16.5v-9A3.75 3.75 0 0 0 16.5 3.75Zm-1.125 2.25a1.125 1.125 0 1 1 0 2.25 1.125 1.125 0 0 1 0-2.25ZM12 7.5a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9Zm0 1.5a3 3 0 1 0 0 6 3 3 0 0 0 0-6Z"/>
-                  </svg>
-                </span>
-                <span>ストーリーズにシェア</span>
-              </button>
             </div>
           </div>
 
@@ -189,37 +177,57 @@ const config = typeConfig[article.type as keyof typeof typeConfig] || typeConfig
       </div>
     </div>
   )}
-
-  <!-- Instagram Story Share Modal (fallback) -->
-  <div id="ig-share-modal" class="lightbox-overlay hidden fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4">
-    <div class="relative w-full max-w-md bg-white rounded-2xl shadow-xl overflow-hidden">
-      <button id="ig-modal-close" class="absolute top-3 right-3 w-10 h-10 rounded-full bg-black/70 text-white text-xl">×</button>
-      <div class="p-5 space-y-4">
-        <h2 class="text-lg font-semibold">Instagramストーリーズにシェア</h2>
-        <p class="text-sm text-gray-600">画像を保存してInstagramアプリでストーリーズに貼り付けてください。</p>
-        <div class="rounded-xl overflow-hidden border border-gray-200">
-          <img id="ig-preview" alt="Story Preview" class="w-full h-auto max-h-[60vh] object-contain bg-gray-50 hidden" />
-          <div id="ig-loading" class="w-full py-8 flex flex-col items-center justify-center text-gray-600">
-            <svg class="animate-spin h-6 w-6 text-gray-400 mb-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" aria-hidden="true">
-              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
-            </svg>
-            <p class="text-sm">画像を生成しています…</p>
-          </div>
-        </div>
-        <div class="flex flex-col sm:flex-row gap-3">
-          <button id="ig-copy-link" class="flex-1 inline-flex items-center justify-center px-4 py-2 rounded-full bg-white/90 text-ink ring-1 ring-[var(--theme-accent)]/15 border border-[var(--theme-accent)]/15 backdrop-blur-sm shadow-sm hover:bg-white hover:ring-[var(--theme-accent)]/25 transition-colors">リンクをコピー</button>
-          <a id="ig-download" class="flex-1 inline-flex items-center justify-center px-4 py-2 rounded-full bg-[var(--theme-accent)] text-white shadow-md hover:shadow-lg hover:bg-[var(--theme-accent)]/90 focus:outline-none focus:ring-2 focus:ring-[var(--theme-accent)]/60 transition" download="tabi-log-story.webp">画像を保存</a>
-        </div>
-        <p class="text-xs text-gray-500">保存できない場合は、画像を長押しして保存してからInstagramを開いてください。</p>
-      </div>
-    </div>
-  </div>
-
 </Layout>
 
-<!-- External client script for lightbox and Instagram share -->
-<script src="/js/article-share.js" defer></script>
+<script>
+  // Cover Image Lightbox functionality
+  document.addEventListener('DOMContentLoaded', () => {
+    const coverImage = document.getElementById('cover-image')
+    const coverImageMobile = document.getElementById('cover-image-mobile')
+    const lightbox = document.getElementById('cover-lightbox')
+    const lightboxImage = document.getElementById('cover-lightbox-image')
+    const closeBtn = document.getElementById('cover-lightbox-close')
+    
+    const setupLightbox = (imgElement) => {
+      if (imgElement && lightbox) {
+        imgElement.addEventListener('click', () => {
+          const lightboxUrl = imgElement.dataset.lightboxUrl
+          if (lightboxUrl && lightboxImage) {
+            lightboxImage.src = lightboxUrl
+          }
+          lightbox.classList.remove('hidden')
+          document.body.style.overflow = 'hidden'
+        })
+      }
+    }
+    
+    setupLightbox(coverImage)
+    setupLightbox(coverImageMobile)
+      
+      // Close lightbox
+      const closeLightbox = () => {
+        lightbox.classList.add('hidden')
+        document.body.style.overflow = ''
+      }
+      
+      closeBtn?.addEventListener('click', closeLightbox)
+      lightboxImage?.addEventListener('click', closeLightbox)
+      
+      // Close on background click
+      lightbox.addEventListener('click', (e) => {
+        if (e.target === lightbox) {
+          closeLightbox()
+        }
+      })
+      
+      // Close on Escape key
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !lightbox.classList.contains('hidden')) {
+          closeLightbox()
+        }
+      })
+  })
+</script>
 
 <style is:global>
   /* Improved Content Typography for Mobile */
