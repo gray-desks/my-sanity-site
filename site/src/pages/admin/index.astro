@@ -113,6 +113,10 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
 
     // Show notification
     function showNotification(message, type = 'info') {
+      // Remove any existing notifications to prevent duplicates
+      const existingNotifications = document.querySelectorAll('[data-notification]');
+      existingNotifications.forEach(notification => notification.remove());
+
       const colors = {
         success: 'bg-green-50 border-green-200 text-green-800',
         error: 'bg-red-50 border-red-200 text-red-800',
@@ -128,7 +132,8 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
       };
 
       const notification = document.createElement('div');
-      notification.className = `fixed top-4 right-4 ${colors[type]} border rounded-lg p-4 shadow-lg z-50 max-w-md`;
+      notification.className = `fixed bottom-4 right-4 ${colors[type]} border rounded-lg p-4 shadow-lg z-50 max-w-md`;
+      notification.setAttribute('data-notification', 'true');
       
       // Handle multiline messages
       const messageLines = message.split('\n');
