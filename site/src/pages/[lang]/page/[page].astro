@@ -15,6 +15,11 @@ export async function getStaticPaths() {
       const totalCount = await getArticleCount(language.id)
       const totalPages = calculateTotalPages(totalCount, PAGE_SIZE)
       
+      // Only generate paths if there are actually enough articles for pagination
+      if (totalCount <= PAGE_SIZE) {
+        continue
+      }
+      
       // Generate paths for pages 2 and beyond (page 1 is handled by [lang]/index.astro)
       for (let page = 2; page <= totalPages; page++) {
         paths.push({

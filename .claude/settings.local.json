@@ -78,12 +78,13 @@
       "mcp__serena__find_referencing_symbols",
       "Bash(npm:*)",
       "mcp__ide__getDiagnostics",
-      "Bash(git revert:*)"
+      "Bash(git revert:*)",
+      "mcp__serena__replace_symbol_body"
     ],
     "deny": [],
+    "defaultMode": "acceptEdits",
     "additionalDirectories": [
       "/Users/yamazaki"
-    ],
-    "defaultMode": "acceptEdits"
+    ]
   }
 }
