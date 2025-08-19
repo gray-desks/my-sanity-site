@@ -150,7 +150,7 @@ export async function getArticlesPaged(
       __i18n_refs
     }
   `
-  const end = offset + limit - 1
+  const end = offset + limit
   return await client.fetch(query, { lang, offset, end })
 }
 
