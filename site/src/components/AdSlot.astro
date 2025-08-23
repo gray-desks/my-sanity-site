@@ -102,15 +102,44 @@ const config = formatConfig[format]
   </div>
 ) : null}
 
-{/* Only load push script in production when ads are enabled */}
+{/* Optimized AdSense push with intersection observer */}
 {showAds && !isDev && (
-  <script is:inline>
-    try {
-      (adsbygoogle = window.adsbygoogle || []).push({});
-    } catch(e) {
-      // Silently handle ad blocker or script loading errors
-      console.debug('AdSense push failed:', e.message);
-    }
+  <script is:inline define:vars={{slotId}}>
+    // Use intersection observer to load ads only when visible
+    (() => {
+      const adElement = document.querySelector(`ins[data-ad-slot="${slotId}"]`);
+      if (!adElement) return;
+      
+      let pushed = false;
+      const pushAd = () => {
+        if (pushed || !window.adsbygoogle) return;
+        pushed = true;
+        
+        try {
+          (window.adsbygoogle = window.adsbygoogle || []).push({});
+        } catch(e) {
+          console.debug('AdSense push failed:', e.message);
+        }
+      };
+      
+      // Push ad when it becomes visible or after AdSense script loads
+      if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              observer.disconnect();
+              // Small delay to ensure AdSense script is ready
+              setTimeout(pushAd, 100);
+            }
+          });
+        }, { rootMargin: '100px' });
+        
+        observer.observe(adElement);
+      } else {
+        // Fallback for older browsers
+        setTimeout(pushAd, 1000);
+      }
+    })();
   </script>
 )}
 

@@ -80,7 +80,8 @@
       "mcp__ide__getDiagnostics",
       "Bash(git revert:*)",
       "mcp__serena__replace_symbol_body",
-      "mcp__serena__read_memory"
+      "mcp__serena__read_memory",
+      "Read(//var/folders/mf/857mvkr90pngs73rrb_860z00000gn/T/TemporaryItems/NSIRD_screencaptureui_iu8YGs/**)"
     ],
     "deny": [],
     "defaultMode": "acceptEdits",

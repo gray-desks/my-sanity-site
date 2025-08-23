@@ -13,8 +13,8 @@ interface Props {
 const { images } = Astro.props
 const galleryId = `gallery-${Math.random().toString(36).substr(2, 9)}`
 
-// Prepare image URLs for JavaScript
-const imageUrls = images.map(img => `${img.asset?.url}?auto=format`)
+// Prepare optimized image URLs for JavaScript
+const imageUrls = images.map(img => `${img.asset?.url}?auto=format&w=800&q=85`)
 ---
 
 <div class="gallery-container" data-gallery-id={galleryId} data-image-urls={JSON.stringify(imageUrls)}>
@@ -23,7 +23,7 @@ const imageUrls = images.map(img => `${img.asset?.url}?auto=format`)
     <div class="gallery-main aspect-video bg-gray-100 rounded-lg overflow-hidden">
       <img 
         id={`${galleryId}-main`}
-        src={`${images[0]?.asset?.url}?auto=format`}
+        src={`${images[0]?.asset?.url}?auto=format&w=800&q=85`}
         alt=""
         class="w-full h-full object-contain transition-opacity duration-300 cursor-pointer bg-gray-50"
         loading="lazy"
