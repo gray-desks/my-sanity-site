@@ -79,7 +79,8 @@
       "Bash(npm:*)",
       "mcp__ide__getDiagnostics",
       "Bash(git revert:*)",
-      "mcp__serena__replace_symbol_body"
+      "mcp__serena__replace_symbol_body",
+      "mcp__serena__read_memory"
     ],
     "deny": [],
     "defaultMode": "acceptEdits",

@@ -1,7 +1,9 @@
 ---
 import { PortableText } from 'astro-portabletext'
 import AdSlot from './AdSlot.astro'
+import LinkOut from './LinkOut.astro'
 import { ADS_SLOTS } from '../config/ads'
+import { getUILabel } from '../lib/i18n'
 
 export interface Props {
   value: any[]
@@ -44,7 +46,14 @@ const afterAd = insertAdAfterIndex >= 0 ? value.slice(insertAdAfterIndex + 1) : 
 
 <div class="portable-text-with-ads">
   <!-- Content before ad -->
-  <PortableText value={beforeAd} />
+  <PortableText 
+    value={beforeAd}
+    components={{
+      marks: {
+        link: LinkOut
+      }
+    }}
+  />
   
   <!-- In-Article Ad (only if we have content to split) -->
   {showAds && insertAdAfterIndex >= 0 && (
@@ -59,7 +68,14 @@ const afterAd = insertAdAfterIndex >= 0 ? value.slice(insertAdAfterIndex + 1) : 
   
   <!-- Content after ad -->
   {afterAd.length > 0 && (
-    <PortableText value={afterAd} />
+    <PortableText 
+      value={afterAd}
+      components={{
+        marks: {
+          link: LinkOut
+        }
+      }}
+    />
   )}
 </div>
 

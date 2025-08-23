@@ -22,13 +22,15 @@ export interface Props {
   pathname: string;
   lang: string;
   pageType?: 'article' | 'website';
+  noindex?: boolean;
 }
 
 const { 
   frontmatter = {}, 
   pathname, 
   lang = 'ja',
-  pageType = 'website'
+  pageType = 'website',
+  noindex = false
 } = Astro.props;
 
 // SEO values with fallbacks
@@ -89,14 +91,14 @@ const getOgLocale = (langCode: string): string => {
 const generateJsonLd = () => {
   const baseData = {
     '@context': 'https://schema.org',
-    '@type': seoType === 'article' ? 'Article' : 'WebPage',
+    '@type': seoType === 'article' ? 'BlogPosting' : 'WebPage',
     name: seoTitle,
     description: seoDescription,
     url: canonicalURL,
     inLanguage: getHreflangCode(lang),
     publisher: {
       '@type': 'Organization',
-      name: SITE_TITLE,
+      name: 'Japan Travel Log',
       url: SITE_URL
     }
   };
@@ -105,12 +107,12 @@ const generateJsonLd = () => {
     return {
       ...baseData,
       headline: seoTitle,
-      image: ogImageUrl,
+      image: ogImageUrl ? [ogImageUrl] : undefined,
       datePublished: frontmatter.publishedAt || new Date().toISOString(),
       dateModified: frontmatter.publishedAt || new Date().toISOString(),
       author: {
         '@type': 'Person',
-        name: 'Travel Logger'
+        name: 'HIDEKUNI YAMAZAKI'
       },
       mainEntityOfPage: {
         '@type': 'WebPage',
@@ -125,12 +127,52 @@ const generateJsonLd = () => {
   };
 };
 
+// Generate Breadcrumb JSON-LD for articles
+const generateBreadcrumbJsonLd = () => {
+  if (seoType !== 'article' || !frontmatter.type) return null;
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: lang === 'ja' ? 'ホーム' : 'Home',
+        item: lang === 'ja' ? SITE_URL + '/' : SITE_URL + '/en/'
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: frontmatter.type || 'blog',
+        item: lang === 'ja' 
+          ? SITE_URL + '/' + (frontmatter.type || 'blog') + '/'
+          : SITE_URL + '/en/' + (frontmatter.type || 'blog') + '/'
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: seoTitle,
+        item: canonicalURL
+      }
+    ]
+  };
+};
+
 const jsonLd = generateJsonLd();
+const breadcrumbJsonLd = generateBreadcrumbJsonLd();
 const alternateOgLocales = getLangIds().filter((l) => l !== lang).map((l) => getOgLocale(l));
 ---
 
 <!-- Canonical URL -->
 <link rel="canonical" href={canonicalURL} />
+
+<!-- Robots meta -->
+{noindex ? (
+  <meta name="robots" content="noindex,nofollow" />
+) : (
+  <meta name="robots" content="index,follow" />
+)}
 
 <!-- Hreflang alternates -->
 <HreflangLinks currentPath={cleanPathname || '/'} />
@@ -165,3 +207,8 @@ const alternateOgLocales = getLangIds().filter((l) => l !== lang).map((l) => get
 
 <!-- JSON-LD Structured Data -->
 <script type="application/ld+json" set:html={JSON.stringify(jsonLd, null, 2)} />
+
+<!-- Breadcrumb JSON-LD for Articles -->
+{breadcrumbJsonLd && (
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbJsonLd, null, 2)} />
+)}

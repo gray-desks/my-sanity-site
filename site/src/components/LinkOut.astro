@@ -1,0 +1,36 @@
+---
+export interface Props {
+  href: string;
+  children?: any;
+  [key: string]: any;
+}
+
+const { href, children, ...props } = Astro.props;
+
+// Check if link is external
+const isExternal = /^https?:\/\//i.test(href ?? "");
+
+// Check if link is affiliate/sponsored
+const isSponsored = /booking\.com|ikyu\.com|a8\.net|afb\.jp|valuecommerce\.ne\.jp|rakuten\.co\.jp|amazon\.co\.jp/i.test(href ?? "");
+
+// Determine rel attribute
+let rel = '';
+if (isExternal) {
+  rel = 'noopener';
+  if (isSponsored) {
+    rel = 'noopener sponsored nofollow';
+  }
+}
+
+// Filter out href from props to avoid duplication
+const { href: _, ...otherProps } = props;
+---
+
+<a 
+  href={href} 
+  target={isExternal ? '_blank' : undefined} 
+  rel={rel || undefined}
+  {...otherProps}
+>
+  <slot>{children}</slot>
+</a>
