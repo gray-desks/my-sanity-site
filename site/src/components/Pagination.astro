@@ -6,9 +6,11 @@ export interface Props {
   totalPages: number
   basePath: string // "" for Japanese, "/en" for English, etc.
   lang?: string
+  mode?: 'path' | 'query'
+  queryParams?: Record<string, string>
 }
 
-const { currentPage, totalPages, basePath, lang = 'ja' } = Astro.props
+const { currentPage, totalPages, basePath, lang = 'ja', mode = 'path', queryParams } = Astro.props
 
 // Generate page numbers to show (show max 5 numbers around current page)
 function getPageNumbers(current: number, total: number): (number | string)[] {
@@ -50,10 +52,21 @@ function getPageNumbers(current: number, total: number): (number | string)[] {
 const pageNumbers = getPageNumbers(currentPage, totalPages)
 
 function getPageUrl(pageNum: number): string {
-  if (pageNum === 1) {
-    return basePath === '' ? '/' : basePath + '/'
+  if (mode === 'query') {
+    const params = new URLSearchParams(queryParams || {})
+    if (pageNum === 1) {
+      params.delete('page')
+    } else {
+      params.set('page', String(pageNum))
+    }
+    const qs = params.toString()
+    return qs ? `${basePath}?${qs}` : basePath
+  } else {
+    if (pageNum === 1) {
+      return basePath === '' ? '/' : basePath + '/'
+    }
+    return basePath + '/page/' + pageNum
   }
-  return basePath + '/page/' + pageNum
 }
 
 const prevUrl = currentPage > 1 ? getPageUrl(currentPage - 1) : null

@@ -20,6 +20,9 @@ export interface Props {
   canonicalUrl: string
   prevUrl?: string
   nextUrl?: string
+  paginationMode?: 'path' | 'query'
+  paginationQueryParams?: Record<string, string>
+  isSearch?: boolean
 }
 
 const { 
@@ -32,7 +35,10 @@ const {
   pageDescription, 
   canonicalUrl,
   prevUrl,
-  nextUrl
+  nextUrl,
+  paginationMode,
+  paginationQueryParams,
+  isSearch = false
 } = Astro.props
 
 // Generate structured data for pagination
@@ -49,9 +55,6 @@ const structuredData = {
   title={pageTitle}
   description={pageDescription}
   lang={lang}
-  canonicalUrl={canonicalUrl}
-  prevUrl={prevUrl}
-  nextUrl={nextUrl}
 >
   <!-- Structured Data -->
   <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
@@ -101,18 +104,27 @@ const structuredData = {
       {articles.length === 0 ? (
         <div class="text-center py-16 bg-white rounded-2xl shadow-lg border border-gray-100">
           <div class="text-6xl mb-4">📝</div>
-          <p class="text-gray-500 text-xl mb-2">
-            {currentPage > 1 
-              ? getUILabel(lang, 'noArticlesOnPage')
-              : getUILabel(lang, 'noArticlesTitle')
-            }
-          </p>
-          <p class="text-gray-400">
-            {currentPage > 1 
-              ? getUILabel(lang, 'tryDifferentPage')
-              : getUILabel(lang, 'noArticlesSubtitle')
-            }
-          </p>
+          {isSearch ? (
+            <>
+              <p class="text-gray-500 text-xl mb-2">検索結果が見つかりませんでした</p>
+              <p class="text-gray-400">キーワードや条件を変更して再度お試しください</p>
+            </>
+          ) : (
+            <>
+              <p class="text-gray-500 text-xl mb-2">
+                {currentPage > 1 
+                  ? getUILabel(lang, 'noArticlesOnPage')
+                  : getUILabel(lang, 'noArticlesTitle')
+                }
+              </p>
+              <p class="text-gray-400">
+                {currentPage > 1 
+                  ? getUILabel(lang, 'tryDifferentPage')
+                  : getUILabel(lang, 'noArticlesSubtitle')
+                }
+              </p>
+            </>
+          )}
         </div>
       ) : (
         <>
@@ -129,6 +141,8 @@ const structuredData = {
             totalPages={totalPages}
             basePath={basePath}
             lang={lang}
+            mode={paginationMode}
+            queryParams={paginationQueryParams}
           />
         </>
       )}

@@ -298,8 +298,8 @@ const prefectures = [
       this.bindEvents()
       // セッションストレージから状態を復元
       this.loadState()
-      // 復元した状態でフィルタリングを実行
-      this.filterArticles()
+      // クライアントサイドの自動フィルタリングは行わない（検索ページ遷移方式）
+      // this.filterArticles()
       
       // Store singleton instance
       searchFilterInstance = this;
@@ -363,7 +363,8 @@ const prefectures = [
       
       this.syncing = true;
       this.syncInputs()
-      this.filterArticles()
+      // 入力同期時は遷移せず状態のみ保存
+      this.saveState()
       this.syncing = false;
     }
     
@@ -432,47 +433,36 @@ const prefectures = [
     }
 
     filterArticles() {
-      // Get values from either mobile or desktop inputs
-      const searchTerm = (this.searchInput?.value || this.searchInputDesktop?.value || '').toLowerCase()
+      // 入力値を取得（そのままURLに載せるため小文字化しない）
+      const searchTerm = this.searchInput?.value || this.searchInputDesktop?.value || ''
       const selectedType = this.typeFilter?.value || this.typeFilterDesktop?.value || ''
       const selectedPrefecture = this.prefectureFilter?.value || this.prefectureFilterDesktop?.value || ''
-      
-      let visibleCount = 0
-      
-      this.articles.forEach((article) => {
-        const element = article as HTMLElement
-        const title = element.dataset.title?.toLowerCase() || ''
-        const type = element.dataset.type || ''
-        const placeName = element.dataset.placeName?.toLowerCase() || ''
-        const prefecture = element.dataset.prefecture || ''
-        const bodyText = element.dataset.bodyText?.toLowerCase() || ''
-        
-        const matchesSearch = !searchTerm || 
-          title.includes(searchTerm) || 
-          placeName.includes(searchTerm) ||
-          bodyText.includes(searchTerm)
-        
-        const matchesType = !selectedType || type === selectedType
-        const matchesPrefecture = !selectedPrefecture || prefecture === selectedPrefecture
-        
-        const shouldShow = matchesSearch && matchesType && matchesPrefecture
-        
-        if (shouldShow) {
-          element.style.display = 'block'
-          element.style.animation = 'fadeIn 0.3s ease-in-out'
-          visibleCount++
-        } else {
-          element.style.display = 'none'
-        }
-      })
-      
-      // 結果が0件の場合のメッセージ表示
-      this.updateNoResultsMessage(visibleCount)
+
       // 状態を保存
       this.saveState()
+
+      // 検索条件がある場合は検索ページへ遷移
+      if (searchTerm || selectedType || selectedPrefecture) {
+        const params = new URLSearchParams()
+        if (searchTerm) params.set('q', searchTerm)
+        if (selectedType) params.set('type', selectedType)
+        if (selectedPrefecture) params.set('prefecture', selectedPrefecture)
+        window.location.href = `/search?${params.toString()}`
+        return
+      }
+
+      // 条件が空で検索ページにいる場合はトップへ
+      if (window.location.pathname === '/search') {
+        window.location.href = '/'
+      }
     }
 
     resetFilters() {
+      // 検索ページにいる場合はトップページに戻る
+      if (window.location.pathname === '/search') {
+        window.location.href = '/'
+        return
+      }
       // Reset mobile inputs
       if (this.searchInput) {
         this.searchInput.value = ''

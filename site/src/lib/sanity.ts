@@ -154,6 +154,92 @@ export async function getArticlesPaged(
   return await client.fetch(query, { lang, offset, end })
 }
 
+// ======= SEARCH/FILTER FUNCTIONS =======
+// 検索・絞り込み対応（ページング）
+export async function getArticlesWithFilters(
+  lang: string = DEFAULT_LANGUAGE,
+  offset: number = 0,
+  limit: number = 12,
+  searchTerm?: string,
+  type?: string,
+  prefecture?: string
+): Promise<Article[]> {
+  const filters: string[] = [
+    '_type == "article"',
+    '(lang == $lang || (!defined(lang) && $lang == "ja"))',
+    'defined(slug.current)'
+  ]
+
+  if (searchTerm && searchTerm.trim()) {
+    filters.push('(title match $searchPattern || pt::text(coalesce(content, body)) match $searchPattern)')
+  }
+  if (type && type.trim()) {
+    filters.push('type == $type')
+  }
+  if (prefecture && prefecture.trim()) {
+    filters.push('prefecture == $prefecture')
+  }
+
+  const query = `*[${filters.join(' && ')}] | order(publishedAt desc) [$offset...$end] {
+    _id,
+    title,
+    slug,
+    type,
+    placeName,
+    prefecture,
+    publishedAt,
+    visitDate,
+    tags,
+    coverImage {
+      asset->{
+        _id,
+        url,
+        metadata { dimensions }
+      }
+    },
+    gallery[] {
+      asset->{ _id, url }
+    },
+    "bodyText": pt::text(coalesce(content, body)),
+    lang,
+    __i18n_lang,
+    __i18n_refs
+  }`
+
+  const end = offset + limit
+  const searchPattern = searchTerm && searchTerm.trim() ? `*${searchTerm}*` : undefined
+
+  return await client.fetch(query, { lang, offset, end, searchPattern, type, prefecture })
+}
+
+// 検索・絞り込み結果の総件数取得
+export async function getArticleCountWithFilters(
+  lang: string = DEFAULT_LANGUAGE,
+  searchTerm?: string,
+  type?: string,
+  prefecture?: string
+): Promise<number> {
+  const filters: string[] = [
+    '_type == "article"',
+    '(lang == $lang || (!defined(lang) && $lang == "ja"))',
+    'defined(slug.current)'
+  ]
+
+  if (searchTerm && searchTerm.trim()) {
+    filters.push('(title match $searchPattern || pt::text(coalesce(content, body)) match $searchPattern)')
+  }
+  if (type && type.trim()) {
+    filters.push('type == $type')
+  }
+  if (prefecture && prefecture.trim()) {
+    filters.push('prefecture == $prefecture')
+  }
+
+  const query = `count(*[${filters.join(' && ')}])`
+  const searchPattern = searchTerm && searchTerm.trim() ? `*${searchTerm}*` : undefined
+  return await client.fetch(query, { lang, searchPattern, type, prefecture })
+}
+
 // 全言語の記事を一括取得（将来の多言語展開用）
 export async function getAllLanguageArticles(): Promise<MultiLanguageArticles> {
   const results: MultiLanguageArticles = {}

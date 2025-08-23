@@ -1,0 +1,50 @@
+---
+import ArticleIndex from './_templates/ArticleIndex.astro'
+import { getArticlesWithFilters, getArticleCountWithFilters } from '../lib/sanity'
+import { PAGE_SIZE, calculateTotalPages } from '../config/site'
+
+const url = Astro.url
+const searchTerm = (url.searchParams.get('q') || '').trim()
+const type = (url.searchParams.get('type') || '').trim()
+const prefecture = (url.searchParams.get('prefecture') || '').trim()
+const currentPage = parseInt(url.searchParams.get('page') || '1', 10)
+const lang = 'ja'
+
+const page = Number.isFinite(currentPage) && currentPage > 0 ? currentPage : 1
+const offset = (page - 1) * PAGE_SIZE
+
+let articles = []
+let totalCount = 0
+
+try {
+  const [articlesData, count] = await Promise.all([
+    getArticlesWithFilters(lang, offset, PAGE_SIZE, searchTerm || undefined, type || undefined, prefecture || undefined),
+    getArticleCountWithFilters(lang, searchTerm || undefined, type || undefined, prefecture || undefined)
+  ])
+  articles = articlesData
+  totalCount = count
+} catch (e) {
+  console.error('Failed to fetch search results:', e)
+}
+
+const totalPages = calculateTotalPages(totalCount, PAGE_SIZE)
+const pageTitle = `検索結果：${searchTerm || '絞り込み結果'} (${totalCount}件)`
+const pageDescription = `${totalCount}件の検索結果が見つかりました`
+const canonicalUrl = url.pathname + url.search
+
+// Build query params for Pagination component (keeps current filters)
+const queryParams: Record<string, string> = Object.fromEntries(url.searchParams)
+---
+
+<ArticleIndex 
+  articles={articles}
+  currentPage={page}
+  totalPages={totalPages}
+  lang={lang}
+  basePath="/search"
+  pageTitle={pageTitle}
+  pageDescription={pageDescription}
+  canonicalUrl={canonicalUrl}
+  paginationMode="query"
+  paginationQueryParams={queryParams}
+/>
