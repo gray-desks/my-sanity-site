@@ -1,14 +1,23 @@
 ---
-import ArticleIndex from './_templates/ArticleIndex.astro'
-import { getArticlesWithFilters, getArticleCountWithFilters } from '../lib/sanity'
-import { PAGE_SIZE, calculateTotalPages } from '../config/site'
+import ArticleIndex from '../_templates/ArticleIndex.astro'
+import { getArticlesWithFilters, getArticleCountWithFilters } from '../../lib/sanity'
+import { PAGE_SIZE, calculateTotalPages } from '../../config/site'
+import { getLangIds, getHreflangCode } from '../../lib/getSupportedLangs'
+import { getUILabel } from '../../lib/i18n'
+
+// Validate language parameter
+const { lang } = Astro.params
+const supportedLangs = getLangIds()
+
+if (!lang || !supportedLangs.includes(lang)) {
+  return Astro.redirect('/404')
+}
 
 const url = Astro.url
 const searchTerm = (url.searchParams.get('q') || '').trim()
 const type = (url.searchParams.get('type') || '').trim()
 const prefecture = (url.searchParams.get('prefecture') || '').trim()
 const currentPage = parseInt(url.searchParams.get('page') || '1', 10)
-const lang = 'ja'
 
 const page = Number.isFinite(currentPage) && currentPage > 0 ? currentPage : 1
 const offset = (page - 1) * PAGE_SIZE
@@ -28,12 +37,21 @@ try {
 }
 
 const totalPages = calculateTotalPages(totalCount, PAGE_SIZE)
-const pageTitle = `検索結果：${searchTerm || '絞り込み結果'} (${totalCount}件)`
-const pageDescription = `${totalCount}件の検索結果が見つかりました`
+
+// Localized titles and descriptions
+const searchResultsLabel = getUILabel(lang, 'searchResults') || 'Search Results'
+const filterResultsLabel = getUILabel(lang, 'filterResults') || 'Filter Results'
+const resultsFoundLabel = getUILabel(lang, 'resultsFound') || 'results found'
+
+const pageTitle = `${searchResultsLabel}: ${searchTerm || filterResultsLabel} (${totalCount} ${resultsFoundLabel})`
+const pageDescription = `${totalCount} ${resultsFoundLabel}`
 const canonicalUrl = url.pathname + url.search
 
 // Build query params for Pagination component (keeps current filters)
 const queryParams: Record<string, string> = Object.fromEntries(url.searchParams)
+
+// Generate proper basePath for this language
+const basePath = `/${lang}/search`
 ---
 
 <ArticleIndex 
@@ -41,7 +59,7 @@ const queryParams: Record<string, string> = Object.fromEntries(url.searchParams)
   currentPage={page}
   totalPages={totalPages}
   lang={lang}
-  basePath="/search"
+  basePath={basePath}
   pageTitle={pageTitle}
   pageDescription={pageDescription}
   canonicalUrl={canonicalUrl}

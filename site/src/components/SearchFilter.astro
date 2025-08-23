@@ -438,6 +438,9 @@ const prefectures = [
       const selectedType = this.typeFilter?.value || this.typeFilterDesktop?.value || ''
       const selectedPrefecture = this.prefectureFilter?.value || this.prefectureFilterDesktop?.value || ''
 
+      // 現在の言語を取得
+      const currentLang = ROOT_EL?.dataset.lang || 'ja'
+
       // 状態を保存
       this.saveState()
 
@@ -447,20 +450,30 @@ const prefectures = [
         if (searchTerm) params.set('q', searchTerm)
         if (selectedType) params.set('type', selectedType)
         if (selectedPrefecture) params.set('prefecture', selectedPrefecture)
-        window.location.href = `/search?${params.toString()}`
+        
+        // 言語に応じて適切な検索ページにリダイレクト
+        const searchPath = currentLang === 'ja' ? '/search' : `/${currentLang}/search`
+        window.location.href = `${searchPath}?${params.toString()}`
         return
       }
 
       // 条件が空で検索ページにいる場合はトップへ
-      if (window.location.pathname === '/search') {
-        window.location.href = '/'
+      const currentPath = window.location.pathname
+      if (currentPath === '/search' || currentPath.endsWith('/search')) {
+        const homePath = currentLang === 'ja' ? '/' : `/${currentLang}/`
+        window.location.href = homePath
       }
     }
 
     resetFilters() {
+      // 現在の言語を取得
+      const currentLang = ROOT_EL?.dataset.lang || 'ja'
+      
       // 検索ページにいる場合はトップページに戻る
-      if (window.location.pathname === '/search') {
-        window.location.href = '/'
+      const currentPath = window.location.pathname
+      if (currentPath === '/search' || currentPath.endsWith('/search')) {
+        const homePath = currentLang === 'ja' ? '/' : `/${currentLang}/`
+        window.location.href = homePath
         return
       }
       // Reset mobile inputs

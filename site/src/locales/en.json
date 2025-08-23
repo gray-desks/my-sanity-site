@@ -22,5 +22,8 @@
   "hotel": "Hotel",
   "note": "Note",
   "allPrefectures": "All Prefectures",
-  "reset": "Reset"
+  "reset": "Reset",
+  "searchResults": "Search Results",
+  "filterResults": "Filter Results",
+  "resultsFound": "results found"
 }
