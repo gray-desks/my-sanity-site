@@ -88,19 +88,17 @@ const pageLabel = getUILabel(lang, 'page')
         rel="prev"
         aria-label={`${prevLabel} (${pageLabel} ${currentPage - 1})`}
       >
-        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg class="w-4 h-4 sm:mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
         </svg>
         <span class="hidden sm:inline">{prevLabel}</span>
-        <span class="sm:hidden">‹</span>
       </a>
     ) : (
       <span class="flex items-center px-4 py-2 text-sm font-medium text-gray-400 bg-gray-50 border border-gray-200 rounded-lg cursor-not-allowed">
-        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg class="w-4 h-4 sm:mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
         </svg>
         <span class="hidden sm:inline">{prevLabel}</span>
-        <span class="sm:hidden">‹</span>
       </span>
     )}
 
@@ -138,16 +136,14 @@ const pageLabel = getUILabel(lang, 'page')
         aria-label={`${nextLabel} (${pageLabel} ${currentPage + 1})`}
       >
         <span class="hidden sm:inline">{nextLabel}</span>
-        <span class="sm:hidden">›</span>
-        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg class="w-4 h-4 sm:ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
         </svg>
       </a>
     ) : (
       <span class="flex items-center px-4 py-2 text-sm font-medium text-gray-400 bg-gray-50 border border-gray-200 rounded-lg cursor-not-allowed">
         <span class="hidden sm:inline">{nextLabel}</span>
-        <span class="sm:hidden">›</span>
-        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg class="w-4 h-4 sm:ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
         </svg>
       </span>
