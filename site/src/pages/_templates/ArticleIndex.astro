@@ -59,45 +59,32 @@ const structuredData = {
   <!-- Structured Data -->
   <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
 
-  <!-- Hero Section (only on first page) -->
-  {currentPage === 1 && <Hero lang={lang} />}
+  <!-- Hero Section (consistent across all pages) -->
+  <Hero lang={lang} />
 
-  <!-- SearchFilter is embedded inside Hero on the first page -->
-
-  <!-- Top Ad - ヒーローの下に配置 (only on first page) -->
-  {currentPage === 1 && (
-    <div class="max-w-4xl lg:max-w-7xl mx-auto px-4 pt-2">
-      <AdSlot
-        slotId={ADS_SLOTS.HOME_HERO}
-        format="horizontal" 
-        reserveHeight={120}
-        label={getUILabel(lang, 'advertisement')}
-        class="mb-6"
-      />
-    </div>
-  )}
+  <!-- Top Ad - ヒーローの下に配置 -->
+  <div class="max-w-4xl lg:max-w-7xl mx-auto px-4 pt-2">
+    <AdSlot
+      slotId={ADS_SLOTS.HOME_HERO}
+      format="horizontal" 
+      reserveHeight={120}
+      label={getUILabel(lang, 'advertisement')}
+      class="mb-6"
+    />
+  </div>
 
   <div class="max-w-7xl mx-auto px-4 py-8 space-y-16">
     <!-- Page Title for pagination pages -->
     {currentPage > 1 && (
       <div class="text-center">
-        <h1 class="text-3xl md:text-4xl font-bold text-ink mb-4">
-          {getUILabel(lang, 'siteTitle')}
-        </h1>
         <p class="text-lg text-secondary mb-2">
           {lang === 'en' 
             ? `${getUILabel(lang, 'page')} ${currentPage} ${getUILabel(lang, 'pageOf')} ${totalPages}` 
             : `${totalPages}${getUILabel(lang, 'pageOf')} ${currentPage}${getUILabel(lang, 'pageNumber')}`
           }
         </p>
-        <p class="text-secondary">
-          {getUILabel(lang, 'siteDescription')}
-        </p>
       </div>
     )}
-
-    <!-- Search and Filter Section for pagination pages -->
-    {currentPage > 1 && <SearchFilter lang={lang} />}
     
     <!-- Articles Section -->
     <section id="articles" class="relative">
