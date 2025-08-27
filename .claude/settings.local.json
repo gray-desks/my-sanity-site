@@ -30,7 +30,7 @@
       "Bash(npm ls:*)",
       "Bash(SANITY_LOG_LEVEL=debug npx sanity dev --port 9999)",
       "Bash(SANITY_LOG_LEVEL=debug npx sanity build --clean)",
-      "Bash(SANITY_WRITE_TOKEN=skBGZBgsjc6HR2ouOvbIiDoNxIn6f2gKkqcIymaOEdPJpXNdQU0x0yT07Zpu2Liq90CbpNmaYHIrhEg8C node seed/seed-articles.js)",
+      "Bash(SANITY_WRITE_TOKEN=skIEgntbPGwbKWFk4tV5SWJle19glkvexwkeqbaP5P5diBs74oPmzuDObOAS8Q1xKgfBLghKFvGbkgQuF3BDh5tMhEMrluWPeRLc93DWjb2ZeUf2yHnGKN0JqTztAxYEDOP1zilJw6M6y2PD0gtHe8R3mrY5a3ZyJft2FAo0Byqk18uPLoZ9 node seed/seed-articles.js)",
       "Bash(curl:*)",
       "Bash(npx vercel:*)",
       "Bash(npm run e2e:*)",
