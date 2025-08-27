@@ -70,6 +70,8 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
         clearBtn.onclick = function() {
           clearArticleForm();
         };
+      } else {
+        console.warn('Clear button not found');
       }
     }
     
@@ -181,7 +183,14 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
 
     // Article management functions
     async function saveArticle() {
-      const contentText = document.getElementById('article-content').value;
+      const contentField = document.getElementById('article-content');
+      if (!contentField) {
+        console.error('Article content field not found');
+        showNotification('フォーム要素が見つかりません', 'error');
+        return;
+      }
+      
+      const contentText = contentField.value;
       
       if (!contentText.trim()) {
         showNotification('記事内容を入力してください', 'warning');
@@ -189,7 +198,13 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
       }
 
       const saveBtn = document.getElementById('save-article-btn');
-      const originalText = saveBtn.textContent;
+      if (!saveBtn) {
+        console.error('Save button not found');
+        showNotification('フォームの要素が見つかりません', 'error');
+        return;
+      }
+      
+      const originalText = saveBtn.textContent || '記事を作成';
       
       saveBtn.disabled = true;
       saveBtn.textContent = '作成中...';
@@ -286,8 +301,10 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
         
         showNotification(errorMessage, 'error');
       } finally {
-        saveBtn.disabled = false;
-        saveBtn.textContent = originalText;
+        if (saveBtn) {
+          saveBtn.disabled = false;
+          saveBtn.textContent = originalText;
+        }
       }
     }
 
@@ -498,8 +515,14 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
     }
 
     function clearArticleForm() {
-      document.getElementById('article-content').value = '';
-      showNotification('フォームをクリアしました', 'info');
+      const contentField = document.getElementById('article-content');
+      if (contentField) {
+        contentField.value = '';
+        showNotification('フォームをクリアしました', 'info');
+      } else {
+        console.error('Article content field not found');
+        showNotification('フォーム要素が見つかりません', 'error');
+      }
     }
 
     function getTypeEmoji(type) {
