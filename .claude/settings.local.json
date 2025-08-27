@@ -83,7 +83,8 @@
       "mcp__serena__read_memory",
       "Read(//var/folders/mf/857mvkr90pngs73rrb_860z00000gn/T/TemporaryItems/NSIRD_screencaptureui_iu8YGs/**)",
       "Read(//var/folders/mf/857mvkr90pngs73rrb_860z00000gn/T/TemporaryItems/NSIRD_screencaptureui_W1StvW/**)",
-      "Read(/var/folders/mf/857mvkr90pngs73rrb_860z00000gn/T/TemporaryItems/NSIRD_screencaptureui_hvJZjQ/**)"
+      "Read(/var/folders/mf/857mvkr90pngs73rrb_860z00000gn/T/TemporaryItems/NSIRD_screencaptureui_hvJZjQ/**)",
+      "Read(/var/folders/mf/857mvkr90pngs73rrb_860z00000gn/T/TemporaryItems/NSIRD_screencaptureui_F3zgyd/**)"
     ],
     "deny": [],
     "defaultMode": "acceptEdits",
