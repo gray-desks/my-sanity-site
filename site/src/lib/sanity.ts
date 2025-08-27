@@ -8,13 +8,25 @@ export const client = createClient({
   apiVersion: '2024-01-01',
 })
 
+// Get environment variables with proper fallbacks for different environments
+const getSanityToken = () => {
+  // Try different ways to get the token based on environment
+  if (typeof process !== 'undefined' && process.env.SANITY_WRITE_TOKEN) {
+    return process.env.SANITY_WRITE_TOKEN;
+  }
+  if (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.SANITY_WRITE_TOKEN) {
+    return import.meta.env.SANITY_WRITE_TOKEN;
+  }
+  return null;
+};
+
 // Write client for mutations (requires token)
 export const writeClient = createClient({
   projectId: 'fcz6on8p',
   dataset: 'production',
   useCdn: false, // Don't use CDN for write operations
   apiVersion: '2024-01-01',
-  token: import.meta.env.SANITY_WRITE_TOKEN || process.env.SANITY_WRITE_TOKEN,
+  token: getSanityToken(),
 })
 
 

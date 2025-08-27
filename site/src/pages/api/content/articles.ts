@@ -34,6 +34,10 @@ export const POST: APIRoute = async ({ request }) => {
   };
 
   console.log('POST request received');
+  console.log('Environment variables check:');
+  console.log('- SANITY_WRITE_TOKEN exists:', !!import.meta.env.SANITY_WRITE_TOKEN);
+  console.log('- Process env SANITY_WRITE_TOKEN exists:', !!process.env.SANITY_WRITE_TOKEN);
+  console.log('- Sanity client token configured:', !!sanityClient.config().token);
   
   try {
     // Check if Sanity write token is configured
@@ -160,6 +164,10 @@ export const POST: APIRoute = async ({ request }) => {
     
   } catch (error: any) {
     console.error('Error creating article:', error);
+    console.error('Error name:', error.name);
+    console.error('Error message:', error.message);
+    console.error('Error stack:', error.stack);
+    console.error('Full error object:', JSON.stringify(error, null, 2));
     
     // Parse different types of Sanity errors
     let errorMessage = '記事の作成に失敗しました';
