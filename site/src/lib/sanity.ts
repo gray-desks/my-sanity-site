@@ -1,6 +1,24 @@
 import { createClient } from '@sanity/client'
 import { ENABLED_LANGUAGES, DEFAULT_LANGUAGE, type Language } from './i18n'
 
+// Normalize a potentially malformed token to avoid invalid Authorization header values
+const sanitizeToken = (raw: string | null | undefined): string | undefined => {
+  if (!raw) return undefined
+  let t = String(raw)
+    .replace(/\r?\n/g, '') // remove any newlines
+    .replace(/\t/g, '') // remove tabs
+    .trim()
+  // Remove surrounding quotes if present
+  if ((t.startsWith('"') && t.endsWith('"')) || (t.startsWith("'") && t.endsWith("'"))) {
+    t = t.slice(1, -1)
+  }
+  // Some environments mistakenly include the Bearer prefix in the env var
+  t = t.replace(/^Bearer\s+/i, '')
+  // Tokens should have no spaces
+  t = t.replace(/\s+/g, '')
+  return t || undefined
+}
+
 export const client = createClient({
   projectId: 'fcz6on8p',
   dataset: 'production',
@@ -9,15 +27,15 @@ export const client = createClient({
 })
 
 // Get environment variables with proper fallbacks for different environments
-const getSanityToken = () => {
+const getSanityToken = (): string | undefined => {
   // Try different ways to get the token based on environment
-  if (typeof process !== 'undefined' && process.env.SANITY_WRITE_TOKEN) {
-    return process.env.SANITY_WRITE_TOKEN;
+  let tok: string | null = null
+  if (typeof process !== 'undefined' && process.env && typeof process.env.SANITY_WRITE_TOKEN === 'string' && process.env.SANITY_WRITE_TOKEN) {
+    tok = process.env.SANITY_WRITE_TOKEN
+  } else if (typeof import.meta !== 'undefined' && (import.meta as any).env && (import.meta as any).env.SANITY_WRITE_TOKEN) {
+    tok = (import.meta as any).env.SANITY_WRITE_TOKEN as string
   }
-  if (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.SANITY_WRITE_TOKEN) {
-    return import.meta.env.SANITY_WRITE_TOKEN;
-  }
-  return null;
+  return sanitizeToken(tok)
 };
 
 // Write client for mutations (requires token)
