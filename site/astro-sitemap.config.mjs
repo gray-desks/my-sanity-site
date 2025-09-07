@@ -3,24 +3,21 @@
  * 多言語サイトマップとhreflang自動生成設定
  */
 
-import { getLangIds, getHreflangCode } from './src/lib/getSupportedLangs.ts'
+import { getHreflangCode } from './src/lib/getSupportedLangs.ts'
 
 export default {
-  // サイトURL
-  site: 'https://my-sanity-site.vercel.app',
+  // サイトURL（独自ドメインに統一）
+  site: 'https://www.japantravellog.com',
   
   // サイトマップ生成設定
   changefreq: 'weekly',
   priority: 0.7,
   lastmod: new Date(),
   
-  // 多言語hreflang設定
+  // 多言語hreflang設定（審査期間中は日本語のみ露出）
   i18n: {
     defaultLocale: 'ja',
-    locales: getLangIds().reduce((acc, langId) => {
-      acc[langId] = getHreflangCode(langId)
-      return acc
-    }, {}),
+    locales: { ja: getHreflangCode('ja') },
   },
   
   // カスタムページ設定
@@ -29,13 +26,8 @@ export default {
       url: '/',
       changefreq: 'daily',
       priority: 1.0,
-      // 多言語版のURL
-      alternates: getLangIds()
-        .filter(langId => langId !== 'ja')
-        .map(langId => ({
-          href: `/${langId}/`,
-          hreflang: getHreflangCode(langId)
-        }))
+      // 当面 alternates は出さない
+      alternates: []
     }
   ],
   
@@ -56,6 +48,6 @@ export default {
         disallow: ['/api/', '/admin/', '/_astro/']
       }
     ],
-    sitemap: 'https://my-sanity-site.vercel.app/sitemap-index.xml'
+    sitemap: 'https://www.japantravellog.com/sitemap-index.xml'
   }
 }

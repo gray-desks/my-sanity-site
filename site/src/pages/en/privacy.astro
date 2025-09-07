@@ -1,107 +1,18 @@
 ---
-import Layout from '../../layouts/Layout.astro'
-
-// Privacy policy last updated date
-const lastUpdated = 'August 9, 2025'
+// 英語版プライバシーポリシーは日本語版へ恒久的にリダイレクト
+Astro.redirect('/privacy')
 ---
 
-<Layout 
-  title="Privacy Policy - Japan Travel Journal"
-  description="Privacy Policy for Japan Travel Journal. Learn about our Cookie usage, Google AdSense, Google Analytics and data collection practices."
-  lang="en"
->
-  <div class="max-w-3xl mx-auto px-4 py-10">
-    <div class="prose prose-lg max-w-none">
-      <h1 class="text-3xl font-bold text-gray-900 mb-2">Privacy Policy</h1>
-      <p class="text-sm text-gray-600 mb-8">Last updated: {lastUpdated}</p>
-      
-      <div class="space-y-8">
-        <section>
-          <h2 class="text-2xl font-semibold text-gray-800 mb-4">1. Introduction</h2>
-          <p>Japan Travel Log (hereinafter referred to as "this site") is committed to protecting your personal information. This Privacy Policy explains how we collect, use, and safeguard your data.</p>
-        </section>
-
-        <section>
-          <h2 class="text-2xl font-semibold text-gray-800 mb-4">2. Information We Collect</h2>
-          <p>For the purposes of improving our services and delivering advertisements, we may automatically collect the following information:</p>
-          <ul class="list-disc pl-6 mt-3 space-y-1">
-            <li>IP address</li>
-            <li>Browser type and version</li>
-            <li>Operating system</li>
-            <li>Date and time of access</li>
-            <li>Pages viewed and referring URLs</li>
-          </ul>
-        </section>
-
-        <section>
-          <h2 class="text-2xl font-semibold text-gray-800 mb-4">3. Use of Cookies</h2>
-          <p>This site uses cookies to enhance user experience and display relevant advertisements.<br>
-          You can disable cookies in your browser settings, but some features of the site may not function properly.</p>
-        </section>
-
-        <section>
-          <h2 class="text-2xl font-semibold text-gray-800 mb-4">4. About Google AdSense</h2>
-          <p>We use Google AdSense, a service provided by Google, to display advertisements.<br>
-          Google and its partners use cookies to serve ads based on your interests and previous visits to this site or other websites.<br>
-          For more details, please refer to the Google Policies and Terms.</p>
-        </section>
-
-        <section>
-          <h2 class="text-2xl font-semibold text-gray-800 mb-4">5. Analytics Tools</h2>
-          <p>This site uses Google Analytics to analyze website usage.<br>
-          Google Analytics uses cookies, but the data collected does not include personally identifiable information.<br>
-          For more information, please see the Google Privacy Policy.</p>
-        </section>
-
-        <section>
-          <h2 class="text-2xl font-semibold text-gray-800 mb-4">6. Provision to Third Parties</h2>
-          <p>We do not provide personal information to third parties without the user's consent, except as required by law.</p>
-        </section>
-
-        <section>
-          <h2 class="text-2xl font-semibold text-gray-800 mb-4">7. Disclaimer</h2>
-          <p>We make no guarantees regarding the accuracy, completeness, or usefulness of the content on this site.<br>
-          We are not responsible for any damages resulting from the use of this site.<br>
-          We also assume no responsibility for the content or privacy practices of external sites linked from this site.</p>
-        </section>
-
-        <section>
-          <h2 class="text-2xl font-semibold text-gray-800 mb-4">8. Changes to This Policy</h2>
-          <p>We may update this Privacy Policy when necessary.<br>
-          Any changes will take effect when posted on this page.</p>
-        </section>
-
-        <section>
-          <h2 class="text-2xl font-semibent text-gray-800 mb-4">9. Contact</h2>
-          <p>If you have any questions about this Privacy Policy, please contact us at:</p>
-          
-          <div class="bg-gray-50 p-4 rounded-lg mt-4">
-            <p><strong>Operator:</strong> Hide</p>
-            <p><strong>Email:</strong> yamazaki2357@gmail.com</p>
-          </div>
-        </section>
-      </div>
-    </div>
-  </div>
-</Layout>
-
-<style>
-  /* Privacy policy specific styles */
-  .prose h2 {
-    border-bottom: 2px solid #e5e7eb;
-    padding-bottom: 0.5rem;
-  }
-  
-  .prose a {
-    color: #2563eb;
-    text-decoration: underline;
-  }
-  
-  .prose a:hover {
-    color: #1d4ed8;
-  }
-  
-  .prose ul li {
-    margin-bottom: 0.25rem;
-  }
-</style>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta http-equiv="refresh" content="0;url=/privacy" />
+    <link rel="canonical" href="/privacy" />
+    <title>Redirecting...</title>
+  </head>
+  <body>
+    <p>Redirecting to <a href="/privacy">/privacy</a> ...</p>
+  </body>
+</html>

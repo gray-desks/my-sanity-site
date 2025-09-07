@@ -2,7 +2,7 @@
 import Layout from '../layouts/Layout.astro'
 
 // プライバシーポリシーの最終更新日
-const lastUpdated = '2025年8月9日'
+const lastUpdated = '2025年9月8日'
 ---
 
 <Layout 
@@ -18,66 +18,82 @@ const lastUpdated = '2025年8月9日'
       <div class="space-y-8">
         <section>
           <h2 class="text-2xl font-semibold text-gray-800 mb-4">1. はじめに</h2>
-          <p>旅ログ（以下「当サイト」）は、ユーザーの皆様に安心してご利用いただくため、個人情報の取扱いについて以下のとおりプライバシーポリシーを定めます。</p>
+          <p>旅ログ（以下「当サイト」）は、ユーザーの皆様に安心してご利用いただくため、個人情報・行動情報の取扱いについて本ポリシーを定めます。</p>
         </section>
 
         <section>
           <h2 class="text-2xl font-semibold text-gray-800 mb-4">2. 収集する情報</h2>
-          <p>当サイトでは、サービス改善や広告配信のため、以下の情報を自動的に収集する場合があります。</p>
+          <p>当サイトでは、サービス改善・セキュリティ確保・広告配信・アクセス解析のため、以下の情報を自動的に収集する場合があります。</p>
           <ul class="list-disc pl-6 mt-3 space-y-1">
-            <li>IPアドレス</li>
-            <li>ブラウザの種類・バージョン</li>
+            <li>IPアドレス、地域推定情報</li>
+            <li>ブラウザの種類・バージョン、ユーザーエージェント</li>
             <li>オペレーティングシステム</li>
-            <li>アクセス日時</li>
-            <li>閲覧ページや参照元URL</li>
+            <li>アクセス日時、閲覧ページ、遷移元URL</li>
+            <li>Cookieや匿名ID等のオンライン識別子</li>
           </ul>
         </section>
 
         <section>
-          <h2 class="text-2xl font-semibold text-gray-800 mb-4">3. Cookieの利用</h2>
-          <p>当サイトは、ユーザー体験向上および広告配信のためにCookieを使用します。<br>
-          Cookieはブラウザ設定により無効化できますが、一部機能が利用できなくなる場合があります。</p>
+          <h2 class="text-2xl font-semibold text-gray-800 mb-4">3. Cookieおよび同様の技術</h2>
+          <p>当サイトは、ユーザー体験の向上、広告の配信・計測、アクセス解析のためにCookie等を使用します。Cookieはブラウザ設定で削除・拒否が可能ですが、一部機能が利用できなくなる場合があります。</p>
+          <p class="mt-2">主要ブラウザのヘルプ: <a href="https://support.google.com/chrome/answer/95647?hl=ja" target="_blank" rel="noopener">Chrome</a> / <a href="https://support.mozilla.org/ja/kb/block-cookies" target="_blank" rel="noopener">Firefox</a> / <a href="https://support.apple.com/ja-jp/guide/safari/sfri11471/mac" target="_blank" rel="noopener">Safari</a> / <a href="https://support.microsoft.com/ja-jp/topic/-cookies-windows-%E3%81%AE%E3%82%AF%E3%83%AA%E3%82%A2%E3%81%AA%E3%81%A9-cc56958f-4a0b-9a0f-2ad7-00e35d2a06d6" target="_blank" rel="noopener">Edge</a></p>
         </section>
 
         <section>
-          <h2 class="text-2xl font-semibold text-gray-800 mb-4">4. Google AdSenseについて</h2>
-          <p>当サイトではGoogleが提供する広告配信サービス「Google AdSense」を利用しています。<br>
-          GoogleやそのパートナーはCookieを使用し、ユーザーの興味・関心に基づく広告を配信します。<br>
-          詳細はGoogleポリシーと規約をご確認ください。</p>
+          <h2 class="text-2xl font-semibold text-gray-800 mb-4">4. Google AdSense（第三者配信広告）</h2>
+          <p>当サイトではGoogleが提供する広告配信サービス「Google AdSense」を利用します。GoogleおよびそのパートナーはCookie等を使用し、本サイトや他サイトへの過去のアクセス情報に基づいて、ユーザーの興味・関心に応じた広告（パーソナライズド広告）を配信します。</p>
+          <ul class="list-disc pl-6 mt-3 space-y-1">
+            <li>パーソナライズド広告の無効化（Google 広告設定）: <a href="https://adssettings.google.com/authenticated" target="_blank" rel="noopener">https://adssettings.google.com/authenticated</a></li>
+            <li>オンライン広告業界の選択オプトアウト: <a href="https://optout.aboutads.info/" target="_blank" rel="noopener">https://optout.aboutads.info/</a></li>
+            <li>Googleのデータ利用について: <a href="https://policies.google.com/technologies/ads?hl=ja" target="_blank" rel="noopener">Googleの広告に関するポリシー</a></li>
+          </ul>
         </section>
 
         <section>
-          <h2 class="text-2xl font-semibold text-gray-800 mb-4">5. アクセス解析ツールについて</h2>
-          <p>当サイトではGoogle Analyticsを利用し、サイト利用状況を分析しています。<br>
-          Google AnalyticsはCookieを使用しますが、個人を特定する情報は含まれません。<br>
-          詳細はGoogleプライバシーポリシーをご確認ください。</p>
+          <h2 class="text-2xl font-semibold text-gray-800 mb-4">5. アクセス解析（Google Analytics）</h2>
+          <p>当サイトはGoogle Analyticsを利用してサイトの利用状況を分析します。Google AnalyticsはCookieを使用して匿名のトラフィックデータを収集し、個人を直接特定する情報は含みません。</p>
+          <ul class="list-disc pl-6 mt-3 space-y-1">
+            <li>Google プライバシーポリシー: <a href="https://policies.google.com/privacy?hl=ja" target="_blank" rel="noopener">https://policies.google.com/privacy?hl=ja</a></li>
+            <li>オプトアウト アドオン: <a href="https://tools.google.com/dlpage/gaoptout?hl=ja" target="_blank" rel="noopener">Google Analytics オプトアウト</a></li>
+          </ul>
         </section>
 
         <section>
-          <h2 class="text-2xl font-semibold text-gray-800 mb-4">6. 第三者への提供</h2>
-          <p>当サイトは、法令で定められた場合を除き、ユーザーの同意なく個人情報を第三者に提供しません。</p>
+          <h2 class="text-2xl font-semibold text-gray-800 mb-4">6. 個人情報の利用目的・第三者提供</h2>
+          <p>当サイトは、法令に基づく場合を除き、本人の同意なく個人情報を第三者へ提供しません。利用目的は以下のとおりです。</p>
+          <ul class="list-disc pl-6 mt-3 space-y-1">
+            <li>コンテンツ提供、問い合わせ対応</li>
+            <li>サイトの品質向上、統計分析</li>
+            <li>不正アクセス等の防止、セキュリティ確保</li>
+          </ul>
         </section>
 
         <section>
-          <h2 class="text-2xl font-semibold text-gray-800 mb-4">7. 免責事項</h2>
-          <p>当サイトのコンテンツの正確性・完全性・有用性について保証しません。<br>
-          当サイト利用により生じた損害について、運営者は責任を負いません。<br>
-          また、外部サイトの内容やプライバシーポリシーについても責任を負いません。</p>
+          <h2 class="text-2xl font-semibold text-gray-800 mb-4">7. 保存期間・安全管理措置</h2>
+          <p>取得した情報は、利用目的の達成に必要な範囲で適切に保存し、不要となった情報は速やかに削除します。外部サービスに保存されるデータについては、各サービス提供事業者の管理方針に従います。</p>
         </section>
 
         <section>
-          <h2 class="text-2xl font-semibold text-gray-800 mb-4">8. プライバシーポリシーの変更</h2>
-          <p>当サイトは、必要に応じて本ポリシーを変更する場合があります。<br>
-          変更後は、本ページに掲載された時点で効力を生じます。</p>
+          <h2 class="text-2xl font-semibold text-gray-800 mb-4">8. 未成年者のプライバシー</h2>
+          <p>当サイトは13歳未満の児童から故意に個人情報を収集しません。保護者の同意なく提供されたことが判明した場合、速やかに削除します。</p>
         </section>
 
         <section>
-          <h2 class="text-2xl font-semibold text-gray-800 mb-4">9. お問い合わせ</h2>
+          <h2 class="text-2xl font-semibold text-gray-800 mb-4">9. 免責事項</h2>
+          <p>当サイトのコンテンツの正確性・完全性・有用性を保証するものではありません。当サイトの利用により生じた損害について、運営者は一切の責任を負いません。外部サイトの内容やプライバシーポリシーについても責任を負いません。</p>
+        </section>
+
+        <section>
+          <h2 class="text-2xl font-semibold text-gray-800 mb-4">10. 本ポリシーの改定</h2>
+          <p>本ポリシーは、法令やサービス内容の変更等に応じて予告なく改定する場合があります。改定後は本ページへの掲示時点で効力を生じます。</p>
+        </section>
+
+        <section>
+          <h2 class="text-2xl font-semibold text-gray-800 mb-4">11. お問い合わせ</h2>
           <p>本ポリシーに関するお問い合わせは、以下までご連絡ください。</p>
-          
           <div class="bg-gray-50 p-4 rounded-lg mt-4">
-            <p><strong>運営者:</strong> ひで</p>
-            <p><strong>連絡先:</strong> yamazaki2357@gmail.com</p>
+            <p><strong>運営者:</strong> 山﨑秀国（HIDEKUNI YAMAZAKI）</p>
+            <p><strong>連絡先:</strong> <a class="underline" href="mailto:yamazaki2357@gmail.com">yamazaki2357@gmail.com</a></p>
           </div>
         </section>
       </div>

@@ -36,8 +36,8 @@ export default defineConfig({
     }
   },
   
-  // サイト設定
-  site: 'https://my-sanity-site.vercel.app',
+  // サイト設定（独自ドメインに統一）
+  site: 'https://www.japantravellog.com',
   
   // ビルド設定
   // API ルートを含むサーバーレス関数を有効にするため、"static" ではなく "server" モードに変更

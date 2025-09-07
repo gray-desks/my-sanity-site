@@ -91,7 +91,9 @@
       "Read(/var/folders/mf/857mvkr90pngs73rrb_860z00000gn/T/TemporaryItems/NSIRD_screencaptureui_hnZcOV/**)",
       "Bash(cat:*)",
       "Bash(echo:*)",
-      "Read(/var/folders/mf/857mvkr90pngs73rrb_860z00000gn/T/TemporaryItems/NSIRD_screencaptureui_8vfm1q/**)"
+      "Read(/var/folders/mf/857mvkr90pngs73rrb_860z00000gn/T/TemporaryItems/NSIRD_screencaptureui_8vfm1q/**)",
+      "WebFetch(domain:my-sanity-site.vercel.app)",
+      "WebSearch"
     ],
     "deny": [],
     "defaultMode": "acceptEdits",

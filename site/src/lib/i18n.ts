@@ -41,8 +41,8 @@ export const ALL_LANGUAGES: Language[] = [
   { id: 'id', title: 'Indonesian', nativeName: 'Bahasa Indonesia', shortName: 'ID', dir: 'ltr', phase: 2, enabled: true },
 ]
 
-// 現在有効な言語のみを取得
-export const ENABLED_LANGUAGES = ALL_LANGUAGES.filter(lang => lang.enabled)
+// 現在有効な言語のみを取得（審査期間中は日本語のみに限定）
+export const ENABLED_LANGUAGES = ALL_LANGUAGES.filter(lang => lang.id === 'ja')
 
 // デフォルト言語
 export const DEFAULT_LANGUAGE = 'ja'
@@ -196,13 +196,13 @@ export const UI_LABELS = {
     comingSoon: '準備中',
     switchLanguage: '言語を切り替え',
     siteTitle: '旅ログ',
-    siteDescription: '日本全国の旅記録を多言語で発信',
+    siteDescription: '日本全国の旅記録を世界へ届ける',
     home: 'ホーム',
     english: '英語',
     privacy: 'プライバシー',
     allRightsReserved: '全著作権所有。',
-    heroTitle: '日本全国の旅ログを発信',
-    heroSubtitle: '美しい景色、美味しい食べ物、文化体験を多言語で共有',
+    heroTitle: '日本全国の旅ログをお届け',
+    heroSubtitle: '美しい景色、美味しい食べ物、文化体験を世界へ発信',
     readStories: '記事を読む',
     switchToEnglish: '英語',
     search: '検索',
@@ -234,7 +234,7 @@ export const UI_LABELS = {
     searchResults: '検索結果',
     filterResults: '絞り込み結果',
     resultsFound: '件見つかりました',
-    footerDescription: '日本全国の美しい風景、伝統文化、美食体験を世界20言語で発信。一期一会の旅の記録をお届けします。',
+    footerDescription: '日本全国の美しい風景、伝統文化、美食体験を世界へ発信。一期一会の旅の記録をお届けします。',
     footerTagline: '― 心に残る旅の記録を、世界へ ―',
   },
   en: {
