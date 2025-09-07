@@ -13,9 +13,7 @@
     "deploy:studio": "sanity deploy",
     "deploy-graphql": "sanity graphql deploy",
     "lint": "echo \"No TypeScript files to lint\"",
-    "typecheck": "tsc --noEmit",
-    "test": "vitest",
-    "test:coverage": "vitest --coverage"
+    "typecheck": "tsc --noEmit"
   },
   "keywords": [
     "sanity"
@@ -34,7 +32,6 @@
     "@types/node": "^20.14.0",
     "@types/react": "^19.1",
     "prettier": "^3.3.0",
-    "typescript": "^5.8",
-    "vitest": "^2.1.1"
+    "typescript": "^5.8"
   }
 }

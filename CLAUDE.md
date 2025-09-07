@@ -91,7 +91,7 @@ npm run deploy:studio
 cd site && npm run dev      # localhost:4321
 cd site && npm run build
 
-# === 全ビルドテスト ===
+# === 全ビルド ===
 npm run build && cd site && npm run build
 
 ---
@@ -191,7 +191,6 @@ v1.0	20 言語フル自動翻訳 + マップ埋込
 - `supportedLanguages.js` ✅ **更新完了**
 - `sanity.config.js` - documentInternationalization設定
 - `site/src/` - Astroルーティング・コンポーネント
-- テストファイル群
 
 ---
 
@@ -266,11 +265,6 @@ Document types: article
 Secret: [REVALIDATE_SECRET と同じ値]
 ```
 
-##### E2E Test Suite
-```bash
-cd site && npm run e2e
-```
-**チェック項目**: Homepage(JA/EN), Article routes, 404 handling, ISR endpoint, CORS headers, Redirects
 
 ### v0.2.2 Schema Synchronization for Translation Pipeline (2025-08-06)
 **実装**: 翻訳自動化パイプラインとのスキーマ同期完了
@@ -281,7 +275,6 @@ cd site && npm run e2e
 - **オプションフィールド**: `tags`, `placeName`, `translationOf` 対応
 - **多言語サポート**: 20言語対応 (ja, en, zh-cn, zh-tw, ko, th, vi, id, ms, tl, fr, de, es, it, pt, ru, ar, hi, tr, pt-br)
 - **フィールド名変更**: `body` → `content` (Article スキーマ用)
-- **テスト修正**: 新スキーマ対応で全20テスト成功
 
 #### 🔧 Schema 変更詳細
 **Required Fields** (validation: Rule.required()):
@@ -308,13 +301,6 @@ cd site && npm run e2e
 **Webhook Ready**: article 作成/更新/削除時の翻訳トリガー対応  
 **Field Validation**: 翻訳時の "Unknown fields" エラー解消
 
-#### 🧪 Test Updates
-**修正ファイル**:
-- `tests/post.test.ts` - 新スキーマ対応テストケース更新
-- `scripts/post-testable.ts` - FrontMatter インターフェース & ロジック更新
-
-**テスト結果**: 20/20 tests passed ✅  
-**検証項目**: 必須フィールド処理、多言語サポート、backward compatibility
 
 ### v0.2.3 DeepL API対応20言語への移行完了 (2025-08-10)
 **実装**: 翻訳パイプライン互換性改善 + 言語設定統一
@@ -340,15 +326,10 @@ cd site && npm run e2e
 - `i18n.ts`: 20言語分のUI翻訳追加
 
 #### 📊 検証結果
-**ビルドテスト**: ✅ **全言語成功**
+**ビルド検証**: ✅ **全言語成功**
 - Sanity Studio: ビルドクリア
 - Astro Frontend: 20言語プリレンダリング成功
 - サイトマップ: 全言語URL生成完了
-
-**テストスイート**: ✅ **41/41テスト成功**
-- textParser: 21テスト成功
-- markdown: 11テスト成功  
-- post: 9テスト成功
 
 #### 🌍 対応言語 (20言語)
 **原文**: 日本語 (ja)
