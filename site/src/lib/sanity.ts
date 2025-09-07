@@ -440,46 +440,6 @@ export async function getEnabledLanguageArticleSlugs(): Promise<{slug: string, t
   return allSlugs.filter(item => enabledLangCodes.includes(item.lang))
 }
 
-// 記事の統計情報取得（言語・種類・タグの分布）
-export async function getArticleStats(): Promise<{
-  totalArticles: number
-  articlesByLanguage: Record<string, number>
-  articlesByType: Record<string, number>
-  articlesByPrefecture: Record<string, number>
-  articlesByTag: Record<string, number>
-}> {
-  // 必要最小限のフィールドのみ取得
-  const query = `
-    *[_type == "article"]{
-      "lang": coalesce(lang, "ja"),
-      "type": coalesce(type, "unknown"),
-      "prefecture": coalesce(prefecture, "未設定"),
-      "tags": coalesce(tags, [])
-    }
-  `
-  const items: { lang: string; type: string; prefecture: string; tags: string[] }[] = await client.fetch(query)
-
-  const totalArticles = items.length
-  const articlesByLanguage: Record<string, number> = {}
-  const articlesByType: Record<string, number> = {}
-  const articlesByPrefecture: Record<string, number> = {}
-  const articlesByTag: Record<string, number> = {}
-
-  for (const it of items) {
-    articlesByLanguage[it.lang] = (articlesByLanguage[it.lang] ?? 0) + 1
-    articlesByType[it.type] = (articlesByType[it.type] ?? 0) + 1
-    articlesByPrefecture[it.prefecture] = (articlesByPrefecture[it.prefecture] ?? 0) + 1
-    
-    // タグの統計を追加
-    for (const tag of it.tags || []) {
-      if (tag && tag.trim()) {
-        articlesByTag[tag] = (articlesByTag[tag] ?? 0) + 1
-      }
-    }
-  }
-
-  return { totalArticles, articlesByLanguage, articlesByType, articlesByPrefecture, articlesByTag }
-}
 
 // 記事が存在する都道府県のリストを取得（言語別）
 export async function getAvailablePrefectures(lang = DEFAULT_LANGUAGE): Promise<string[]> {
