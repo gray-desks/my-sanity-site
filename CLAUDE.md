@@ -1,6 +1,6 @@
 # CLAUDE.md
 > Guidance for Claude Code when working with **旅ログ – Japan Travel Journal** repository  
-> Last update : 2025-08-12 (docs cleanup: remove content/ & CLI)
+> Last update : 2025-09-08 (project cleanup: remove unused CI/CD and legacy configs)
 
 ---
 
@@ -74,7 +74,6 @@ my-sanity-site/
 │  │  │  ├─ Gallery.astro
 │  │  │  └─ AffiliateBlock.astro
 │  │  └─ styles/global.css
-└─ .github/                 # (CI, templates) ＊未実装
 4. 必須コマンド
 bash
 コピーする
@@ -123,11 +122,6 @@ lang フォルダ配下の一覧ページを ISR 生成。
 
 ファイルサイズ目安：合計 < 1.5 MB / entry。
 
-6. CI / 品質チェック（予定）
-ツール	チェック内容
-GitHub Actions	Node 20 → npm ci, npm run build (site)
-Lighthouse CI	LCP / CLS / a11y スコア
-ESLint + Prettier	ルート & site 両方
 
 7. 環境変数（site/.env）
 PUBLIC_SANITY_PROJECT_ID=fcz6on8p
@@ -150,15 +144,8 @@ OG_IMAGE_VERSION=v4
 スタイル調整	tailwind.config.mjs に theme.extend 追加 → global.css 反映
 デバッグ ISR	GET /api/revalidate?secret=… → Vercel Logs
 
-9. TODO ロードマップ対応表
-フェーズ	Claude Code が実装すべき大タスク
-v0.2	1) Article スキーマ切替
-2) 一覧/詳細ルーティング改修
-3) タグ機能
-v0.3	検索 / RSS / OGP 生成 / Lighthouse CI
-v1.0	20 言語フル自動翻訳 + マップ埋込
 
-10. 最後に
+9. 最後に
 原則 "小さな PR"（1 機能 / 1 ファイルセット）で送ってください。
 
 不明点・追加情報は必ずオーナー（ひで）へ質問。
@@ -230,40 +217,6 @@ v1.0	20 言語フル自動翻訳 + マップ埋込
 - **Redirects**: `/posts/*` → `/note/*` (301 redirect)
 - **Sample Data**: 浅草寺・銀座寿司記事 本番環境で表示確認
 
-#### 🔧 v0.2.1 運用自動化 (進行中)
-**目標**: ISR Webhook + 環境変数最終整備
-
-##### 必須環境変数 (Vercel Dashboard)
-```bash
-# === Core Sanity Configuration ===
-PUBLIC_SANITY_PROJECT_ID=fcz6on8p
-PUBLIC_SANITY_DATASET=production  
-PUBLIC_SANITY_API_VERSION=2024-01-01
-
-# === Site Configuration ===
-PUBLIC_SITE_URL=https://my-sanity-site.vercel.app
-PUBLIC_SITE_TITLE=旅ログ - 日本全国の旅記録
-
-# === Revenue Stream ===
-PUBLIC_BOOKING_AFFILIATE_ID=your-booking-affiliate-id
-PUBLIC_ADSENSE_CLIENT_ID=ca-pub-your-adsense-id
-
-# === ISR Automation ===
-REVALIDATE_SECRET=your-secure-random-32char-string
-VERCEL_DEPLOY_HOOK_URL=your-vercel-deploy-hook-id
-```
-
-##### Sanity Webhook 設定
-**Location**: Sanity Dashboard → API → Webhooks
-```
-Name: Vercel ISR Trigger
-URL: https://my-sanity-site.vercel.app/api/revalidate
-Method: POST
-Dataset: production
-Trigger: Create, Update, Delete
-Document types: article
-Secret: [REVALIDATE_SECRET と同じ値]
-```
 
 
 ### v0.2.2 Schema Synchronization for Translation Pipeline (2025-08-06)
@@ -310,32 +263,15 @@ Secret: [REVALIDATE_SECRET と同じ値]
 - **除去言語**: vi, ms, tl, hi の4言語を削除（DeepL API未対応）
 - **追加言語**: nl, pl, sv, da, fi の5言語を追加（DeepL API対応）
 - **中央設定更新**: `supportedLanguages.js` を基準とした動的言語管理
-- **コンポーネント修正**: ハードコード言語参照を全て動的取得に変更
-- **Prefecture翻訳**: 47都道府県 × 削除言語分のデータクリーンアップ
-- **OG画像対応**: 新言語分のタイトル生成設定追加
-
-#### 🔧 技術改修詳細
-**コンポーネント修正**:
-- `SearchFilter.astro`: i18n関数による動的文言取得
-- `ArticleCard.astro`: 動的ロケールマッピング
-- `Seo.astro`: OG locale動的対応
-
-**設定ファイル**:
-- `sanity.config.js`: 中央言語設定からの自動取得
-- `astro.config.mjs`: 動的i18nルーティング設定
-- `i18n.ts`: 20言語分のUI翻訳追加
-
-#### 📊 検証結果
-**ビルド検証**: ✅ **全言語成功**
-- Sanity Studio: ビルドクリア
-- Astro Frontend: 20言語プリレンダリング成功
-- サイトマップ: 全言語URL生成完了
 
 #### 🌍 対応言語 (20言語)
 **原文**: 日本語 (ja)
 **DeepL API対応19言語**: en, es, fr, de, it, pt-br, ru, ko, zh-cn, zh-tw, ar, tr, th, nl, pl, sv, da, fi, id
 
-#### ⚠️ 移行影響
-**既存データ**: 削除言語の記事は保持（新規翻訳のみ停止）
-**URL構造**: 変更なし（既存リンク互換性維持）
-**パフォーマンス**: 言語数変更なし（20言語維持）
+### v0.2.4 Project Cleanup (2025-09-08)
+**実装**: 不要機能削除によるプロジェクト軽量化
+
+#### ✅ 削除項目
+- **GitHub Actions**: `.github/` フォルダ削除（CI/CD未使用）
+- **Legacy Config**: `.npmrc` 削除（legacy-peer-deps不要）
+- **計画段階機能**: ロードマップ・予定機能の記載削除
