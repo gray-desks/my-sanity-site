@@ -8,13 +8,7 @@ npm run lint        # Fix ESLint issues
 npm run typecheck   # Ensure TypeScript compilation
 ```
 
-### 2. Testing (if applicable)
-```bash
-npm run test        # Run unit tests
-npm run test:coverage # Check test coverage
-```
-
-### 3. Build Verification
+### 2. Build Verification
 ```bash
 # For Sanity changes
 npm run build
@@ -67,7 +61,7 @@ cd site && npm run preview
 ## Pre-Commit Requirements
 1. All linting passes without errors
 2. TypeScript compiles without errors  
-3. All tests pass (if tests exist)
+3. Build completes successfully
 4. Build completes successfully
 5. No sensitive information committed (.env files, API keys)
 

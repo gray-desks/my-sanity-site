@@ -45,7 +45,6 @@
 - **Frontend**: Astro v5.12 (SSR) + Tailwind CSS v3.4
 - **Deployment**: Vercel (Adapter: @astrojs/vercel)
 - **Language**: TypeScript
-- **Testing**: Vitest
 
 ## 📦 セットアップ
 
@@ -177,7 +176,6 @@ npm run generate-og
 ### ✅ v0.2.3 - ChatGPT記事一括貼り付け機能 (完了)
 - [x] カスタム入力コンポーネント `TextPasteInput.jsx`
 - [x] 自動テキスト解析エンジン `textParser.js`
-- [x] テストスイート `textParser.test.ts`
 
 ### ✅ v0.2.1 - 運用自動化 & 本番安定化 (完了)
 - [x] ISR Webhook 設定（Sanity → Vercel 自動更新）

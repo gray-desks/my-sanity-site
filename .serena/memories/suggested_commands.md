@@ -26,17 +26,15 @@ CLI Options:
 - `--json` - Output JSON format
 - `--dry-run` - Preview without posting
 
-### Testing & Quality
+### Code Quality
 ```bash
 npm run lint        # ESLint for TypeScript files
 npm run typecheck   # TypeScript type checking
-npm run test        # Run Vitest tests
-npm run test:coverage # Test coverage report
 ```
 
 ### Full Build Pipeline
 ```bash
-npm run build && cd site && npm run build   # Complete build test
+npm run build && cd site && npm run build   # Complete build verification
 ```
 
 ## Content Management

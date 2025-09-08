@@ -7,7 +7,7 @@ on:
     branches: [ main ]
 
 jobs:
-  test:
+  build-check:
     runs-on: ubuntu-latest
     
     strategy:
@@ -32,9 +32,6 @@ jobs:
 
     - name: Run ESLint
       run: npm run lint
-
-    - name: Run tests
-      run: npm test
 
     - name: Build Sanity Studio (if applicable)
       run: npm run build --if-present

@@ -13,7 +13,6 @@ my-sanity-site/
 ├── tsconfig.json               # TypeScript configuration
 ├── .eslintrc.js                # ESLint configuration
 ├── .prettierrc                 # Prettier configuration
-└── vitest.config.ts            # Vitest test configuration
 ```
 
 ## Schema Directory
