@@ -4,6 +4,7 @@ import Navbar from '../components/Navbar.astro'
 import Logo from '../components/ui/Logo.astro'
 import HreflangLinks from '../components/HreflangLinks.astro'
 import Seo from '../components/Seo.astro'
+import CmpLoader from '../components/CmpLoader.astro'
 import { isRTL, getFontFamily, getUILabel, getLocalizedPath, DEFAULT_LANGUAGE } from '../lib/i18n'
 import { GA_MEASUREMENT_ID } from '../lib/env'
 
@@ -80,6 +81,9 @@ const currentPath = Astro.url.pathname
     <!-- Hreflang links for 20 languages + x-default -->
     <HreflangLinks currentPath={currentPath} />
 
+    <!-- CMP + Consent Mode v2 (GDPR Compliance) -->
+    <CmpLoader />
+
     <!-- Google Analytics: load only in production -->
     {GA_MEASUREMENT_ID && !import.meta.env.DEV && (
       <>
@@ -92,6 +96,9 @@ const currentPath = Astro.url.pathname
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Shippori+Mincho:wght@400;600&display=swap" rel="stylesheet">
+    
+    <!-- Sanity CDN Preconnect for image optimization -->
+    <link rel="preconnect" href="https://cdn.sanity.io" crossorigin>
     
     <!-- Google AdSense: optimized loading strategy for better performance -->
     {import.meta.env.PUBLIC_ADSENSE_CLIENT_ID && !import.meta.env.DEV && (

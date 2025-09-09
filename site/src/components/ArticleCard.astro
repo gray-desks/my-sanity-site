@@ -1,6 +1,7 @@
 ---
 import type { Article } from '../lib/sanity'
 import { DEFAULT_LANGUAGE } from '../lib/i18n'
+import { generateLCPImage, generateResponsiveSrcSet } from '../lib/sanityImage'
 
 interface Props {
   article: Article
@@ -208,10 +209,12 @@ const articleUrl = lang === 'ja'
   data-body-text={article.bodyText || ''}
 >
   <!-- Thumbnail -->
-  {article.coverImage?.asset?.url && (
+  {article.coverImage?.asset && (
     <div class="relative aspect-video overflow-hidden rounded-xl">
       <img 
-        src={`${article.coverImage.asset.url}?w=600&h=338&fit=crop&auto=format&q=85`}
+        src={generateLCPImage(article.coverImage, { width: 600, height: 338, quality: 85, format: 'webp' })}
+        srcset={generateResponsiveSrcSet(article.coverImage, { quality: 85, format: 'webp' })}
+        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         alt={`${article.placeName || ''} ${article.title}`.trim()}
         class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
         loading="lazy"
@@ -245,7 +248,7 @@ const articleUrl = lang === 'ja'
           {article.gallery.slice(0, 4).map((image, index) => (
             <div class="relative group/gallery">
               <img 
-                src={`${image.asset.url}?w=56&h=56&fit=crop&auto=format&q=85`}
+                src={generateLCPImage(image, { width: 56, height: 56, quality: 85, format: 'webp' })}
                 alt=""
                 class="w-14 h-14 object-cover rounded-xl flex-shrink-0 ring-2 ring-white/50 shadow-lg hover:ring-brand-400 hover:scale-110 transition-all duration-300 hover:shadow-xl group-hover:animate-pulse"
                 loading="lazy"

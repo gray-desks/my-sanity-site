@@ -41,8 +41,9 @@ export const ALL_LANGUAGES: Language[] = [
   { id: 'id', title: 'Indonesian', nativeName: 'Bahasa Indonesia', shortName: 'ID', dir: 'ltr', phase: 2, enabled: true },
 ]
 
-// 現在有効な言語のみを取得（審査期間中は日本語のみに限定）
-export const ENABLED_LANGUAGES = ALL_LANGUAGES.filter(lang => lang.id === 'ja')
+// 現在有効な言語のみを取得（環境変数LANGSから制御）
+const enabledFromEnv = (import.meta.env.LANGS || 'ja').split(',').map((l: string) => l.trim());
+export const ENABLED_LANGUAGES = ALL_LANGUAGES.filter(lang => enabledFromEnv.includes(lang.id))
 
 // デフォルト言語
 export const DEFAULT_LANGUAGE = 'ja'

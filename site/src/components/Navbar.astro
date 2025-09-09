@@ -31,8 +31,11 @@ const availableLanguages = ENABLED_LANGUAGES
     <!-- Navigation Links -->
     <div class="flex items-center gap-4">
       
-      <!-- モバイル用言語メニュー -->
-      <details class="sm:hidden relative" role="navigation" aria-label="Language selection">
+      {/* 言語切替UIは複数言語が有効な場合のみ表示 */}
+      {availableLanguages.length > 1 && (
+        <>
+          <!-- モバイル用言語メニュー -->
+          <details class="sm:hidden relative" role="navigation" aria-label="Language selection">
         <summary 
           class="flex items-center gap-1 px-3 h-10 rounded-lg bg-ink/5 text-ink focus:ring-2 focus:ring-[var(--theme-accent)] cursor-pointer"
           aria-label="Select language"
@@ -148,6 +151,8 @@ const availableLanguages = ENABLED_LANGUAGES
             })}
         </div>
       </div>
+        </>
+      )}
     </div>
   </div>
 </nav>

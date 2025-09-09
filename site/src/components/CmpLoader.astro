@@ -1,0 +1,96 @@
+---
+// CMP (Consent Management Platform) + Google Consent Mode v2
+// EU/UK/CH地域でプライバシー同意を管理し、gtag consentを制御
+
+const { CMP_VENDOR, CMP_ID, AD_ENABLED } = import.meta.env;
+---
+
+<!-- CMP実装（環境変数で制御） -->
+{CMP_VENDOR === 'cookieyes' && CMP_ID && CMP_ID !== 'REPLACE_ME' && (
+  <>
+    <!-- Google Consent Mode v2: 初期設定（denied） -->
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      
+      // 同意前: 全てdenied状態
+      gtag('consent', 'default', {
+        ad_storage: 'denied',
+        ad_user_data: 'denied',
+        ad_personalization: 'denied',
+        analytics_storage: 'denied'
+      });
+      
+      // Debug log for AdSense review
+      console.log('🔒 Consent Mode v2: Initial state set to denied');
+    </script>
+
+    <!-- CookieYes CMP Script -->
+    <script 
+      id="cookieyes" 
+      type="text/javascript" 
+      src={`https://cdn-cookieyes.com/client_data/${CMP_ID}/script.js`}
+      is:inline
+    ></script>
+
+    <!-- CMP同意更新イベントリスナー -->
+    <script is:inline>
+      window.addEventListener('load', function() {
+        // CookieYes同意更新イベント
+        window.addEventListener('cookieyes_consent_update', function(e) {
+          const consentData = e.detail || {};
+          const accepted = consentData.accepted || [];
+          
+          // 同意状態判定
+          const granted = (category) => accepted.includes(category) ? 'granted' : 'denied';
+          
+          // Google Consent Mode v2 更新
+          gtag('consent', 'update', {
+            ad_storage: granted('advertisement'),
+            ad_user_data: granted('advertisement'),
+            ad_personalization: granted('advertisement'),
+            analytics_storage: granted('analytics')
+          });
+          
+          // Debug log
+          console.log('🔓 Consent Mode v2: Updated based on user choice', {
+            ad_storage: granted('advertisement'),
+            analytics_storage: granted('analytics')
+          });
+        });
+        
+        // 初回読み込み時の同意状態確認
+        if (window.cookieyes && window.cookieyes.getConsentData) {
+          const currentConsent = window.cookieyes.getConsentData();
+          if (currentConsent && currentConsent.accepted) {
+            const accepted = currentConsent.accepted;
+            const granted = (category) => accepted.includes(category) ? 'granted' : 'denied';
+            
+            gtag('consent', 'update', {
+              ad_storage: granted('advertisement'),
+              ad_user_data: granted('advertisement'),
+              ad_personalization: granted('advertisement'),
+              analytics_storage: granted('analytics')
+            });
+            
+            console.log('🔄 Consent Mode v2: Restored from existing consent');
+          }
+        }
+      });
+    </script>
+  </>
+)}
+
+<!-- CMP未設定の場合の警告（開発環境のみ） -->
+{(import.meta.env.DEV && (!CMP_ID || CMP_ID === 'REPLACE_ME')) && (
+  <script is:inline>
+    console.warn('⚠️ CMP not configured. Set CMP_ID in .env for GDPR compliance');
+  </script>
+)}
+
+<!-- AdSense無効時の確認ログ -->
+{AD_ENABLED === 'false' && (
+  <script is:inline>
+    console.log('📵 AdSense DISABLED for review period');
+  </script>
+)}
