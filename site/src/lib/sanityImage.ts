@@ -8,7 +8,7 @@ import imageUrlBuilder from '@sanity/image-url';
 
 // Sanity client setup
 const client = createClient({
-  projectId: import.meta.env.PUBLIC_SANITY_PROJECT_ID || '',
+  projectId: import.meta.env.PUBLIC_SANITY_PROJECT_ID || 'fcz6on8p',
   dataset: import.meta.env.PUBLIC_SANITY_DATASET || 'production',
   apiVersion: import.meta.env.PUBLIC_SANITY_API_VERSION || '2024-01-01',
   useCdn: true,

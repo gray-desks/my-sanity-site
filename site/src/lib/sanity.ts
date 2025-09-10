@@ -174,7 +174,7 @@ export async function getArticlesPaged(
           url
         }
       },
-      "bodyText": pt::text(coalesce(content, body)),
+      "bodyText": pt::text(body),
       lang,
       __i18n_lang,
       __i18n_refs
@@ -201,7 +201,7 @@ export async function getArticlesWithFilters(
   ]
 
   if (searchTerm && searchTerm.trim()) {
-    filters.push('(title match $searchPattern || pt::text(coalesce(content, body)) match $searchPattern)')
+    filters.push('(title match $searchPattern || pt::text(body) match $searchPattern)')
   }
   if (type && type.trim()) {
     filters.push('type == $type')
@@ -230,7 +230,7 @@ export async function getArticlesWithFilters(
     gallery[] {
       asset->{ _id, url }
     },
-    "bodyText": pt::text(coalesce(content, body)),
+    "bodyText": pt::text(body),
     lang,
     __i18n_lang,
     __i18n_refs
@@ -256,7 +256,7 @@ export async function getArticleCountWithFilters(
   ]
 
   if (searchTerm && searchTerm.trim()) {
-    filters.push('(title match $searchPattern || pt::text(coalesce(content, body)) match $searchPattern)')
+    filters.push('(title match $searchPattern || pt::text(body) match $searchPattern)')
   }
   if (type && type.trim()) {
     filters.push('type == $type')
@@ -339,8 +339,8 @@ export async function getArticleById(articleId: string): Promise<Article | null>
           url
         }
       },
-      "body": content,
-      "bodyText": pt::text(content),
+      body,
+      "bodyText": pt::text(body),
       lang,
       __i18n_lang,
       __i18n_refs
@@ -374,8 +374,8 @@ export async function getArticleBySlug(slug: string, lang = DEFAULT_LANGUAGE): P
           url
         }
       },
-      "body": content,
-      "bodyText": pt::text(content),
+      body,
+      "bodyText": pt::text(body),
       lang,
       __i18n_lang,
       __i18n_refs
