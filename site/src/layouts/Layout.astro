@@ -6,7 +6,7 @@ import HreflangLinks from '../components/HreflangLinks.astro'
 import Seo from '../components/Seo.astro'
 import CmpLoader from '../components/CmpLoader.astro'
 import { isRTL, getFontFamily, getUILabel, getLocalizedPath, DEFAULT_LANGUAGE } from '../lib/i18n'
-import { GA_MEASUREMENT_ID } from '../lib/env'
+import { GA_MEASUREMENT_ID, ADSENSE_CLIENT_ID } from '../lib/env'
 
 export interface Props {
   title: string
@@ -100,40 +100,13 @@ const currentPath = Astro.url.pathname
     <!-- Sanity CDN Preconnect for image optimization -->
     <link rel="preconnect" href="https://cdn.sanity.io" crossorigin>
     
-    <!-- Google AdSense: optimized loading strategy for better performance -->
-    {import.meta.env.PUBLIC_ADSENSE_CLIENT_ID && !import.meta.env.DEV && (
+    <!-- Google AdSense: official script tag (build-time client injection) -->
+    {ADSENSE_CLIENT_ID && !import.meta.env.DEV && (
       <>
         <link rel="preconnect" href="https://pagead2.googlesyndication.com" crossorigin>
         <link rel="preconnect" href="https://googleads.g.doubleclick.net" crossorigin>
         <link rel="preconnect" href="https://googlesyndicatedsearch.com" crossorigin>
-        <script is:inline>
-          (function(){
-            let adsLoaded = false;
-            const loadAds = () => {
-              if (adsLoaded) return;
-              adsLoaded = true;
-              
-              const s = document.createElement('script');
-              s.async = true;
-              s.crossOrigin = 'anonymous';
-              s.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${import.meta.env.PUBLIC_ADSENSE_CLIENT_ID}`;
-              s.onerror = () => console.debug('AdSense script failed to load');
-              document.head.appendChild(s);
-            };
-            
-            // Load after user interaction or with longer delay
-            const events = ['mousedown', 'touchstart', 'keydown', 'scroll'];
-            const lazyLoad = () => {
-              events.forEach(event => document.removeEventListener(event, lazyLoad, true));
-              loadAds();
-            };
-            
-            events.forEach(event => document.addEventListener(event, lazyLoad, { once: true, passive: true }));
-            
-            // Fallback: load after 3 seconds if no user interaction
-            setTimeout(loadAds, 3000);
-          })();
-        </script>
+        <script async crossorigin="anonymous" src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT_ID}`}></script>
       </>
     )}
   </head>
