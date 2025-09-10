@@ -4,6 +4,7 @@ import Gallery from '../../components/Gallery.astro'
 import AdSlot from '../../components/AdSlot.astro'
 import PortableTextWithAds from '../../components/PortableTextWithAds.astro'
 import { getArticleById, client, type Article } from '../../lib/sanity'
+import { generateLCPImage } from '../../lib/sanityImage'
 import { ADS_SLOTS } from '../../config/ads'
 
 const { id } = Astro.params
@@ -12,6 +13,9 @@ const article: Article | null = await getArticleById(id!)
 if (!article) {
   return Astro.redirect('/404')
 }
+
+// Debug: Log article data structure
+console.log('Article data:', JSON.stringify(article, null, 2))
 
 const formatDate = (dateString: string) => {
   return new Date(dateString).toLocaleDateString('ja-JP', {
@@ -37,14 +41,14 @@ const config = typeConfig[article.type as keyof typeof typeConfig] || typeConfig
   description={article.bodyText?.slice(0, 160) || `${article.title}の記事です。`}
 >
   <!-- Hero Image (Mobile Full-bleed, 16:9 to match cards) -->
-  {article.coverImage?.asset?.url && (
+  {article.coverImage?.asset && (
     <picture class="block md:hidden -mx-4 sm:-mx-6 mb-4">
       <img 
-        src={`${article.coverImage.asset.url}?w=1200&h=675&fit=crop&auto=format`}
+        src={generateLCPImage(article.coverImage, { width: 1200, height: 675, quality: 85, format: 'webp' })}
         alt={article.title}
         class="w-full aspect-video object-cover rounded-none cursor-pointer"
         id="cover-image-mobile"
-        data-lightbox-url={`${article.coverImage.asset.url}?auto=format`}
+        data-lightbox-url={generateLCPImage(article.coverImage, { width: 1920, height: 1080, quality: 90, format: 'webp' })}
         loading="eager"
       />
     </picture>
@@ -58,10 +62,10 @@ const config = typeConfig[article.type as keyof typeof typeConfig] || typeConfig
         <div class="lg:col-span-3 bg-white md:rounded-2xl md:shadow-lg">
           <div class="md:p-8">
           <!-- Cover Image (最上部) -->
-          {article.coverImage?.asset?.url && (
+          {article.coverImage?.asset && (
             <div class="mb-8 md:rounded-2xl overflow-hidden md:shadow-lg hidden md:block">
               <img 
-                src={`${article.coverImage.asset.url}?w=1200&h=600&fit=crop&auto=format`}
+                src={generateLCPImage(article.coverImage, { width: 1200, height: 600, quality: 85, format: 'webp' })}
                 alt={article.title}
                 class="w-full h-96 object-cover cursor-pointer"
                 width="1200"
@@ -69,7 +73,7 @@ const config = typeConfig[article.type as keyof typeof typeConfig] || typeConfig
                 decoding="async"
                 fetchpriority="high"
                 id="cover-image"
-                data-lightbox-url={`${article.coverImage.asset.url}?auto=format`}
+                data-lightbox-url={generateLCPImage(article.coverImage, { width: 1920, height: 1080, quality: 90, format: 'webp' })}
               />
             </div>
           )}
@@ -159,7 +163,7 @@ const config = typeConfig[article.type as keyof typeof typeConfig] || typeConfig
   </div>
   
   <!-- Cover Image Lightbox Modal -->
-  {article.coverImage?.asset?.url && (
+  {article.coverImage?.asset && (
     <div id="cover-lightbox" class="lightbox-overlay hidden fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center p-4">
       <div class="relative max-w-7xl max-h-full flex items-center justify-center">
         <!-- Close button -->
@@ -170,7 +174,7 @@ const config = typeConfig[article.type as keyof typeof typeConfig] || typeConfig
         <!-- Lightbox main image -->
         <img 
           id="cover-lightbox-image"
-          src={`${article.coverImage.asset.url}?auto=format`}
+          src={generateLCPImage(article.coverImage, { width: 1920, height: 1080, quality: 90, format: 'webp' })}
           alt={article.title}
           class="max-w-full max-h-full object-contain cursor-pointer"
         />
