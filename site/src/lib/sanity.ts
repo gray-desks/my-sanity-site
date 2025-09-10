@@ -20,8 +20,8 @@ const sanitizeToken = (raw: string | null | undefined): string | undefined => {
 }
 
 export const client = createClient({
-  projectId: 'fcz6on8p',
-  dataset: 'production',
+  projectId: import.meta.env.PUBLIC_SANITY_PROJECT_ID || 'fcz6on8p',
+  dataset: import.meta.env.PUBLIC_SANITY_DATASET || 'production',
   useCdn: true,
   apiVersion: '2024-01-01',
 })
