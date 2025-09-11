@@ -13,12 +13,27 @@ export const GET: APIRoute = async () => {
 
   let sanityReachable = false;
   let articleCount: number | null = null;
+  let articleCountJa: number | null = null;
+  let articleCountByLang: Record<string, number> = {};
   let errorMessage: string | null = null;
 
   try {
     articleCount = await client.fetch(
-      'count(*[_type == "article" && defined(slug.current)])'
+      'count(*[_type == "article"])'
     );
+    // Count JA using both lang and __i18n_lang for robustness
+    articleCountJa = await client.fetch(
+      'count(*[_type == "article" && (coalesce(lang, __i18n_lang) == "ja" || (!defined(lang) && !defined(__i18n_lang)))])'
+    );
+    // Count for enabled languages
+    for (const l of ENABLED_LANGUAGES) {
+      // eslint-disable-next-line no-await-in-loop
+      const c = await client.fetch(
+        'count(*[_type == "article" && coalesce(lang, __i18n_lang) == $lang])',
+        { lang: l.id }
+      );
+      articleCountByLang[l.id] = c as number;
+    }
     sanityReachable = true;
   } catch (e: any) {
     sanityReachable = false;
@@ -34,6 +49,8 @@ export const GET: APIRoute = async () => {
     sanity: {
       reachable: sanityReachable,
       articleCount,
+      articleCountJa,
+      articleCountByLang,
       error: errorMessage,
     },
     durationMs: Date.now() - start,

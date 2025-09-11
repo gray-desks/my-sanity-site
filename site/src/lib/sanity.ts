@@ -95,7 +95,7 @@ export interface MultiLanguageArticles {
 export async function getArticles(lang = DEFAULT_LANGUAGE): Promise<Article[]> {
   // `lang` フィールドを使用してフィルタリング
   const query = `
-    *[_type == "article" && (lang == $lang || (!defined(lang) && $lang == "ja"))] | order(publishedAt desc) {
+    *[_type == "article" && (coalesce(lang, __i18n_lang) == $lang || (!defined(lang) && !defined(__i18n_lang) && $lang == "ja"))] | order(publishedAt desc) {
       _id,
       title,
       slug,
@@ -132,7 +132,7 @@ export async function getArticles(lang = DEFAULT_LANGUAGE): Promise<Article[]> {
 export async function getArticleCount(lang = DEFAULT_LANGUAGE): Promise<number> {
   const query = `
     count(*[_type == "article" 
-      && (lang == $lang || (!defined(lang) && $lang == "ja")) 
+      && (coalesce(lang, __i18n_lang) == $lang || (!defined(lang) && !defined(__i18n_lang) && $lang == "ja")) 
     ])
   `
   return await client.fetch(query, { lang })
@@ -146,7 +146,7 @@ export async function getArticlesPaged(
 ): Promise<Article[]> {
   const query = `
     *[_type == "article" 
-      && (lang == $lang || (!defined(lang) && $lang == "ja")) 
+      && (coalesce(lang, __i18n_lang) == $lang || (!defined(lang) && !defined(__i18n_lang) && $lang == "ja")) 
     ] | order(publishedAt desc) [$offset...$end] {
       _id,
       title,
@@ -194,7 +194,7 @@ export async function getArticlesWithFilters(
 ): Promise<Article[]> {
   const filters: string[] = [
     '_type == "article"',
-    '(lang == $lang || (!defined(lang) && $lang == "ja"))'
+    '(coalesce(lang, __i18n_lang) == $lang || (!defined(lang) && !defined(__i18n_lang) && $lang == "ja"))'
   ]
 
   if (searchTerm && searchTerm.trim()) {
@@ -384,7 +384,7 @@ export async function getArticleBySlug(slug: string, lang = DEFAULT_LANGUAGE): P
 export async function getArticlesByType(type: string, lang = DEFAULT_LANGUAGE): Promise<Article[]> {
   // `lang` フィールドを使用してフィルタリング
   const query = `
-    *[_type == "article" && type == $type && (lang == $lang || (!defined(lang) && $lang == "ja"))] | order(publishedAt desc) {
+    *[_type == "article" && type == $type && (coalesce(lang, __i18n_lang) == $lang || (!defined(lang) && !defined(__i18n_lang) && $lang == "ja"))] | order(publishedAt desc) {
       _id,
       title,
       slug,
@@ -441,7 +441,7 @@ export async function getEnabledLanguageArticleSlugs(): Promise<{slug: string, t
 export async function getAvailablePrefectures(lang = DEFAULT_LANGUAGE): Promise<string[]> {
   const query = `
     *[_type == "article" 
-      && (lang == $lang || (!defined(lang) && $lang == "ja"))
+      && (coalesce(lang, __i18n_lang) == $lang || (!defined(lang) && !defined(__i18n_lang) && $lang == "ja"))
       && defined(prefecture)
       && prefecture != ""
     ] {

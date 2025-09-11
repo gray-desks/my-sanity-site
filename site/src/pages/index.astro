@@ -19,6 +19,12 @@ try {
   
   articles = articlesData
   totalPages = calculateTotalPages(totalCount, PAGE_SIZE)
+  // Debug: log article fetch result on server console
+  console.log('[DEBUG] / index getArticlesPaged', {
+    lang,
+    fetched: Array.isArray(articlesData) ? articlesData.length : 'non-array',
+    totalCount,
+  })
 } catch (error) {
   console.error('Failed to fetch articles:', error)
 }
