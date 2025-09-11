@@ -46,17 +46,53 @@ export function generateLCPImage(
     fit = 'clip'
   } = options;
 
-  const baseUrl = urlFor(source)
-    .width(width)
-    .quality(quality)
-    .fit(fit)
-    .format(format);
+  // Try builder first (works when source contains a valid asset ref)
+  try {
+    let chain = urlFor(source)
+      .width(width)
+      .quality(quality)
+      .fit(fit);
 
-  if (height) {
-    baseUrl.height(height);
+    if (format && format !== 'auto') {
+      chain = chain.format(format as any);
+    }
+    if (height) {
+      chain = chain.height(height);
+    }
+    const built = chain.url();
+    if (built) return built;
+  } catch (_) {
+    // no-op, fall back to raw asset url handling below
   }
 
-  return baseUrl.url();
+  // Fallback: build from raw asset URL if provided by GROQ (asset-> url)
+  const rawUrl: string | undefined =
+    (source && source.asset && (source.asset.url as string)) ||
+    (source && (source.url as string)) ||
+    (typeof source === 'string' ? source : undefined);
+
+  if (rawUrl) {
+    try {
+      const u = new URL(rawUrl);
+      // Prefer auto=format for broad compatibility; use fm for explicit formats
+      if (format === 'webp' || format === 'avif') {
+        u.searchParams.set('fm', format);
+      } else {
+        u.searchParams.set('auto', 'format');
+      }
+      if (width) u.searchParams.set('w', String(width));
+      if (height) u.searchParams.set('h', String(height));
+      if (quality) u.searchParams.set('q', String(quality));
+      if (fit) u.searchParams.set('fit', fit);
+      return u.toString();
+    } catch (_) {
+      // If URL constructor fails, just return the raw string
+      return rawUrl;
+    }
+  }
+
+  // As a last resort, return empty string to avoid broken attribute
+  return '';
 }
 
 /**
@@ -73,18 +109,46 @@ export function generateResponsiveSrcSet(
   } = options;
 
   const breakpoints = [320, 640, 768, 1024, 1280, 1920];
-  
-  return breakpoints
-    .map(width => {
-      const url = urlFor(source)
-        .width(width)
+
+  // Attempt builder path first; if it fails for any width, fall back to raw URL approach
+  try {
+    const urls = breakpoints.map(w => {
+      let chain = urlFor(source)
+        .width(w)
         .quality(quality)
-        .fit(fit)
-        .format(format)
-        .url();
-      return `${url} ${width}w`;
-    })
-    .join(', ');
+        .fit(fit);
+      if (format && format !== 'auto') {
+        chain = chain.format(format as any);
+      }
+      const url = chain.url();
+      return `${url} ${w}w`;
+    });
+    return urls.join(', ');
+  } catch (_) {
+    // Fallback using raw asset URL
+    const rawUrl: string | undefined =
+      (source && source.asset && (source.asset.url as string)) ||
+      (source && (source.url as string)) ||
+      (typeof source === 'string' ? source : undefined);
+    if (!rawUrl) return '';
+    const urls = breakpoints.map(w => {
+      try {
+        const u = new URL(rawUrl);
+        if (format === 'webp' || format === 'avif') {
+          u.searchParams.set('fm', format);
+        } else {
+          u.searchParams.set('auto', 'format');
+        }
+        u.searchParams.set('w', String(w));
+        u.searchParams.set('q', String(quality));
+        u.searchParams.set('fit', fit);
+        return `${u.toString()} ${w}w`;
+      } catch (_) {
+        return `${rawUrl} ${w}w`;
+      }
+    });
+    return urls.join(', ');
+  }
 }
 
 /**
