@@ -10,7 +10,12 @@ import { ADS_SLOTS } from '../../../config/ads'
  
 
 const { lang, id } = Astro.params
-const article: Article | null = await getArticleById(id!)
+let article: Article | null = null
+try {
+  article = await getArticleById(id!)
+} catch (e) {
+  console.error('Failed to fetch article by id (i18n route):', e)
+}
 
 if (!article) {
   return Astro.redirect('/404')
