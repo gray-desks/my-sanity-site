@@ -133,7 +133,6 @@ export async function getArticleCount(lang = DEFAULT_LANGUAGE): Promise<number> 
   const query = `
     count(*[_type == "article" 
       && (lang == $lang || (!defined(lang) && $lang == "ja")) 
-      && defined(slug.current)
     ])
   `
   return await client.fetch(query, { lang })
@@ -148,7 +147,6 @@ export async function getArticlesPaged(
   const query = `
     *[_type == "article" 
       && (lang == $lang || (!defined(lang) && $lang == "ja")) 
-      && defined(slug.current)
     ] | order(publishedAt desc) [$offset...$end] {
       _id,
       title,
@@ -196,8 +194,7 @@ export async function getArticlesWithFilters(
 ): Promise<Article[]> {
   const filters: string[] = [
     '_type == "article"',
-    '(lang == $lang || (!defined(lang) && $lang == "ja"))',
-    'defined(slug.current)'
+    '(lang == $lang || (!defined(lang) && $lang == "ja"))'
   ]
 
   if (searchTerm && searchTerm.trim()) {
@@ -251,8 +248,7 @@ export async function getArticleCountWithFilters(
 ): Promise<number> {
   const filters: string[] = [
     '_type == "article"',
-    '(lang == $lang || (!defined(lang) && $lang == "ja"))',
-    'defined(slug.current)'
+    '(lang == $lang || (!defined(lang) && $lang == "ja"))'
   ]
 
   if (searchTerm && searchTerm.trim()) {
