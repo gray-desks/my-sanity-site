@@ -26,13 +26,19 @@ const articleTypes = [
 ]
 
 // 記事が存在する都道府県のみ取得（多言語対応）
-const availablePrefectureCodes = await getAvailablePrefectures(lang)
+// 失敗時は全都道府県を表示してSSRエラーを回避
+let availablePrefectureCodes: string[] = []
+try {
+  availablePrefectureCodes = await getAvailablePrefectures(lang)
+} catch (e) {
+  console.error('Failed to fetch available prefectures:', e)
+}
 const allPrefectures = getPrefecturesForLanguage(lang)
 
-// 記事が存在する都道府県のみをフィルタリング
-const availablePrefectures = allPrefectures.filter(p => 
-  availablePrefectureCodes.includes(p.code)
-)
+// 記事が存在する都道府県のみをフィルタリング（取得失敗時は全件）
+const availablePrefectures = (availablePrefectureCodes && availablePrefectureCodes.length > 0)
+  ? allPrefectures.filter(p => availablePrefectureCodes.includes(p.code))
+  : allPrefectures
 
 const prefectures = [
   { code: '', name: getUILabel(lang, 'allPrefectures') },

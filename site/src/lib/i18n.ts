@@ -53,7 +53,13 @@ export const FALLBACK_LANGUAGE = 'en'
 export const X_DEFAULT_LANGUAGE = 'en'
 
 // 現在のフェーズ設定 (環境変数で制御可能)
-export const CURRENT_PHASE = parseInt(process.env.I18N_PHASE || '1') as 1 | 2 | 3
+// Avoid referencing process in Edge runtimes; fall back to import.meta.env
+const RAW_PHASE = (
+  (typeof process !== 'undefined' && process.env && process.env.I18N_PHASE) ||
+  ((import.meta as any)?.env?.I18N_PHASE) ||
+  '1'
+) as string;
+export const CURRENT_PHASE = parseInt(RAW_PHASE, 10) as 1 | 2 | 3
 
 // フェーズ別言語取得
 export function getLanguagesByPhase(phase: number): Language[] {

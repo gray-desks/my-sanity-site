@@ -8,7 +8,12 @@ import { generateLCPImage } from '../../lib/sanityImage'
 import { ADS_SLOTS } from '../../config/ads'
 
 const { id } = Astro.params
-const article: Article | null = await getArticleById(id!)
+let article: Article | null = null
+try {
+  article = await getArticleById(id!)
+} catch (e) {
+  console.error('Failed to fetch article by id:', e)
+}
 
 if (!article) {
   return Astro.redirect('/404')
