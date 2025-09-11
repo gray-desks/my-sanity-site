@@ -23,6 +23,7 @@ export interface Props {
   paginationMode?: 'path' | 'query'
   paginationQueryParams?: Record<string, string>
   isSearch?: boolean
+  noindex?: boolean
 }
 
 const { 
@@ -38,7 +39,8 @@ const {
   nextUrl,
   paginationMode,
   paginationQueryParams,
-  isSearch = false
+  isSearch = false,
+  noindex = false
 } = Astro.props
 
 // Generate structured data for pagination
@@ -49,12 +51,17 @@ const structuredData = {
   "description": pageDescription,
   "url": canonicalUrl
 }
+
+// List page ads gate (disable during AdSense review)
+const LIST_ADS_ENABLED = import.meta.env.LIST_ADS_ENABLED === 'true'
+
 ---
 
 <Layout 
   title={pageTitle}
   description={pageDescription}
   lang={lang}
+  noindex={noindex}
 >
   <!-- Structured Data -->
   <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
@@ -62,16 +69,18 @@ const structuredData = {
   <!-- Hero Section (consistent across all pages) -->
   <Hero lang={lang} />
 
-  <!-- Top Ad - ヒーローの下に配置 -->
-  <div class="max-w-4xl lg:max-w-7xl mx-auto px-4 pt-2">
-    <AdSlot
-      slotId={ADS_SLOTS.HOME_HERO}
-      format="horizontal" 
-      reserveHeight={120}
-      label={getUILabel(lang, 'advertisement')}
-      class="mb-6"
-    />
-  </div>
+  <!-- Top Ad - ヒーローの下（検索ページや記事0件のときは非表示） -->
+  {(LIST_ADS_ENABLED && !isSearch && articles.length > 0) && (
+    <div class="max-w-4xl lg:max-w-7xl mx-auto px-4 pt-2">
+      <AdSlot
+        slotId={ADS_SLOTS.HOME_HERO}
+        format="horizontal" 
+        reserveHeight={120}
+        label={getUILabel(lang, 'advertisement')}
+        class="mb-6"
+      />
+    </div>
+  )}
 
   <div class="max-w-7xl mx-auto px-4 py-8 space-y-16">
     <!-- Page Title for pagination pages -->
@@ -135,14 +144,16 @@ const structuredData = {
       )}
     </section>
 
-    <!-- Bottom Ad - フッター直前 -->
-    <AdSlot
-      slotId={ADS_SLOTS.HOME_FOOTER}
-      format="horizontal"
-      reserveHeight={120}
-      label={getUILabel(lang, 'advertisement')}
-      class="mt-16"
-    />
+    <!-- Bottom Ad - フッター直前（検索ページや記事0件のときは非表示） -->
+    {(LIST_ADS_ENABLED && !isSearch && articles.length > 0) && (
+      <AdSlot
+        slotId={ADS_SLOTS.HOME_FOOTER}
+        format="horizontal"
+        reserveHeight={120}
+        label={getUILabel(lang, 'advertisement')}
+        class="mt-16"
+      />
+    )}
   </div>
 </Layout>
 
